@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2010-08-14.
-" @Revision:    682
+" @Last Change: 2010-08-28.
+" @Revision:    688
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
@@ -33,31 +33,47 @@ if !exists("g:tcommentOpModeExtra")
 endif
 
 
-" :line1,line2 TCommentAs commenttype
-command! -bang -complete=customlist,tcomment#FileTypes -range -nargs=+ TCommentAs 
+" :{range}TCommentAs commenttype ?args...
+" For the optional "args" argument see |tcomment#CommentAs()|.
+command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
             \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
 
-" :line1,line2 TComment ?commentBegin ?commentEnd
+" :{range}TComment ?args...
+" args... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* TComment keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
 
-" :line1,line2 TCommentRight ?commentBegin ?commentEnd
+" :{range}TCommentRight ?args...
+" args... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* TCommentRight keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
-" :line1,line2 TCommentBlock ?commentBegin ?commentEnd
+" :{range}TCommentBlock ?args...
+" args... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* TCommentBlock keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
 
-" :line1,line2 TCommentInline ?commentBegin ?commentEnd
+" :{range}TCommentInline ?args...
+" args... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* TCommentInline keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
 
-" :line1,line2 TCommentMaybeInline ?commentBegin ?commentEnd
+" :{range}TCommentMaybeInline ?args...
+" args... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* TCommentMaybeInline keepjumps call tcomment#Comment(<line1>, <line2>, 'i', "<bang>", <f-args>)
 
 
 
 if (g:tcommentMapLeader1 != '')
-    exec 'noremap <silent> '. g:tcommentMapLeader1 .'<c-_> :TComment<cr>'
-    exec 'vnoremap <silent> '. g:tcommentMapLeader1 .'<c-_> :TCommentMaybeInline<cr>'
-    exec 'inoremap <silent> '. g:tcommentMapLeader1 .'<c-_> <c-o>:TComment<cr>'
+    exec 'noremap <silent> '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' :TComment<cr>'
+    exec 'vnoremap <silent> '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' :TCommentMaybeInline<cr>'
+    exec 'inoremap <silent> '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' <c-o>:TComment<cr>'
     exec 'noremap <silent> '. g:tcommentMapLeader1 .'p m`vip:TComment<cr>``'
     exec 'inoremap <silent> '. g:tcommentMapLeader1 .'p <c-o>:norm! m`vip<cr>:TComment<cr><c-o>``'
     exec 'noremap '. g:tcommentMapLeader1 .'<space> :TComment '
