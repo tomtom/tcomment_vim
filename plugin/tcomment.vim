@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2010-08-28.
-" @Revision:    704
+" @Revision:    707
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
@@ -246,5 +246,7 @@ autoload/tcomment.vim
 - Support for x86conf
 
 2.0
+- Enabled key=value pairs to configure commenting
 - Renamed the file plugin/tComment.vim to plugin/tcomment.vim
+- Renamed certain global functions to tcomment#...
 
