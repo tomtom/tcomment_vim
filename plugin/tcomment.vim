@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2010-08-28.
-" @Revision:    688
+" @Revision:    689
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
@@ -42,31 +42,36 @@ command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs
 " args... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* TComment keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
+command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComment
+            \ keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
 
 " :{range}TCommentRight ?args...
 " args... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* TCommentRight keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
+command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentRight
+            \ keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
 " :{range}TCommentBlock ?args...
 " args... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* TCommentBlock keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
+command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentBlock
+            \ keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
 
 " :{range}TCommentInline ?args...
 " args... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* TCommentInline keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
+command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentInline
+            \ keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
 
 " :{range}TCommentMaybeInline ?args...
 " args... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* TCommentMaybeInline keepjumps call tcomment#Comment(<line1>, <line2>, 'i', "<bang>", <f-args>)
+command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentMaybeInline
+            \ keepjumps call tcomment#Comment(<line1>, <line2>, 'i', "<bang>", <f-args>)
 
 
 

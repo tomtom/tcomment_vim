@@ -504,7 +504,16 @@ function! tcomment#Complete(ArgLead, CmdLine, CursorPos) "{{{3
         " TLogVAR &filetype
         call insert(completions, &filetype)
     endif
-    let completions += ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=']
+    if !empty(a:ArgLead)
+        call filter(completions, 'v:val =~ ''\V\^''.a:ArgLead')
+    endif
+    let completions += tcomment#CompleteArgs(a:ArgLead, a:CmdLine, a:CursorPos)
+    return completions
+endf
+
+
+function! tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos) "{{{3
+    let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=']
     if !empty(a:ArgLead)
         call filter(completions, 'v:val =~ ''\V\^''.a:ArgLead')
     endif
