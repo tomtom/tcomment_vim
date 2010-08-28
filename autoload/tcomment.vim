@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2010-08-28.
-" @Revision:    0.0.216
+" @Revision:    0.0.217
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -483,7 +483,6 @@ function! tcomment#CommentAs(beg, end, commentAnyway, filetype, ...)
 endf
 
 
-" ----------------------------------------------------------------
 " collect all known comment types
 function! tcomment#CollectFileTypes()
     if s:typesDirty

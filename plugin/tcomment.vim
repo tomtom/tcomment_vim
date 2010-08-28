@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2010-08-28.
-" @Revision:    689
+" @Revision:    704
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
@@ -33,41 +33,65 @@ if !exists("g:tcommentOpModeExtra")
 endif
 
 
-" :{range}TCommentAs commenttype ?args...
-" For the optional "args" argument see |tcomment#CommentAs()|.
-command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
-            \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
-
-" :{range}TComment ?args...
-" args... are either (see also |tcomment#Comment()|):
+" :display: :[range]TComment[!] ?ARGS...
+" If there is a visual selection that begins and ends in the same line, 
+" then |:TCommentInline| is used instead.
+" The optional range defaults to the current line. With a bang '!', 
+" always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComment
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
 
-" :{range}TCommentRight ?args...
-" args... are either (see also |tcomment#Comment()|):
+" :display: :[range]TCommentAs[!] commenttype ?ARGS...
+" TCommentAs requires g:tcomment_{filetype} to be defined.
+" With a bang '!', always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
+"   1. a list of key=value pairs
+"   2. 1-2 values for: ?commentBegin, ?commentEnd
+command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
+            \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
+
+" :display: :[range]TCommentRight[!] ?ARGS...
+" Comment the text to the right of the cursor. If a visual selection was 
+" made (be it block-wise or not), all lines are commented out at from 
+" the current cursor position downwards.
+" With a bang '!', always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentRight
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
-" :{range}TCommentBlock ?args...
-" args... are either (see also |tcomment#Comment()|):
+" :display: :[range]TCommentBlock[!] ?ARGS...
+" Comment as "block", e.g. use the {&ft}_block comment style. The 
+" commented text isn't indented or reformated.
+" With a bang '!', always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentBlock
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
 
-" :{range}TCommentInline ?args...
-" args... are either (see also |tcomment#Comment()|):
+" :display: :[range]TCommentInline[!] ?ARGS...
+" Use the {&ft}_inline comment style.
+" With a bang '!', always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentInline
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
 
-" :{range}TCommentMaybeInline ?args...
-" args... are either (see also |tcomment#Comment()|):
+" :display: :[range]TCommentMaybeInline[!] ?ARGS...
+" With a bang '!', always comment the line.
+"
+" ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
 command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentMaybeInline
