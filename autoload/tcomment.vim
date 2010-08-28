@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2010-08-28.
-" @Revision:    0.0.217
+" @Revision:    0.0.219
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -514,6 +514,10 @@ endf
 function! tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos) "{{{3
     let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=']
     if !empty(a:ArgLead)
+        if a:ArgLead =~ '^as='
+            call tcomment#CollectFileTypes()
+            let completions += map(copy(s:types), '"as=". v:val')
+        endif
         call filter(completions, 'v:val =~ ''\V\^''.a:ArgLead')
     endif
     return completions
