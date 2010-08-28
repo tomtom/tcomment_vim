@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2010-08-28.
-" @Revision:    0.0.198
+" @Revision:    0.0.216
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -307,7 +307,13 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR indentStr, uncomment
     let col = get(cdef, 'col', -1)
     if col >= 0
-        let indentStr = repeat(' ', col)
+        let col -= 1
+        let indent = len(indentStr)
+        if col > indent
+            let cms0 = repeat(' ', col - indent) . cms0
+        else
+            let indentStr = repeat(' ', col)
+        endif
     endif
     if commentAnyway
         let uncomment = 0
