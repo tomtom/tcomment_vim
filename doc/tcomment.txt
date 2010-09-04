@@ -81,6 +81,7 @@ Contents~
 
         :TComment ..................... |:TComment|
         :TCommentAs ................... |:TCommentAs|
+        :TCommentRight ................ |:TCommentRight|
         :TCommentBlock ................ |:TCommentBlock|
         :TCommentInline ............... |:TCommentInline|
         :TCommentMaybeInline .......... |:TCommentMaybeInline|
@@ -120,7 +121,7 @@ plugin/tcomment.vim~
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
 
-
+                                                    *:TCommentRight*
 :[range]TCommentRight[!] ?ARGS...
     Comment the text to the right of the cursor. If a visual selection was 
     made (be it block-wise or not), all lines are commented out at from 
