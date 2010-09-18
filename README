@@ -1,5 +1,3 @@
-*tcomment.txt*  An easily extensible & universal comment plugin
-
 tcomment provides easy to use, file-type sensible comments for Vim. It 
 can handle embedded syntax.
 

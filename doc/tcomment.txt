@@ -164,7 +164,7 @@ plugin/tcomment.vim~
 autoload/tcomment.vim~
 
                                                     *tcomment#DefineType()*
-tcomment#DefineType(name, commentstring)
+tcomment#DefineType(name, commentdef)
     Currently this function just sets a variable
 
                                                     *tcomment#TypeExists()*
@@ -176,13 +176,17 @@ tcomment#Comment(beg, end, ...)
     tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
     args... are either:
       1. a list of key=value pairs where known keys are:
-            as=STRING    ... Use a specific comment definition
-            col=N        ... Start the comment at column N (in block mode; must 
-                             be smaller than |indent()|)
-            count=N      ... Multiply the comment markers
-            mode=STRING  ... See the notes below on the "commentMode" argument
-            begin=STRING ... Comment prefix
-            end=STRING   ... Comment postfix
+            as=STRING     ... Use a specific comment definition
+            col=N         ... Start the comment at column N (in block mode; must 
+                              be smaller than |indent()|)
+            mode=STRING   ... See the notes below on the "commentMode" argument
+            begin=STRING  ... Comment prefix
+            end=STRING    ... Comment postfix
+            middle=STRING ... Middle line comments in block mode
+            rxbeg=N       ... Regexp to find the substring of "begin" that 
+                              should be multipied by "count"
+            rxend=N       ... The above for "end"
+            rxmid=N       ... The above for "middle"
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
     

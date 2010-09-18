@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-08-28.
-" @Revision:    0.0.219
+" @Last Change: 2010-09-18.
+" @Revision:    0.0.247
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -61,10 +61,22 @@ endif
 " I personally find this style rather irritating but here is an alternative 
 " definition that does this left-handed bar thing
 if !exists("g:tcommentBlockC")
-    let g:tcommentBlockC = "/*%s */\n * "
+    let g:tcommentBlockC = {
+                \ 'commentstring': '/*%s */',
+                \ 'middle': ' * ',
+                \ 'rxbeg': '\*\+',
+                \ 'rxend': '\*\+',
+                \ 'rxmid': '\*\+',
+                \ }
 endif
 if !exists("g:tcommentBlockC2")
-    let g:tcommentBlockC2 = "/**%s */\n * "
+    let g:tcommentBlockC2 = {
+                \ 'commentstring': '/**%s */',
+                \ 'middle': ' * ',
+                \ 'rxbeg': '\*\+',
+                \ 'rxend': '\*\+',
+                \ 'rxmid': '\*\+',
+                \ }
 endif
 if !exists("g:tcommentInlineC")
     let g:tcommentInlineC = "/* %s */"
@@ -82,10 +94,14 @@ let s:typesDirty = 1
 let s:definitions = {}
 
 " Currently this function just sets a variable
-function! tcomment#DefineType(name, commentstring)
+function! tcomment#DefineType(name, commentdef)
     if !has_key(s:definitions, a:name)
-        let cdef = a:0 >= 1 ? a:1 : {}
-        let cdef.commentstring = a:commentstring
+        if type(a:commentdef) == 4
+            let cdef = copy(a:commentdef)
+        else
+            let cdef = a:0 >= 1 ? a:1 : {}
+            let cdef.commentstring = a:commentdef
+        endif
         let s:definitions[a:name] = cdef
     endif
     let s:typesDirty = 1
@@ -235,13 +251,17 @@ let s:nullCommentString    = '%s'
 " tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
 " args... are either:
 "   1. a list of key=value pairs where known keys are:
-"         as=STRING    ... Use a specific comment definition
-"         col=N        ... Start the comment at column N (in block mode; must 
-"                          be smaller than |indent()|)
-"         count=N      ... Multiply the comment markers
-"         mode=STRING  ... See the notes below on the "commentMode" argument
-"         begin=STRING ... Comment prefix
-"         end=STRING   ... Comment postfix
+"         as=STRING     ... Use a specific comment definition
+"         col=N         ... Start the comment at column N (in block mode; must 
+"                           be smaller than |indent()|)
+"         mode=STRING   ... See the notes below on the "commentMode" argument
+"         begin=STRING  ... Comment prefix
+"         end=STRING    ... Comment postfix
+"         middle=STRING ... Middle line comments in block mode
+"         rxbeg=N       ... Regexp to find the substring of "begin" that 
+"                           should be multipied by "count"
+"         rxend=N       ... The above for "end"
+"         rxmid=N       ... The above for "middle"
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
@@ -291,11 +311,11 @@ function! tcomment#Comment(beg, end, ...)
         endif
         let commentMode = cdef.mode
     endif
-    if get(cdef, 'count', 1) > 1
+    if !empty(filter(['count', 'cbeg', 'cend', 'cmid'], 'has_key(cdef, v:val)'))
         call s:RepeatCommentstring(cdef)
     endif
     " echom "DBG" string(cdef) string(a:000)
-    let cms0 = s:BlockGetCommentString(cdef.commentstring)
+    let cms0 = s:BlockGetCommentString(cdef)
     let cms0 = escape(cms0, '\')
     " make whitespace optional; this conflicts with comments that require some 
     " whitespace
@@ -321,7 +341,7 @@ function! tcomment#Comment(beg, end, ...)
     " go
     if commentMode =~# 'B'
         " We want a comment block
-        call s:CommentBlock(a:beg, a:end, uncomment, cmtCheck, cdef.commentstring, indentStr)
+        call s:CommentBlock(a:beg, a:end, uncomment, cmtCheck, cdef, indentStr)
     else
         " call s:CommentLines(a:beg, a:end, cstart, cend, uncomment, cmtCheck, cms0, indentStr)
         " We want commented lines
@@ -369,11 +389,25 @@ endf
 
 
 function! s:RepeatCommentstring(cdef) "{{{3
-    let cms_fbeg = match(a:cdef.commentstring, '\s*%\@<!%s')
-    let cms_fend = matchend(a:cdef.commentstring, '%\@<!%s\s*')
-    let a:cdef.commentstring = repeat(a:cdef.commentstring[0 : cms_fbeg - 1], a:cdef.count)
-                \. a:cdef.commentstring[cms_fbeg : cms_fend - 1]
-                \. repeat(a:cdef.commentstring[cms_fend : -1], a:cdef.count)
+    " TLogVAR a:cdef
+    let cms = s:BlockGetCommentString(a:cdef)
+    let mid = s:BlockGetMiddleString(a:cdef)
+    let cms_fbeg = match(cms, '\s*%\@<!%s')
+    let cms_fend = matchend(cms, '%\@<!%s\s*')
+    let rxbeg = get(a:cdef, 'rxbeg', '^.*$')
+    let rxend = get(a:cdef, 'rxend', '^.*$')
+    let rpbeg = repeat('&', get(a:cdef, 'cbeg', get(a:cdef, 'count', 1)))
+    let rpend = repeat('&', get(a:cdef, 'cend', get(a:cdef, 'count', 1)))
+    let a:cdef.commentstring = substitute(cms[0 : cms_fbeg - 1], rxbeg, rpbeg, '')
+                \. cms[cms_fbeg : cms_fend - 1]
+                \. substitute(cms[cms_fend : -1], rxend, rpend, '')
+    " TLogVAR cms, a:cdef.commentstring
+    if !empty(mid)
+        let rxmid = get(a:cdef, 'rxmid', '^.*$')
+        let rpmid = repeat('&', get(a:cdef, 'cmid', get(a:cdef, 'count', 1)))
+        let a:cdef.middle = substitute(mid, rxmid, rpmid, '')
+        " TLogVAR mid, a:cdef.middle
+    endif
     return a:cdef
 endf
 
@@ -707,11 +741,11 @@ function! s:CommentLines(beg, end, cstart, cend, uncomment, cmtCheck, cms0, inde
                 \ '\=s:ProcessedLine('. a:uncomment .', submatch(0), "'. a:cmtCheck .'", "'. cmtReplace .'")/ge'
 endf
 
-function! s:CommentBlock(beg, end, uncomment, checkRx, replace, indentStr)
+function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
     let t = @t
     try
         silent exec 'norm! '. a:beg.'G1|v'.a:end.'G$"td'
-        let ms = s:BlockGetMiddleString(a:replace)
+        let ms = s:BlockGetMiddleString(a:cdef)
         let mx = escape(ms, '\')
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
@@ -721,7 +755,7 @@ function! s:CommentBlock(beg, end, uncomment, checkRx, replace, indentStr)
             let @t = substitute(@t, '^\n', '', '')
             let @t = substitute(@t, '\n\s*$', '', '')
         else
-            let cs = s:BlockGetCommentString(a:replace)
+            let cs = s:BlockGetCommentString(a:cdef)
             let cs = a:indentStr . substitute(cs, '%s', '%s'. a:indentStr, '')
             if ms != ''
                 let ms = a:indentStr . ms
@@ -817,15 +851,7 @@ function! s:ConstructFromComments(commentMode)
     exec s:ExtractCommentsPart('s')
     if s != ''
         exec s:ExtractCommentsPart('e')
-        " if a:commentMode
-        "     exec s:ExtractCommentsPart("m")
-        "     if m != ""
-        "         let m = "\n". m
-        "     endif
-        "     return s.'%s'.e.m
-        " else
         return s.' %s '.e
-        " endif
     endif
     if line != ''
         return line .' %s'
@@ -870,15 +896,20 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
     return cdef
 endf
 
-function! s:BlockGetCommentString(cms)
-    " return substitute(a:cms, '\n.*$', '', '')
-    return matchstr(a:cms, '^.\{-}\ze\(\n\|$\)')
+function! s:BlockGetCommentString(cdef)
+    if has_key(a:cdef, 'middle')
+        return a:cdef.commentstring
+    else
+        return matchstr(a:cdef.commentstring, '^.\{-}\ze\(\n\|$\)')
+    endif
 endf
 
-function! s:BlockGetMiddleString(cms)
-    " let rv = substitute(a:cms, '^.\{-}\n\([^\n]*\)', '\1', '')
-    let rv = matchstr(a:cms, '\n\zs.*')
-    return rv == a:cms ? '' : rv
+function! s:BlockGetMiddleString(cdef)
+    if has_key(a:cdef, 'middle')
+        return a:cdef.middle
+    else
+        return matchstr(a:cdef.commentstring, '\n\zs.*')
+    endif
 endf
 
 
