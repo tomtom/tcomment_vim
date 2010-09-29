@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-09-18.
-" @Revision:    0.0.247
+" @Last Change: 2010-09-29.
+" @Revision:    0.0.249
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -777,7 +777,7 @@ endf
 function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     if a:0 >= 1 && a:1 != ''
         let cdef = s:GetCustomCommentString(a:1, a:commentMode)
-        if empty(cdef.commentstring, '')
+        if empty(get(cdef, 'commentstring', ''))
             let cdef.commentstring = s:GuessCurrentCommentString(a:commentMode)
         endif
     else
