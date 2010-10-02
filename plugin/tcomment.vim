@@ -2,15 +2,15 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2010-08-28.
-" @Revision:    707
+" @Last Change: 2010-10-02.
+" @Revision:    709
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
-let loaded_tcomment = 200
+let loaded_tcomment = 201
 
 if !exists("g:tcommentMapLeader1")
     " g:tcommentMapLeader1 should be a shortcut that can be used with 
@@ -249,4 +249,7 @@ autoload/tcomment.vim
 - Enabled key=value pairs to configure commenting
 - Renamed the file plugin/tComment.vim to plugin/tcomment.vim
 - Renamed certain global functions to tcomment#...
+
+2.1
+- FIX
 
