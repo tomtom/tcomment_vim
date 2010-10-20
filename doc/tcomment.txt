@@ -79,23 +79,34 @@ please make sure, you have the current version of vimball (vimscript
 ========================================================================
 Contents~
 
-        :TComment ..................... |:TComment|
-        :TCommentAs ................... |:TCommentAs|
-        :TCommentRight ................ |:TCommentRight|
-        :TCommentBlock ................ |:TCommentBlock|
-        :TCommentInline ............... |:TCommentInline|
-        :TCommentMaybeInline .......... |:TCommentMaybeInline|
-        tcomment#DefineType ........... |tcomment#DefineType()|
-        tcomment#TypeExists ........... |tcomment#TypeExists()|
-        tcomment#Comment .............. |tcomment#Comment()|
-        tcomment#Operator ............. |tcomment#Operator()|
-        tcomment#OperatorLine ......... |tcomment#OperatorLine()|
-        tcomment#OperatorAnyway ....... |tcomment#OperatorAnyway()|
-        tcomment#OperatorLineAnyway ... |tcomment#OperatorLineAnyway()|
-        tcomment#CommentAs ............ |tcomment#CommentAs()|
-        tcomment#CollectFileTypes ..... |tcomment#CollectFileTypes()|
-        tcomment#Complete ............. |tcomment#Complete()|
-        tcomment#CompleteArgs ......... |tcomment#CompleteArgs()|
+        :TComment ........................... |:TComment|
+        :TCommentAs ......................... |:TCommentAs|
+        :TCommentRight ...................... |:TCommentRight|
+        :TCommentBlock ...................... |:TCommentBlock|
+        :TCommentInline ..................... |:TCommentInline|
+        :TCommentMaybeInline ................ |:TCommentMaybeInline|
+        g:tcommentBlankLines ................ |g:tcommentBlankLines|
+        g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
+        g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
+        g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
+        g:tcommentGuessFileType_php ......... |g:tcommentGuessFileType_php|
+        g:tcommentGuessFileType_html ........ |g:tcommentGuessFileType_html|
+        g:tcommentGuessFileType_tskeleton ... |g:tcommentGuessFileType_tskeleton|
+        g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
+        g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
+        g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
+        g:tcommentBlockC .................... |g:tcommentBlockC|
+        g:tcommentBlockC2 ................... |g:tcommentBlockC2|
+        g:tcommentInlineC ................... |g:tcommentInlineC|
+        g:tcommentBlockXML .................. |g:tcommentBlockXML|
+        g:tcommentInlineXML ................. |g:tcommentInlineXML|
+        tcomment#DefineType ................. |tcomment#DefineType()|
+        tcomment#Comment .................... |tcomment#Comment()|
+        tcomment#Operator ................... |tcomment#Operator()|
+        tcomment#OperatorLine ............... |tcomment#OperatorLine()|
+        tcomment#OperatorAnyway ............. |tcomment#OperatorAnyway()|
+        tcomment#OperatorLineAnyway ......... |tcomment#OperatorLineAnyway()|
+        tcomment#CommentAs .................. |tcomment#CommentAs()|
 
 
 ========================================================================
@@ -163,13 +174,96 @@ plugin/tcomment.vim~
 ========================================================================
 autoload/tcomment.vim~
 
+                                                    *g:tcommentBlankLines*
+g:tcommentBlankLines           (default: 1)
+    If true, comment blank lines too
+
+                                                    *g:tcommentOpModeExtra*
+g:tcommentOpModeExtra          (default: '')
+    Modifies how the operator works.
+      > ... Move the cursor to the end of the comment
+
+                                                    *g:tcommentGuessFileType*
+g:tcommentGuessFileType        (default: 0)
+    Guess the file type based on syntax names always or for some fileformat only
+    If non-zero, try to guess filetypes.
+    tcomment also checks g:tcommentGuessFileType_{&filetype} for 
+    filetype specific values.
+    
+    Values:
+      0        ... don't guess
+      1        ... guess
+      FILETYPE ... assume this filetype
+
+                                                    *g:tcommentGuessFileType_dsl*
+g:tcommentGuessFileType_dsl    (default: 'xml')
+    For dsl documents, assumet filetype = xml.
+
+                                                    *g:tcommentGuessFileType_php*
+g:tcommentGuessFileType_php    (default: 'html')
+    In php documents, the php part is usually marked as phpRegion. We 
+    thus assume that the buffers default comment style isn't php but 
+    html.
+
+                                                    *g:tcommentGuessFileType_html*
+g:tcommentGuessFileType_html   (default: 1)
+
+                                                    *g:tcommentGuessFileType_tskeleton*
+g:tcommentGuessFileType_tskeleton (default: 1)
+
+                                                    *g:tcommentGuessFileType_vim*
+g:tcommentGuessFileType_vim    (default: 1)
+
+                                                    *g:tcommentIgnoreTypes_php*
+g:tcommentIgnoreTypes_php      (default: 'sql')
+    In php files, some syntax regions are wongly highlighted as sql 
+    markup. We thus ignore sql syntax when guessing the filetype in 
+    php files.
+
+                                                    *g:tcommentSyntaxMap*
+g:tcommentSyntaxMap            (default: {...})
+    tcomment guesses filetypes based on the name of the current syntax 
+    region. This works well if the syntax names match 
+    /filetypeSomeName/. Other syntax names have to be explicitly 
+    mapped onto the corresponding filetype.
+
+                                                    *g:tcommentBlockC*
+g:tcommentBlockC               (default: {...})
+    Generic c-like block comments.
+
+                                                    *g:tcommentBlockC2*
+g:tcommentBlockC2              (default: {...})
+    Generic c-like block comments (alternative markup).
+
+                                                    *g:tcommentInlineC*
+g:tcommentInlineC              (default: "/* %s */")
+    Generic c-like comments.
+
+                                                    *g:tcommentBlockXML*
+g:tcommentBlockXML             (default: "<!--%s-->\n  ")
+    Generic xml-like block comments.
+
+                                                    *g:tcommentInlineXML*
+g:tcommentInlineXML            (default: "<!-- %s -->")
+    Generic xml-like comments.
+
                                                     *tcomment#DefineType()*
 tcomment#DefineType(name, commentdef)
-    Currently this function just sets a variable
-
-                                                    *tcomment#TypeExists()*
-tcomment#TypeExists(name)
-    Return 1 if a comment type is defined.
+    If you don't explicitly define a comment style, |:TComment| will use 
+    'commentstring' instead. We override the default values here in order 
+    to have a blank after the comment marker. Block comments work only if 
+    we explicitly define the markup.
+    
+    The comment definition can be either a string or a dictionary.
+    
+    If it is a string:
+    The format for block comments is similar to 'commentstrings' with the 
+    exception that the format strings for blocks can contain a second line 
+    that defines how "middle lines" (see :h format-comments) should be 
+    displayed.
+    
+    If it is a dictionary:
+    See the help on the args argument of |tcomment#Comment|.
 
                                                     *tcomment#Comment()*
 tcomment#Comment(beg, end, ...)
@@ -220,17 +314,6 @@ tcomment#CommentAs(beg, end, commentAnyway, filetype, ?args...)
       2. An args list (see the notes on the "args" argument of 
          |tcomment#Comment()|)
     comment text as if it were of a specific filetype
-
-                                                    *tcomment#CollectFileTypes()*
-tcomment#CollectFileTypes()
-    collect all known comment types
-
-                                                    *tcomment#Complete()*
-tcomment#Complete(ArgLead, CmdLine, CursorPos)
-    return a list of filetypes for which a tcomment_{&ft} is defined
-
-                                                    *tcomment#CompleteArgs()*
-tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos)
 
 
 

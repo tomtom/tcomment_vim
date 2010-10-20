@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2010-10-02.
-" @Revision:    709
+" @Last Change: 2010-10-20.
+" @Revision:    711
 " 
 " GetLatestVimScripts: 1173 1 tComment.vim
 
@@ -27,9 +27,6 @@ if !exists("g:tcommentMapLeaderOp1")
 endif
 if !exists("g:tcommentMapLeaderOp2")
     let g:tcommentMapLeaderOp2 = 'gC'
-endif
-if !exists("g:tcommentOpModeExtra")
-    let g:tcommentOpModeExtra = ''
 endif
 
 

@@ -3,44 +3,67 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-09-29.
-" @Revision:    0.0.249
+" @Last Change: 2010-10-20.
+" @Revision:    0.0.276
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
-
-" If true, comment blank lines too
 if !exists("g:tcommentBlankLines")
-    let g:tcommentBlankLines = 1
+    " If true, comment blank lines too
+    let g:tcommentBlankLines = 1    "{{{2
+endif
+
+if !exists("g:tcommentOpModeExtra")
+    " Modifies how the operator works.
+    "   > ... Move the cursor to the end of the comment
+    let g:tcommentOpModeExtra = ''   "{{{2
 endif
 
 " Guess the file type based on syntax names always or for some fileformat only
 if !exists("g:tcommentGuessFileType")
-    let g:tcommentGuessFileType = 0
+    " If non-zero, try to guess filetypes.
+    " tcomment also checks g:tcommentGuessFileType_{&filetype} for 
+    " filetype specific values.
+    "
+    " Values:
+    "   0        ... don't guess
+    "   1        ... guess
+    "   FILETYPE ... assume this filetype
+    let g:tcommentGuessFileType = 0   "{{{2
 endif
-" In php documents, the php part is usually marked as phpRegion. We thus 
-" assume that the buffers default comment style isn't php but html
 if !exists("g:tcommentGuessFileType_dsl")
-    let g:tcommentGuessFileType_dsl = 'xml'
+    " For dsl documents, assumet filetype = xml.
+    let g:tcommentGuessFileType_dsl = 'xml'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_php")
-    let g:tcommentGuessFileType_php = 'html'
+    " In php documents, the php part is usually marked as phpRegion. We 
+    " thus assume that the buffers default comment style isn't php but 
+    " html.
+    let g:tcommentGuessFileType_php = 'html'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_html")
-    let g:tcommentGuessFileType_html = 1
+    let g:tcommentGuessFileType_html = 1   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_tskeleton")
-    let g:tcommentGuessFileType_tskeleton = 1
+    let g:tcommentGuessFileType_tskeleton = 1   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_vim")
-    let g:tcommentGuessFileType_vim = 1
+    let g:tcommentGuessFileType_vim = 1   "{{{2
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
-    let g:tcommentIgnoreTypes_php = 'sql'
+    " In php files, some syntax regions are wongly highlighted as sql 
+    " markup. We thus ignore sql syntax when guessing the filetype in 
+    " php files.
+    let g:tcommentIgnoreTypes_php = 'sql'   "{{{2
 endif
 
-if !exists('g:tcommentSyntaxMap') "{{{2
+if !exists('g:tcommentSyntaxMap')
+    " tcomment guesses filetypes based on the name of the current syntax 
+    " region. This works well if the syntax names match 
+    " /filetypeSomeName/. Other syntax names have to be explicitly 
+    " mapped onto the corresponding filetype.
+    " :read: let g:tcommentSyntaxMap = {...}   "{{{2
     let g:tcommentSyntaxMap = {
             \ 'vimMzSchemeRegion': 'scheme',
             \ 'vimPerlRegion':     'perl',
@@ -50,17 +73,9 @@ if !exists('g:tcommentSyntaxMap') "{{{2
             \ }
 endif
 
-" If you don't define these variables, TComment will use &commentstring 
-" instead. We override the default values here in order to have a blank after 
-" the comment marker. Block comments work only if we explicitly define the 
-" markup.
-" The format for block comments is similar to normal commentstrings with the 
-" exception that the format strings for blocks can contain a second line that 
-" defines how "middle lines" (see :h format-comments) should be displayed.
-
-" I personally find this style rather irritating but here is an alternative 
-" definition that does this left-handed bar thing
 if !exists("g:tcommentBlockC")
+    " Generic c-like block comments.
+    " :read: let g:tcommentBlockC = {...}   "{{{2
     let g:tcommentBlockC = {
                 \ 'commentstring': '/*%s */',
                 \ 'middle': ' * ',
@@ -70,6 +85,8 @@ if !exists("g:tcommentBlockC")
                 \ }
 endif
 if !exists("g:tcommentBlockC2")
+    " Generic c-like block comments (alternative markup).
+    " :read: let g:tcommentBlockC2 = {...}   "{{{2
     let g:tcommentBlockC2 = {
                 \ 'commentstring': '/**%s */',
                 \ 'middle': ' * ',
@@ -79,21 +96,38 @@ if !exists("g:tcommentBlockC2")
                 \ }
 endif
 if !exists("g:tcommentInlineC")
-    let g:tcommentInlineC = "/* %s */"
+    " Generic c-like comments.
+    let g:tcommentInlineC = "/* %s */"   "{{{2
 endif
 
 if !exists("g:tcommentBlockXML")
-    let g:tcommentBlockXML = "<!--%s-->\n  "
+    " Generic xml-like block comments.
+    let g:tcommentBlockXML = "<!--%s-->\n  "   "{{{2
 endif
 if !exists("g:tcommentInlineXML")
-    let g:tcommentInlineXML = "<!-- %s -->"
+    " Generic xml-like comments.
+    let g:tcommentInlineXML = "<!-- %s -->"   "{{{2
 endif
 
 let s:typesDirty = 1
 
 let s:definitions = {}
 
-" Currently this function just sets a variable
+" If you don't explicitly define a comment style, |:TComment| will use 
+" 'commentstring' instead. We override the default values here in order 
+" to have a blank after the comment marker. Block comments work only if 
+" we explicitly define the markup.
+"
+" The comment definition can be either a string or a dictionary.
+"
+" If it is a string:
+" The format for block comments is similar to 'commentstrings' with the 
+" exception that the format strings for blocks can contain a second line 
+" that defines how "middle lines" (see :h format-comments) should be 
+" displayed.
+" 
+" If it is a dictionary:
+" See the help on the args argument of |tcomment#Comment|.
 function! tcomment#DefineType(name, commentdef)
     if !has_key(s:definitions, a:name)
         if type(a:commentdef) == 4
@@ -107,6 +141,7 @@ function! tcomment#DefineType(name, commentdef)
     let s:typesDirty = 1
 endf
 
+" :nodoc:
 " Return 1 if a comment type is defined.
 function! tcomment#TypeExists(name)
     return has_key(s:definitions, a:name)
@@ -463,8 +498,14 @@ function! tcomment#Operator(type, ...) "{{{3
         if g:tcommentOpModeExtra !~ '>'
             " TLogVAR pos
             " call setpos('.', pos)
-            call setpos('.', w:tcommentPos)
-            unlet! w:tcommentPos
+            if exists('w:tcommentPos')
+                call setpos('.', w:tcommentPos)
+                unlet! w:tcommentPos
+            else
+                echohl WarningMsg
+                echom "TComment: w:tcommentPos wasn't set. Please report this to the plugin author"
+                echohl NONE
+            endif
         endif
     endtry
 endf
@@ -518,6 +559,7 @@ endf
 
 
 " collect all known comment types
+" :nodoc:
 function! tcomment#CollectFileTypes()
     if s:typesDirty
         let s:types = keys(s:definitions)
@@ -530,6 +572,7 @@ call tcomment#CollectFileTypes()
 
 
 " return a list of filetypes for which a tcomment_{&ft} is defined
+" :nodoc:
 function! tcomment#Complete(ArgLead, CmdLine, CursorPos) "{{{3
     call tcomment#CollectFileTypes()
     let completions = copy(s:types)
@@ -545,6 +588,7 @@ function! tcomment#Complete(ArgLead, CmdLine, CursorPos) "{{{3
 endf
 
 
+" :nodoc:
 function! tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos) "{{{3
     let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=']
     if !empty(a:ArgLead)
