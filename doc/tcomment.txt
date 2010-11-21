@@ -15,6 +15,9 @@ override the default choice.
 TComment can properly handle an embedded syntax, e.g., ruby/python/perl 
 regions in vim scripts, HTML or JavaScript in php code etc.
 
+Demo:
+http://vimsomnia.blogspot.com/2010/11/tcomment-vim-plugin.html
+
 
                                                     *tcomment-maps*
 Key bindings~
@@ -34,9 +37,8 @@ and g:tcommentMapLeaderOp2):
     gC{motion}   :: Comment region
     gCc          :: Comment the current line
 
-                                                    *g:tcommentOpModeExtra*
 By default the cursor stays put. If you want the cursor to the end of 
-the commented text, set g:tcommentOpModeExtra to '>' (but this may not 
+the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
 work properly with exclusive motions).
 
 Primary key maps:
