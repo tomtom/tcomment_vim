@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-10-20.
-" @Revision:    0.0.276
+" @Last Change: 2010-12-02.
+" @Revision:    0.0.277
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -207,6 +207,7 @@ call tcomment#DefineType('java_doc_block',   g:tcommentBlockC2  )
 call tcomment#DefineType('jproperties',      '# %s'             )
 call tcomment#DefineType('lisp',             '; %s'             )
 call tcomment#DefineType('lynx',             '# %s'             )
+call tcomment#DefineType('matlab',           '%% %s'            )
 call tcomment#DefineType('m4',               'dnl %s'           )
 call tcomment#DefineType('mail',             '> %s'             )
 call tcomment#DefineType('msidl',            '// %s'            )
