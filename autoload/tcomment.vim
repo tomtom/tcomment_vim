@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2010-12-02.
-" @Revision:    0.0.277
+" @Revision:    0.0.281
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -670,21 +670,23 @@ function! s:SPrintF(string, ...)
             let r = r . strpart(s, 0, i)
             let s = strpart(s, i + 2)
             if x == '%'
-                let r = r.'%'
-            else
+                let r .= '%'
+            elseif x ==? 's'
                 if a:0 >= n
                     let v = a:{n}
-                    let n = n + 1
+                    let n += 1
                 else
                     echoerr 'Malformed format string (too many arguments required): '. a:string
                 endif
                 if x ==# 's'
-                    let r = r.v
+                    let r .= v
                 elseif x ==# 'S'
-                    let r = r.'"'.v.'"'
+                    let r .= '"'.v.'"'
                 else
                     echoerr 'Malformed format string: '. a:string
                 endif
+            else
+                let r .= x
             endif
         else
             return r.s
