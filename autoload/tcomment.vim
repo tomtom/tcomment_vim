@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-12-02.
-" @Revision:    0.0.281
+" @Last Change: 2010-12-03.
+" @Revision:    0.0.283
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -577,9 +577,10 @@ call tcomment#CollectFileTypes()
 function! tcomment#Complete(ArgLead, CmdLine, CursorPos) "{{{3
     call tcomment#CollectFileTypes()
     let completions = copy(s:types)
-    if index(completions, &filetype) != -1
-        " TLogVAR &filetype
-        call insert(completions, &filetype)
+    let filetype = s:Filetype()
+    if index(completions, filetype) != -1
+        " TLogVAR filetype
+        call insert(completions, filetype)
     endif
     if !empty(a:ArgLead)
         call filter(completions, 'v:val =~ ''\V\^''.a:ArgLead')
@@ -632,25 +633,26 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
     endif
     let cms = get(cdef, 'commentstring', '')
     if empty(cms)
+        let filetype = s:Filetype()
         if exists('b:commentstring')
             let cms = b:commentstring
-            return s:GetCustomCommentString(&filetype, a:commentMode, cms)
+            return s:GetCustomCommentString(filetype, a:commentMode, cms)
         elseif exists('b:commentStart') && b:commentStart != ''
             let cms = s:EncodeCommentPart(b:commentStart) .' %s'
             if exists('b:commentEnd') && b:commentEnd != ''
                 let cms = cms .' '. s:EncodeCommentPart(b:commentEnd)
             endif
-            return s:GetCustomCommentString(&filetype, a:commentMode, cms)
-        elseif g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. &filetype) 
-                    \ && g:tcommentGuessFileType_{&filetype} =~ '[^0]')
-            if g:tcommentGuessFileType_{&filetype} == 1
+            return s:GetCustomCommentString(filetype, a:commentMode, cms)
+        elseif g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
+                    \ && g:tcommentGuessFileType_{filetype} =~ '[^0]')
+            if g:tcommentGuessFileType_{filetype} == 1
                 let altFiletype = ''
             else
-                let altFiletype = g:tcommentGuessFileType_{&filetype}
+                let altFiletype = g:tcommentGuessFileType_{filetype}
             endif
-            return s:GuessFileType(a:beg, a:end, a:commentMode, &filetype, altFiletype)
+            return s:GuessFileType(a:beg, a:end, a:commentMode, filetype, altFiletype)
         else
-            return s:GetCustomCommentString(&filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
+            return s:GetCustomCommentString(filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
         endif
         let cdef.commentstring = cms
     endif
@@ -817,6 +819,14 @@ function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
         let @t = t
     endtry
 endf
+
+
+function! s:Filetype(...) "{{{3
+    let ft = a:0 >= 1 ? a:1 : &filetype
+    let ft = substitute(ft, '\..*$', '', '')
+    return ft
+endf
+
 
 " inspired by Meikel Brandmeyer's EnhancedCommentify.vim
 " this requires that a syntax names are prefixed by the filetype name 
