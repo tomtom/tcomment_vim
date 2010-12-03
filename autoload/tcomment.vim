@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2010-12-03.
-" @Revision:    0.0.283
+" @Revision:    0.0.284
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -360,7 +360,7 @@ function! tcomment#Comment(beg, end, ...)
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
     " turn commentstring into a search pattern
-    let cmtCheck = s:SPrintF(cmtCheck, '\(\_.\{-}\)')
+    let cmtCheck = printf(cmtCheck, '\(\_.\{-}\)')
     " set commentMode and indentStr
     let [indentStr, uncomment] = s:CommentDef(a:beg, a:end, cmtCheck, commentMode, cstart, cend)
     " TLogVAR indentStr, uncomment
@@ -662,43 +662,6 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
     return cdef
 endf
 
-" s:SPrintF(formatstring, ?values ...)
-" => string
-function! s:SPrintF(string, ...)
-    let n = 1
-    let r = ''
-    let s = a:string
-    while 1
-        let i = match(s, '%\(.\)')
-        if i >= 0
-            let x = s[i + 1]
-            let r = r . strpart(s, 0, i)
-            let s = strpart(s, i + 2)
-            if x == '%'
-                let r .= '%'
-            elseif x ==? 's'
-                if a:0 >= n
-                    let v = a:{n}
-                    let n += 1
-                else
-                    echoerr 'Malformed format string (too many arguments required): '. a:string
-                endif
-                if x ==# 's'
-                    let r .= v
-                elseif x ==# 'S'
-                    let r .= '"'.v.'"'
-                else
-                    echoerr 'Malformed format string: '. a:string
-                endif
-            else
-                let r .= x
-            endif
-        else
-            return r.s
-        endif
-    endwh
-endf
-
 function! s:StartRx(pos)
     if a:pos == 0
         return '\^'
@@ -766,7 +729,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
     if a:uncomment
         let rv = substitute(a:match, a:checkRx, '\1\2', '')
     else
-        let rv = s:SPrintF(a:replace, a:match)
+        let rv = printf(a:replace, a:match)
     endif
     " TLogVAR rv
     " let md = len(rv) - ml
@@ -815,7 +778,7 @@ function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
                 let @t = substitute(@t, '^'. a:indentStr, '', 'g')
                 let @t = ms . substitute(@t, '\n'. a:indentStr, '\n'. mx, 'g')
             endif
-            let @t = s:SPrintF(cs, "\n". @t ."\n")
+            let @t = printf(cs, "\n". @t ."\n")
         endif
         silent norm! "tP
     finally
