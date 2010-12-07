@@ -105,3 +105,10 @@ version: "2.02"
   - Support for matlab (contributed by D Fong)
   MD5 checksum: 29a2742dfae32b52a7abcdfb4de553ad
 
+version: "2.03"
+  - s:PrintF(): Silently ignore malformed format strings
+  - Deal with major.minor pseudo-filetypes
+  - go-lang
+  - Remove s:SPrintF() since vim now has printf()
+  MD5 checksum: 4a13ffb1b1d46bbd2dc8dcee77507983
+
