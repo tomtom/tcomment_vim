@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2010-12-03.
-" @Revision:    0.0.284
+" @Last Change: 2011-01-12.
+" @Revision:    0.0.292
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -17,6 +17,11 @@ if !exists("g:tcommentOpModeExtra")
     " Modifies how the operator works.
     "   > ... Move the cursor to the end of the comment
     let g:tcommentOpModeExtra = ''   "{{{2
+endif
+
+if !exists('g:tcommentOptions')
+    " Other key-value options used by |tcomment#Comment()|.
+    let g:tcommentOptions = {}   "{{{2
 endif
 
 " Guess the file type based on syntax names always or for some fileformat only
@@ -290,7 +295,8 @@ let s:nullCommentString    = '%s'
 
 " tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
 " args... are either:
-"   1. a list of key=value pairs where known keys are:
+"   1. a list of key=value pairs where known keys are (see also 
+"      |g:tcommentOptions|):
 "         as=STRING     ... Use a specific comment definition
 "         col=N         ... Start the comment at column N (in block mode; must 
 "                           be smaller than |indent()|)
@@ -328,10 +334,11 @@ function! tcomment#Comment(beg, end, ...)
     let [cstart, cend] = s:GetStartEnd(commentMode)
     " TLogVAR commentMode, cstart, cend
     " get the correct commentstring
+    let cdef = copy(g:tcommentOptions)
     if a:0 >= 3 && type(a:3) == 4
-        let cdef = a:3
+        call extend(cdef, a:3)
     else
-        let cdef = s:GetCommentDefinition(a:beg, a:end, commentMode)
+        call extend(cdef, s:GetCommentDefinition(a:beg, a:end, commentMode))
         let ax = 3
         if a:0 >= 3 && a:3 != '' && stridx(a:3, '=') == -1
             let ax = 4
