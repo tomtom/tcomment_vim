@@ -112,3 +112,11 @@ version: "2.03"
   - Remove s:SPrintF() since vim now has printf()
   MD5 checksum: 4a13ffb1b1d46bbd2dc8dcee77507983
 
+version: "2.04"
+  - Support for fstab
+  - g:tcommentOptions: Other key-value options used by |tcomment#Comment()|.
+  - Support for django (thanks to Jim Tinsky)
+  - g:tcomment#syntax_substitute: Rewrite syntax names
+  - django support: minor correction
+  MD5 checksum: 994e5886d185857848b5472d5457b232
+
