@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2011-01-20.
-" @Revision:    0.0.295
+" @Revision:    0.0.314
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -21,11 +21,16 @@ endif
 
 if !exists('g:tcommentOptions')
     " Other key-value options used by |tcomment#Comment()|.
+    "
+    " Example: If you want to put the opening comment marker always in 
+    " the first column regardless of the block's indentation, put this 
+    " into your |vimrc| file: >
+    "   let g:tcommentOptions = {'col': 1}
     let g:tcommentOptions = {}   "{{{2
 endif
 
-" Guess the file type based on syntax names always or for some fileformat only
 if !exists("g:tcommentGuessFileType")
+    " Guess the file type based on syntax names always or for some fileformat only
     " If non-zero, try to guess filetypes.
     " tcomment also checks g:tcommentGuessFileType_{&filetype} for 
     " filetype specific values.

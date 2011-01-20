@@ -89,13 +89,16 @@ Contents~
         :TCommentMaybeInline ................ |:TCommentMaybeInline|
         g:tcommentBlankLines ................ |g:tcommentBlankLines|
         g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
+        g:tcommentOptions ................... |g:tcommentOptions|
         g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
         g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
         g:tcommentGuessFileType_php ......... |g:tcommentGuessFileType_php|
         g:tcommentGuessFileType_html ........ |g:tcommentGuessFileType_html|
         g:tcommentGuessFileType_tskeleton ... |g:tcommentGuessFileType_tskeleton|
         g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
+        g:tcommentGuessFileType_django ...... |g:tcommentGuessFileType_django|
         g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
+        g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
         g:tcommentBlockC .................... |g:tcommentBlockC|
         g:tcommentBlockC2 ................... |g:tcommentBlockC2|
@@ -185,6 +188,16 @@ g:tcommentOpModeExtra          (default: '')
     Modifies how the operator works.
       > ... Move the cursor to the end of the comment
 
+                                                    *g:tcommentOptions*
+g:tcommentOptions              (default: {})
+    Other key-value options used by |tcomment#Comment()|.
+    
+    Example: If you want to put the opening comment marker always in 
+    the first column regardless of the block's indentation, put this 
+    into your |vimrc| file: >
+      let g:tcommentOptions = {'col': 1}
+<
+
                                                     *g:tcommentGuessFileType*
 g:tcommentGuessFileType        (default: 0)
     Guess the file type based on syntax names always or for some fileformat only
@@ -216,11 +229,17 @@ g:tcommentGuessFileType_tskeleton (default: 1)
                                                     *g:tcommentGuessFileType_vim*
 g:tcommentGuessFileType_vim    (default: 1)
 
+                                                    *g:tcommentGuessFileType_django*
+g:tcommentGuessFileType_django (default: 1)
+
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
     In php files, some syntax regions are wongly highlighted as sql 
     markup. We thus ignore sql syntax when guessing the filetype in 
     php files.
+
+                                                    *g:tcomment#syntax_substitute*
+g:tcomment#syntax_substitute   (default: {...})
 
                                                     *g:tcommentSyntaxMap*
 g:tcommentSyntaxMap            (default: {...})
@@ -271,7 +290,8 @@ tcomment#DefineType(name, commentdef)
 tcomment#Comment(beg, end, ...)
     tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
     args... are either:
-      1. a list of key=value pairs where known keys are:
+      1. a list of key=value pairs where known keys are (see also 
+         |g:tcommentOptions|):
             as=STRING     ... Use a specific comment definition
             col=N         ... Start the comment at column N (in block mode; must 
                               be smaller than |indent()|)
