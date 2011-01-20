@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-01-12.
-" @Revision:    0.0.292
+" @Last Change: 2011-01-20.
+" @Revision:    0.0.295
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -54,6 +54,9 @@ if !exists("g:tcommentGuessFileType_tskeleton")
 endif
 if !exists("g:tcommentGuessFileType_vim")
     let g:tcommentGuessFileType_vim = 1   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_django")
+    let g:tcommentGuessFileType_django = 1   "{{{2
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
@@ -176,6 +179,8 @@ call tcomment#DefineType('cs',               '// %s'            )
 call tcomment#DefineType('cs_inline',        g:tcommentInlineC  )
 call tcomment#DefineType('cs_block',         g:tcommentBlockC   )
 call tcomment#DefineType('desktop',          '# %s'             )
+call tcomment#DefineType('django_block',     "{%% comment %%}%s{%% endcomment %%}\n ")
+call tcomment#DefineType('django_inline',    '{# %s #}'         )
 call tcomment#DefineType('docbk',            '<!-- %s -->'      )
 call tcomment#DefineType('docbk_inline',     g:tcommentInlineXML)
 call tcomment#DefineType('docbk_block',      g:tcommentBlockXML )
