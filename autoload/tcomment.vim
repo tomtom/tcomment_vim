@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2011-01-20.
-" @Revision:    0.0.314
+" @Revision:    0.0.315
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -192,8 +192,8 @@ call tcomment#DefineType('cs',               '// %s'            )
 call tcomment#DefineType('cs_inline',        g:tcommentInlineC  )
 call tcomment#DefineType('cs_block',         g:tcommentBlockC   )
 call tcomment#DefineType('desktop',          '# %s'             )
+call tcomment#DefineType('django',           '{# %s #}'         )
 call tcomment#DefineType('django_block',     "{%% comment %%}%s{%% endcomment %%}\n ")
-call tcomment#DefineType('django_inline',    '{# %s #}'         )
 call tcomment#DefineType('docbk',            '<!-- %s -->'      )
 call tcomment#DefineType('docbk_inline',     g:tcommentInlineXML)
 call tcomment#DefineType('docbk_block',      g:tcommentBlockXML )
