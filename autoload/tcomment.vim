@@ -66,6 +66,14 @@ if !exists("g:tcommentIgnoreTypes_php")
     let g:tcommentIgnoreTypes_php = 'sql'   "{{{2
 endif
 
+if !exists('g:tcomment#syntax_substitute')
+    " :read: let g:tcomment#syntax_substitute = {...}   "{{{2
+    " Perform replacements on the syntax name.
+    let g:tcomment#syntax_substitute = {
+                \ '\C^javaScript': {'sub': 'javascript'}
+                \ }
+endif
+
 if !exists('g:tcommentSyntaxMap')
     " tcomment guesses filetypes based on the name of the current syntax 
     " region. This works well if the syntax names match 
@@ -826,7 +834,7 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
         let le = len(getline(n))
         " TLogVAR m, le
         while m < le
-            let syntaxName = synIDattr(synID(n, m, 1), 'name')
+            let syntaxName = s:GetSyntaxName(n, m)
             " TLogVAR syntaxName, n, m
             let ftypeMap   = get(g:tcommentSyntaxMap, syntaxName)
             if !empty(ftypeMap)
@@ -850,6 +858,21 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     endwh
     return cdef
 endf
+
+
+function! s:GetSyntaxName(lnum, col) "{{{3
+    let syntaxName = synIDattr(synID(a:lnum, a:col, 1), 'name')
+    if !empty(g:tcomment#syntax_substitute)
+        for [rx, subdef] in items(g:tcomment#syntax_substitute)
+            if !has_key(subdef, 'if') || eval(subdef.if)
+                let syntaxName = substitute(syntaxName, rx, subdef.sub, 'g')
+            endif
+        endfor
+    endif
+    " TLogVAR syntaxName
+    return syntaxName
+endf
+
 
 function! s:CommentMode(commentMode, newmode) "{{{3
     return substitute(a:commentMode, '\w\+', a:newmode, 'g')
