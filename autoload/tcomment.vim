@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-01-26.
-" @Revision:    0.0.317
+" @Last Change: 2011-02-09.
+" @Revision:    0.0.318
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -266,6 +266,7 @@ call tcomment#DefineType('ruby_3',           '### %s'           )
 call tcomment#DefineType('ruby_block',       "=begin rdoc%s=end")
 call tcomment#DefineType('ruby_nodoc_block', "=begin%s=end"     )
 call tcomment#DefineType('r',                '# %s'             )
+call tcomment#DefineType('samba',            '# %s'             )
 call tcomment#DefineType('sbs',              "' %s"             )
 call tcomment#DefineType('scheme',           '; %s'             )
 call tcomment#DefineType('sed',              '# %s'             )
