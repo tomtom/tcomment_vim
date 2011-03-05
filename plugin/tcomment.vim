@@ -1,10 +1,10 @@
-" tComment.vim -- An easily extensible & universal comment plugin 
+" tComment.vim -- An easily extensible & universal comment plugin
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2010-12-07.
 " @Revision:    716
-" 
+"
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -13,12 +13,12 @@ endif
 let loaded_tcomment = 204
 
 if !exists("g:tcommentMapLeader1")
-    " g:tcommentMapLeader1 should be a shortcut that can be used with 
+    " g:tcommentMapLeader1 should be a shortcut that can be used with
     " map, imap, vmap.
     let g:tcommentMapLeader1 = '<c-_>'
 endif
 if !exists("g:tcommentMapLeader2")
-    " g:tcommentMapLeader2 should be a shortcut that can be used with 
+    " g:tcommentMapLeader2 should be a shortcut that can be used with
     " map, xmap.
     let g:tcommentMapLeader2 = '<Leader>_'
 endif
@@ -31,9 +31,9 @@ endif
 
 
 " :display: :[range]TComment[!] ?ARGS...
-" If there is a visual selection that begins and ends in the same line, 
+" If there is a visual selection that begins and ends in the same line,
 " then |:TCommentInline| is used instead.
-" The optional range defaults to the current line. With a bang '!', 
+" The optional range defaults to the current line. With a bang '!',
 " always comment the line.
 "
 " ARGS... are either (see also |tcomment#Comment()|):
@@ -49,12 +49,12 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
+command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs
             \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
 
 " :display: :[range]TCommentRight[!] ?ARGS...
-" Comment the text to the right of the cursor. If a visual selection was 
-" made (be it block-wise or not), all lines are commented out at from 
+" Comment the text to the right of the cursor. If a visual selection was
+" made (be it block-wise or not), all lines are commented out at from
 " the current cursor position downwards.
 " With a bang '!', always comment the line.
 "
@@ -65,7 +65,7 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
 " :display: :[range]TCommentBlock[!] ?ARGS...
-" Comment as "block", e.g. use the {&ft}_block comment style. The 
+" Comment as "block", e.g. use the {&ft}_block comment style. The
 " commented text isn't indented or reformated.
 " With a bang '!', always comment the line.
 "
@@ -134,10 +134,10 @@ if (g:tcommentMapLeaderOp1 != '')
     exec 'nnoremap <silent> '. g:tcommentMapLeaderOp1 .' :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#Operator<cr>g@'
     exec 'nnoremap <silent> '. g:tcommentMapLeaderOp1 .'c :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@$'
     exec 'xnoremap <silent> '. g:tcommentMapLeaderOp1 .' :TCommentMaybeInline<cr>'
-endif 
+endif
 if (g:tcommentMapLeaderOp2 != '')
     exec 'nnoremap <silent> '. g:tcommentMapLeaderOp2 .' :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@'
     exec 'nnoremap <silent> '. g:tcommentMapLeaderOp2 .'c :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$'
     exec 'xnoremap <silent> '. g:tcommentMapLeaderOp2 .' :TCommentMaybeInline<cr>'
-endif 
+endif
 

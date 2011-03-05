@@ -22,8 +22,8 @@ endif
 if !exists('g:tcommentOptions')
     " Other key-value options used by |tcomment#Comment()|.
     "
-    " Example: If you want to put the opening comment marker always in 
-    " the first column regardless of the block's indentation, put this 
+    " Example: If you want to put the opening comment marker always in
+    " the first column regardless of the block's indentation, put this
     " into your |vimrc| file: >
     "   let g:tcommentOptions = {'col': 1}
     let g:tcommentOptions = {}   "{{{2
@@ -32,7 +32,7 @@ endif
 if !exists("g:tcommentGuessFileType")
     " Guess the file type based on syntax names always or for some fileformat only
     " If non-zero, try to guess filetypes.
-    " tcomment also checks g:tcommentGuessFileType_{&filetype} for 
+    " tcomment also checks g:tcommentGuessFileType_{&filetype} for
     " filetype specific values.
     "
     " Values:
@@ -46,8 +46,8 @@ if !exists("g:tcommentGuessFileType_dsl")
     let g:tcommentGuessFileType_dsl = 'xml'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_php")
-    " In php documents, the php part is usually marked as phpRegion. We 
-    " thus assume that the buffers default comment style isn't php but 
+    " In php documents, the php part is usually marked as phpRegion. We
+    " thus assume that the buffers default comment style isn't php but
     " html.
     let g:tcommentGuessFileType_php = 'html'   "{{{2
 endif
@@ -65,8 +65,8 @@ if !exists("g:tcommentGuessFileType_django")
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
-    " In php files, some syntax regions are wongly highlighted as sql 
-    " markup. We thus ignore sql syntax when guessing the filetype in 
+    " In php files, some syntax regions are wongly highlighted as sql
+    " markup. We thus ignore sql syntax when guessing the filetype in
     " php files.
     let g:tcommentIgnoreTypes_php = 'sql'   "{{{2
 endif
@@ -80,9 +80,9 @@ if !exists('g:tcomment#syntax_substitute')
 endif
 
 if !exists('g:tcommentSyntaxMap')
-    " tcomment guesses filetypes based on the name of the current syntax 
-    " region. This works well if the syntax names match 
-    " /filetypeSomeName/. Other syntax names have to be explicitly 
+    " tcomment guesses filetypes based on the name of the current syntax
+    " region. This works well if the syntax names match
+    " /filetypeSomeName/. Other syntax names have to be explicitly
     " mapped onto the corresponding filetype.
     " :read: let g:tcommentSyntaxMap = {...}   "{{{2
     let g:tcommentSyntaxMap = {
@@ -134,19 +134,19 @@ let s:typesDirty = 1
 
 let s:definitions = {}
 
-" If you don't explicitly define a comment style, |:TComment| will use 
-" 'commentstring' instead. We override the default values here in order 
-" to have a blank after the comment marker. Block comments work only if 
+" If you don't explicitly define a comment style, |:TComment| will use
+" 'commentstring' instead. We override the default values here in order
+" to have a blank after the comment marker. Block comments work only if
 " we explicitly define the markup.
 "
 " The comment definition can be either a string or a dictionary.
 "
 " If it is a string:
-" The format for block comments is similar to 'commentstrings' with the 
-" exception that the format strings for blocks can contain a second line 
-" that defines how "middle lines" (see :h format-comments) should be 
+" The format for block comments is similar to 'commentstrings' with the
+" exception that the format strings for blocks can contain a second line
+" that defines how "middle lines" (see :h format-comments) should be
 " displayed.
-" 
+"
 " If it is a dictionary:
 " See the help on the args argument of |tcomment#Comment|.
 function! tcomment#DefineType(name, commentdef)
@@ -317,16 +317,16 @@ let s:nullCommentString    = '%s'
 
 " tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
 " args... are either:
-"   1. a list of key=value pairs where known keys are (see also 
+"   1. a list of key=value pairs where known keys are (see also
 "      |g:tcommentOptions|):
 "         as=STRING     ... Use a specific comment definition
-"         col=N         ... Start the comment at column N (in block mode; must 
+"         col=N         ... Start the comment at column N (in block mode; must
 "                           be smaller than |indent()|)
 "         mode=STRING   ... See the notes below on the "commentMode" argument
 "         begin=STRING  ... Comment prefix
 "         end=STRING    ... Comment postfix
 "         middle=STRING ... Middle line comments in block mode
-"         rxbeg=N       ... Regexp to find the substring of "begin" that 
+"         rxbeg=N       ... Regexp to find the substring of "begin" that
 "                           should be multipied by "count"
 "         rxend=N       ... The above for "end"
 "         rxmid=N       ... The above for "middle"
@@ -341,7 +341,7 @@ let s:nullCommentString    = '%s'
 "   R ... right (comment the line right of the cursor)
 "   v ... visual
 "   o ... operator
-" By default, each line in range will be commented by adding the comment 
+" By default, each line in range will be commented by adding the comment
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
     let commentMode   = a:0 >= 1 ? a:1 : 'G'
@@ -386,7 +386,7 @@ function! tcomment#Comment(beg, end, ...)
     " echom "DBG" string(cdef) string(a:000)
     let cms0 = s:BlockGetCommentString(cdef)
     let cms0 = escape(cms0, '\')
-    " make whitespace optional; this conflicts with comments that require some 
+    " make whitespace optional; this conflicts with comments that require some
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
     " turn commentstring into a search pattern
@@ -418,7 +418,7 @@ function! tcomment#Comment(beg, end, ...)
         let cmtCheck   = escape('\V\^\(\s\{-}\)'. cmtCheck .'\$', '"/\')
         " final pattern for commenting
         let cmtReplace = escape(cms0, '"/')
-        silent exec a:beg .','. a:end .'s/\V'. 
+        silent exec a:beg .','. a:end .'s/\V'.
                     \ s:StartRx(cstart) . indentStr .'\zs\(\.\{-}\)'. s:EndRx(cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
     endif
@@ -563,7 +563,7 @@ endf
 " :display: tcomment#CommentAs(beg, end, commentAnyway, filetype, ?args...)
 " Where args is either:
 "   1. A count NUMBER
-"   2. An args list (see the notes on the "args" argument of 
+"   2. An args list (see the notes on the "args" argument of
 "      |tcomment#Comment()|)
 " comment text as if it were of a specific filetype
 function! tcomment#CommentAs(beg, end, commentAnyway, filetype, ...)
@@ -573,7 +573,7 @@ function! tcomment#CommentAs(beg, end, commentAnyway, filetype, ...)
     elseif a:filetype =~ '_inline$'
         let commentMode = 'I'
         let ft = substitute(a:filetype, '_inline$', '', '')
-    else 
+    else
         let commentMode = 'G'
         let ft = a:filetype
     endif
@@ -676,7 +676,7 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
                 let cms = cms .' '. s:EncodeCommentPart(b:commentEnd)
             endif
             return s:GetCustomCommentString(filetype, a:commentMode, cms)
-        elseif g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
+        elseif g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype)
                     \ && g:tcommentGuessFileType_{filetype} =~ '[^0]')
             if g:tcommentGuessFileType_{filetype} == 1
                 let altFiletype = ''
@@ -781,7 +781,7 @@ function! s:CommentLines(beg, end, cstart, cend, uncomment, cmtCheck, cms0, inde
     let cmtCheck   = escape('\V\^\(\s\{-}\)'. a:cmtCheck .'\$', '"/\')
     " final pattern for commenting
     let cmtReplace = escape(a:cms0, '"/')
-    silent exec a:beg .','. a:end .'s/\V'. 
+    silent exec a:beg .','. a:end .'s/\V'.
                 \ s:StartRx(a:cstart) . a:indentStr .'\zs\(\.\{-}\)'. s:EndRx(a:cend) .'/'.
                 \ '\=s:ProcessedLine('. a:uncomment .', submatch(0), "'. a:cmtCheck .'", "'. cmtReplace .'")/ge'
 endf
@@ -825,7 +825,7 @@ endf
 
 
 " inspired by Meikel Brandmeyer's EnhancedCommentify.vim
-" this requires that a syntax names are prefixed by the filetype name 
+" this requires that a syntax names are prefixed by the filetype name
 " s:GuessFileType(beg, end, commentMode, filetype, ?fallbackFiletype)
 function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     if a:0 >= 1 && a:1 != ''
@@ -894,7 +894,7 @@ function! s:GuessCurrentCommentString(commentMode)
         return &commentstring
     endif
     if &comments != s:defaultComments
-        " the commentstring is the default one, so we assume that it wasn't 
+        " the commentstring is the default one, so we assume that it wasn't
         " explicitly set; we then try to reconstruct &cms from &comments
         let cms = s:ConstructFromComments(a:commentMode)
         if cms != s:nullCommentString
@@ -902,7 +902,7 @@ function! s:GuessCurrentCommentString(commentMode)
         endif
     endif
     if valid_cms
-        " Before &commentstring appeared not to be set. As we don't know 
+        " Before &commentstring appeared not to be set. As we don't know
         " better we return it anyway if it is valid
         return &commentstring
     else
