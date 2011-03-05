@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-02-09.
-" @Revision:    0.0.318
+" @Last Change: 2011-03-05.
+" @Revision:    0.0.319
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -146,7 +146,7 @@ let s:definitions = {}
 " exception that the format strings for blocks can contain a second line 
 " that defines how "middle lines" (see :h format-comments) should be 
 " displayed.
-" 
+"
 " If it is a dictionary:
 " See the help on the args argument of |tcomment#Comment|.
 function! tcomment#DefineType(name, commentdef)
