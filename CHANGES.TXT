@@ -4,7 +4,7 @@
 0.2
 - Fixed uncommenting of non-aligned comments
 - improved support for block comments (with middle lines and indentation)
-- using TCommentBlock for file types that don't have block comments creates 
+- using TCommentBlock for file types that don't have block comments creates
 single line comments
 - removed the TCommentAsBlock command (TCommentAs provides its functionality)
 - removed g:tcommentSetCMS
@@ -12,13 +12,13 @@ single line comments
 
 1.3
 - slightly improved recognition of embedded syntax
-- if no commentstring is defined in whatever way, reconstruct one from 
+- if no commentstring is defined in whatever way, reconstruct one from
 &comments
-- The TComment... commands now have bang variants that don't act as toggles 
+- The TComment... commands now have bang variants that don't act as toggles
 but always comment out the selected text
 - fixed problem with commentstrings containing backslashes
-- comment as visual block (allows commenting text to the right of the main 
-text, i.e., this command doesn't work on whole lines but on the text to the 
+- comment as visual block (allows commenting text to the right of the main
+text, i.e., this command doesn't work on whole lines but on the text to the
 right of the cursor)
 - enable multimode for dsl, vim filetypes
 - added explicit support for some other file types I ran into
@@ -29,44 +29,44 @@ right of the cursor)
 - <c-_>s mapped to :TCommentAs <c-r>=&ft<cr>
 
 1.5
-- "Inline" visual comments (uses the &filetype_inline style if 
-available; doesn't check if the filetype actually supports this kind of 
-comments); tComment can't currently deduce inline comment styles from 
-&comments or &commentstring (I personally hardly ever use them); default 
+- "Inline" visual comments (uses the &filetype_inline style if
+available; doesn't check if the filetype actually supports this kind of
+comments); tComment can't currently deduce inline comment styles from
+&comments or &commentstring (I personally hardly ever use them); default
 map: <c-_>i or <c-_>I
-- In visual mode: if the selection spans several lines, normal mode is 
-selected; if the selection covers only a part of one line, inline mode 
+- In visual mode: if the selection spans several lines, normal mode is
+selected; if the selection covers only a part of one line, inline mode
 is selected
 - Fixed problem with lines containing ^M or ^@ characters.
-- It's no longer necessary to call TCommentCollectFileTypes() after 
+- It's no longer necessary to call TCommentCollectFileTypes() after
 defining a new filetype via TCommentDefineType()
 - Disabled single <c-_> mappings
 - Renamed TCommentVisualBlock to TCommentRight
 - FIX: Forgot 'x' in ExtractCommentsPart() (thanks to Fredrik Acosta)
 
 1.6
-- Ignore sql when guessing the comment string in php files; tComment 
-sometimes chooses the wrong comment string because the use of sql syntax 
-is used too loosely in php files; if you want to comment embedded sql 
+- Ignore sql when guessing the comment string in php files; tComment
+sometimes chooses the wrong comment string because the use of sql syntax
+is used too loosely in php files; if you want to comment embedded sql
 code you have to use TCommentAs
 - Use keepjumps in commands.
 - Map <c-_>p & <L>_p to vip:TComment<cr>
-- Made key maps configurable via g:tcommentMapLeader1 and 
+- Made key maps configurable via g:tcommentMapLeader1 and
 g:tcommentMapLeader2
 
 1.7
-- gc{motion} (see g:tcommentMapLeaderOp1) functions as a comment toggle 
-operator (i.e., something like gcl... works, mostly); gC{motion} (see 
+- gc{motion} (see g:tcommentMapLeaderOp1) functions as a comment toggle
+operator (i.e., something like gcl... works, mostly); gC{motion} (see
 g:tcommentMapLeaderOp2) will unconditionally comment the text.
 - TCommentAs takes an optional second argument (the comment level)
 - New "n" map: TCommentAs &filetype [COUNT]
 - Defined mail comments/citations
-- g:tcommentSyntaxMap: Map syntax names to filetypes for buffers with 
-mixed syntax groups that don't match the filetypeEmbeddedsyntax scheme (e.g.  
-'vimRubyRegion', which should be commented as ruby syntax, not as vim 
+- g:tcommentSyntaxMap: Map syntax names to filetypes for buffers with
+mixed syntax groups that don't match the filetypeEmbeddedsyntax scheme (e.g.
+'vimRubyRegion', which should be commented as ruby syntax, not as vim
 syntax)
 - FIX: Comments in vim*Region
-- TComment: The use of the type argument has slightly changed (IG -> i, 
+- TComment: The use of the type argument has slightly changed (IG -> i,
 new: >)
 
 1.8
@@ -88,7 +88,7 @@ new: >)
 - Support for erlang (thanks to Zhang Jinzhu)
 
 1.12
-- Moved the definition of some variables from plugin/tComment.vim to 
+- Moved the definition of some variables from plugin/tComment.vim to
 autoload/tcomment.vim
 - Changed comment string for eruby (proposed by Vinicius Baggio)
 - Support for x86conf
