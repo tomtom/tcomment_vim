@@ -292,17 +292,23 @@ tcomment#Comment(beg, end, ...)
     args... are either:
       1. a list of key=value pairs where known keys are (see also 
          |g:tcommentOptions|):
-            as=STRING     ... Use a specific comment definition
-            col=N         ... Start the comment at column N (in block mode; must 
-                              be smaller than |indent()|)
-            mode=STRING   ... See the notes below on the "commentMode" argument
-            begin=STRING  ... Comment prefix
-            end=STRING    ... Comment postfix
-            middle=STRING ... Middle line comments in block mode
-            rxbeg=N       ... Regexp to find the substring of "begin" that 
-                              should be multipied by "count"
-            rxend=N       ... The above for "end"
-            rxmid=N       ... The above for "middle"
+            as=STRING        ... Use a specific comment definition
+            col=N            ... Start the comment at column N (in block 
+                                 mode; must be smaller than |indent()|)
+            mode=STRING      ... See the notes below on the "commentMode" argument
+            begin=STRING     ... Comment prefix
+            end=STRING       ... Comment postfix
+            middle=STRING    ... Middle line comments in block mode
+            rxbeg=N          ... Regexp to find the substring of "begin" 
+                                 that should be multipied by "count"
+            rxend=N          ... The above for "end"
+            rxmid=N          ... The above for "middle"
+            commentstring_rx ... A regexp format string that matches 
+                                 commented lines (no new groups may be 
+                                 introduced, the |regexp| is |\V|; % have 
+                                 to be doubled); "commentstring", "begin" 
+                                 and optionally "end" must be defined or 
+                                 deducible.
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
     
