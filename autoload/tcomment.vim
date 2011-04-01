@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-03-05.
-" @Revision:    0.0.319
+" @Last Change: 2011-04-01.
+" @Revision:    0.0.350
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -254,7 +254,7 @@ call tcomment#DefineType('pascal_inline',    '(* %s *)'         )
 call tcomment#DefineType('pascal_block',     "(*%s*)\n   "      )
 call tcomment#DefineType('perl',             '# %s'             )
 call tcomment#DefineType('perl_block',       "=cut%s=cut"       )
-call tcomment#DefineType('php',              '// %s'            )
+call tcomment#DefineType('php',              {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '// %s'})
 call tcomment#DefineType('php_inline',       g:tcommentInlineC  )
 call tcomment#DefineType('php_block',        g:tcommentBlockC   )
 call tcomment#DefineType('php_2_block',      g:tcommentBlockC2  )
@@ -320,17 +320,23 @@ let s:nullCommentString    = '%s'
 " args... are either:
 "   1. a list of key=value pairs where known keys are (see also 
 "      |g:tcommentOptions|):
-"         as=STRING     ... Use a specific comment definition
-"         col=N         ... Start the comment at column N (in block mode; must 
-"                           be smaller than |indent()|)
-"         mode=STRING   ... See the notes below on the "commentMode" argument
-"         begin=STRING  ... Comment prefix
-"         end=STRING    ... Comment postfix
-"         middle=STRING ... Middle line comments in block mode
-"         rxbeg=N       ... Regexp to find the substring of "begin" that 
-"                           should be multipied by "count"
-"         rxend=N       ... The above for "end"
-"         rxmid=N       ... The above for "middle"
+"         as=STRING        ... Use a specific comment definition
+"         col=N            ... Start the comment at column N (in block 
+"                              mode; must be smaller than |indent()|)
+"         mode=STRING      ... See the notes below on the "commentMode" argument
+"         begin=STRING     ... Comment prefix
+"         end=STRING       ... Comment postfix
+"         middle=STRING    ... Middle line comments in block mode
+"         rxbeg=N          ... Regexp to find the substring of "begin" 
+"                              that should be multipied by "count"
+"         rxend=N          ... The above for "end"
+"         rxmid=N          ... The above for "middle"
+"         commentstring_rx ... A regexp format string that matches 
+"                              commented lines (no new groups may be 
+"                              introduced, the |regexp| is |\V|; % have 
+"                              to be doubled); "commentstring", "begin" 
+"                              and optionally "end" must be defined or 
+"                              deducible.
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
@@ -385,8 +391,7 @@ function! tcomment#Comment(beg, end, ...)
         call s:RepeatCommentstring(cdef)
     endif
     " echom "DBG" string(cdef) string(a:000)
-    let cms0 = s:BlockGetCommentString(cdef)
-    let cms0 = escape(cms0, '\')
+    let cms0 = s:BlockGetCommentRx(cdef)
     " make whitespace optional; this conflicts with comments that require some 
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
@@ -418,7 +423,7 @@ function! tcomment#Comment(beg, end, ...)
         " final search pattern for uncommenting
         let cmtCheck   = escape('\V\^\(\s\{-}\)'. cmtCheck .'\$', '"/\')
         " final pattern for commenting
-        let cmtReplace = escape(cms0, '"/')
+        let cmtReplace = s:GetCommentReplace(cdef, cms0)
         silent exec a:beg .','. a:end .'s/\V'. 
                     \ s:StartRx(cstart) . indentStr .'\zs\(\.\{-}\)'. s:EndRx(cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
@@ -963,6 +968,25 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
     let cdef = copy(def)
     let cdef.mode = commentMode
     return cdef
+endf
+
+function! s:GetCommentReplace(cdef, cms0)
+    if has_key(a:cdef, 'commentstring_rx')
+        let rs = s:BlockGetCommentString(a:cdef)
+    else
+        let rs = a:cms0
+    endif
+    return escape(rs, '"/')
+endf
+
+function! s:BlockGetCommentRx(cdef)
+    if has_key(a:cdef, 'commentstring_rx')
+        return a:cdef.commentstring_rx
+    else
+        let cms0 = s:BlockGetCommentString(a:cdef)
+        let cms0 = escape(cms0, '\')
+        return cms0
+    endif
 endf
 
 function! s:BlockGetCommentString(cdef)
