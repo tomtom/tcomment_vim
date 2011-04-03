@@ -772,12 +772,15 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
     let s:pos_end = getpos('.')
     let s:pos_end[2] += len(rv)
     " TLogVAR pe, md, a:match
+    " TLogVAR rv
     if v:version > 702 || (v:version == 702 && has('patch407'))
         let rv = escape(rv, '')
     else
         let rv = escape(rv, '\')
     endif
-    let rv = substitute(rv, '\n', '\\\n', 'g')
+    " TLogVAR rv
+    " let rv = substitute(rv, '\n', '\\\n', 'g')
+    " TLogVAR rv
     return rv
 endf
 
