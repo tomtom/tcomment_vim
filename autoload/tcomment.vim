@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-04-03.
-" @Revision:    0.0.405
+" @Last Change: 2011-04-12.
+" @Revision:    0.0.407
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -282,6 +282,9 @@ call tcomment#DefineType('r',                '# %s'             )
 call tcomment#DefineType('samba',            '# %s'             )
 call tcomment#DefineType('sbs',              "' %s"             )
 call tcomment#DefineType('scheme',           '; %s'             )
+call tcomment#DefineType('scss',             '// %s'            )
+call tcomment#DefineType('scss_inline',      g:tcommentInlineC  )
+call tcomment#DefineType('scss_block',       g:tcommentBlockC   )
 call tcomment#DefineType('sed',              '# %s'             )
 call tcomment#DefineType('sgml',             '<!-- %s -->'      )
 call tcomment#DefineType('sgml_inline',      g:tcommentInlineXML)
