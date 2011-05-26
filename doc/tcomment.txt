@@ -90,6 +90,7 @@ Contents~
         g:tcommentBlankLines ................ |g:tcommentBlankLines|
         g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
         g:tcommentOptions ................... |g:tcommentOptions|
+        g:tcomment#ignore_char_type ......... |g:tcomment#ignore_char_type|
         g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
         g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
         g:tcommentGuessFileType_php ......... |g:tcommentGuessFileType_php|
@@ -197,6 +198,16 @@ g:tcommentOptions              (default: {})
     into your |vimrc| file: >
       let g:tcommentOptions = {'col': 1}
 <
+
+                                                    *g:tcomment#ignore_char_type*
+g:tcomment#ignore_char_type    (default: 1)
+    |text-objects| for use with |tcomment#Operator| can have different 
+    types: line, block, char etc. Text objects like aB, it, at etc. 
+    have type char but this may not work reliably. By default, 
+    tcomment handles those text objects most often as if they were of 
+    type line. Set this variable to 0 in order to change this 
+    behaviour. Be prepared that the result may not always match your 
+    intentions.
 
                                                     *g:tcommentGuessFileType*
 g:tcommentGuessFileType        (default: 0)
