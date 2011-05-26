@@ -120,3 +120,17 @@ version: "2.04"
   - django support: minor correction
   MD5 checksum: 994e5886d185857848b5472d5457b232
 
+version: "2.05"
+  - Explicit support for python (thanks to brendanarnold)
+  - Support for samba (thanks Dominic)
+  - .gitignore
+  - Define new types: debsources and debcontrol
+  - Removed some whitespace as proposed by blueyed
+  - Add config for typoscript filetype.
+  - EXPERIMENTAL commentstring_rx: Support for using regexps to uncomment code
+  - s:ProcessedLine: Don't substitute(rv, '\n', '\\\n', 'g')
+  - Try to handle char-type text objects (disabled by default)
+  - scss (SASS) filetype
+  - Add config for 'nginx' filetype.
+  MD5 checksum: 0e23f194638256fb4fa4a729df645966
+
