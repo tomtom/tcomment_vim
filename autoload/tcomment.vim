@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-04-12.
-" @Revision:    0.0.407
+" @Last Change: 2011-06-09.
+" @Revision:    0.0.408
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -445,6 +445,7 @@ function! tcomment#Comment(beg, end, ...)
         exec lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
+        call histdel('search', -1)
     endif
     " reposition cursor
     " TLogVAR commentMode
