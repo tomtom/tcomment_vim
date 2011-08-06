@@ -174,6 +174,12 @@ function! tcomment#DefineType(name, commentdef)
 endf
 
 " :nodoc:
+" Return comment definition
+function! tcomment#GetCommentDef(name)
+    return get(s:definitions, a:name, "")
+endf
+
+" :nodoc:
 " Return 1 if a comment type is defined.
 function! tcomment#TypeExists(name)
     return has_key(s:definitions, a:name)
