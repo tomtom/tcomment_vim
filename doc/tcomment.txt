@@ -107,6 +107,7 @@ Contents~
         g:tcommentBlockXML .................. |g:tcommentBlockXML|
         g:tcommentInlineXML ................. |g:tcommentInlineXML|
         tcomment#DefineType ................. |tcomment#DefineType()|
+        g:tcomment_types .................... |g:tcomment_types|
         tcomment#Comment .................... |tcomment#Comment()|
         tcomment#Operator ................... |tcomment#Operator()|
         tcomment#OperatorLine ............... |tcomment#OperatorLine()|
@@ -296,6 +297,14 @@ tcomment#DefineType(name, commentdef)
     
     If it is a dictionary:
     See the help on the args argument of |tcomment#Comment|.
+
+                                                    *g:tcomment_types*
+g:tcomment_types               (default: {})
+
+
+A dictionary of name => comment definition (see |tcomment#DefineType|) 
+that can be set in vimrc to override tcomment's default comment 
+styles.
 
                                                     *tcomment#Comment()*
 tcomment#Comment(beg, end, ...)
