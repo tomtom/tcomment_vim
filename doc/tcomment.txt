@@ -300,11 +300,11 @@ tcomment#DefineType(name, commentdef)
 
                                                     *g:tcomment_types*
 g:tcomment_types               (default: {})
+    A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
+    that can be set in vimrc to override tcomment's default comment 
+    styles.
 
 
-A dictionary of name => comment definition (see |tcomment#DefineType|) 
-that can be set in vimrc to override tcomment's default comment 
-styles.
 
                                                     *tcomment#Comment()*
 tcomment#Comment(beg, end, ...)

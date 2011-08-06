@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 06-Aug-2011.
-" @Revision:    0.0.413
+" @Last Change: 2011-08-06.
+" @Revision:    0.0.415
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -186,10 +186,10 @@ function! tcomment#TypeExists(name)
 endf
 
 " :doc:
-" :read: let g:tcomment_types = {} "{{{2
-" A dictionary of name => comment definition (see |tcomment#DefineType|) 
+" A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
 " that can be set in vimrc to override tcomment's default comment 
 " styles.
+" :read: let g:tcomment_types = {} "{{{2
 if exists('g:tcomment_types')
     for [s:name, s:def] in items(g:tcomment_types)
         call tcomment#DefineType(s:name, s:def)
