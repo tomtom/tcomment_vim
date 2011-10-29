@@ -1,15 +1,15 @@
-tcomment provides easy to use, file-type sensible comments for Vim. It 
+tcomment provides easy to use, file-type sensible comments for Vim. It
 can handle embedded syntax.
 
-TComment works like a toggle, i.e., it will comment out text that 
-contains uncommented lines, and it will remove comment markup for 
+TComment works like a toggle, i.e., it will comment out text that
+contains uncommented lines, and it will remove comment markup for
 already commented text (i.e. text that contains no uncommented lines).
 
-If the file-type is properly defined, TComment will figure out which 
-comment string to use. Otherwise you use |tcomment#DefineType()| to 
+If the file-type is properly defined, TComment will figure out which
+comment string to use. Otherwise you use |tcomment#DefineType()| to
 override the default choice.
 
-TComment can properly handle an embedded syntax, e.g., ruby/python/perl 
+TComment can properly handle an embedded syntax, e.g., ruby/python/perl
 regions in vim scripts, HTML or JavaScript in php code etc.
 
 Demo:
@@ -19,23 +19,23 @@ http://vimsomnia.blogspot.com/2010/11/tcomment-vim-plugin.html
                                                     *tcomment-maps*
 Key bindings~
 
-Most of the time the default toggle keys will do what you want (or to be 
+Most of the time the default toggle keys will do what you want (or to be
 more precise: what I think you want it to do ;-).
 
                                                     *g:tcommentMapLeaderOp1*
                                                     *g:tcommentMapLeaderOp2*
-As operator (the prefix can be customized via g:tcommentMapLeaderOp1 
+As operator (the prefix can be customized via g:tcommentMapLeaderOp1
 and g:tcommentMapLeaderOp2):
 
-    gc{motion}   :: Toggle comments (for small comments within one line 
-                    the &filetype_inline style will be used, if 
+    gc{motion}   :: Toggle comments (for small comments within one line
+                    the &filetype_inline style will be used, if
                     defined)
     gcc          :: Toggle comment for the current line
     gC{motion}   :: Comment region
     gCc          :: Comment the current line
 
-By default the cursor stays put. If you want the cursor to the end of 
-the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
+By default the cursor stays put. If you want the cursor to the end of
+the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not
 work properly with exclusive motions).
 
 Primary key maps:
