@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2011-05-26.
-" @Revision:    720
+" @Last Change: 2011-08-06.
+" @Revision:    721
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -14,18 +14,18 @@ let loaded_tcomment = 205
 if !exists("g:tcommentMapLeader1")
     " g:tcommentMapLeader1 should be a shortcut that can be used with 
     " map, imap, vmap.
-    let g:tcommentMapLeader1 = '<c-_>'
+    let g:tcommentMapLeader1 = '<c-_>' "{{{2
 endif
 if !exists("g:tcommentMapLeader2")
     " g:tcommentMapLeader2 should be a shortcut that can be used with 
     " map, xmap.
-    let g:tcommentMapLeader2 = '<Leader>_'
+    let g:tcommentMapLeader2 = '<Leader>_' "{{{2
 endif
 if !exists("g:tcommentMapLeaderOp1")
-    let g:tcommentMapLeaderOp1 = 'gc'
+    let g:tcommentMapLeaderOp1 = 'gc' "{{{2
 endif
 if !exists("g:tcommentMapLeaderOp2")
-    let g:tcommentMapLeaderOp2 = 'gC'
+    let g:tcommentMapLeaderOp2 = 'gC' "{{{2
 endif
 
 

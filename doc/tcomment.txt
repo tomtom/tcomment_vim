@@ -81,6 +81,10 @@ please make sure, you have the current version of vimball (vimscript
 ========================================================================
 Contents~
 
+        g:tcommentMapLeader1 ................ |g:tcommentMapLeader1|
+        g:tcommentMapLeader2 ................ |g:tcommentMapLeader2|
+        g:tcommentMapLeaderOp1 .............. |g:tcommentMapLeaderOp1|
+        g:tcommentMapLeaderOp2 .............. |g:tcommentMapLeaderOp2|
         :TComment ........................... |:TComment|
         :TCommentAs ......................... |:TCommentAs|
         :TCommentRight ...................... |:TCommentRight|
@@ -118,6 +122,22 @@ Contents~
 
 ========================================================================
 plugin/tcomment.vim~
+
+                                                    *g:tcommentMapLeader1*
+g:tcommentMapLeader1           (default: '<c-_>')
+    g:tcommentMapLeader1 should be a shortcut that can be used with 
+    map, imap, vmap.
+
+                                                    *g:tcommentMapLeader2*
+g:tcommentMapLeader2           (default: '<Leader>_')
+    g:tcommentMapLeader2 should be a shortcut that can be used with 
+    map, xmap.
+
+                                                    *g:tcommentMapLeaderOp1*
+g:tcommentMapLeaderOp1         (default: 'gc')
+
+                                                    *g:tcommentMapLeaderOp2*
+g:tcommentMapLeaderOp2         (default: 'gC')
 
                                                     *:TComment*
 :[range]TComment[!] ?ARGS...
