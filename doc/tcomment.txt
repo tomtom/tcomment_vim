@@ -25,8 +25,6 @@ Key bindings~
 Most of the time the default toggle keys will do what you want (or to be 
 more precise: what I think you want it to do ;-).
 
-                                                    *g:tcommentMapLeaderOp1*
-                                                    *g:tcommentMapLeaderOp2*
 As operator (the prefix can be customized via g:tcommentMapLeaderOp1 
 and g:tcommentMapLeaderOp2):
 
