@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2011-08-06.
-" @Revision:    721
+" @Last Change: 2011-12-03.
+" @Revision:    722
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -22,9 +22,11 @@ if !exists("g:tcommentMapLeader2")
     let g:tcommentMapLeader2 = '<Leader>_' "{{{2
 endif
 if !exists("g:tcommentMapLeaderOp1")
+    " See |tcomment-operator|.
     let g:tcommentMapLeaderOp1 = 'gc' "{{{2
 endif
 if !exists("g:tcommentMapLeaderOp2")
+    " See |tcomment-operator|.
     let g:tcommentMapLeaderOp2 = 'gC' "{{{2
 endif
 

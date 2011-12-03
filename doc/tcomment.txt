@@ -25,10 +25,9 @@ Key bindings~
 Most of the time the default toggle keys will do what you want (or to be 
 more precise: what I think you want it to do ;-).
 
-                                                    *g:tcommentMapLeaderOp1*
-                                                    *g:tcommentMapLeaderOp2*
-As operator (the prefix can be customized via g:tcommentMapLeaderOp1 
-and g:tcommentMapLeaderOp2):
+                                                    *tcomment-operator*
+As operator (the prefix can be customized via |g:tcommentMapLeaderOp1| 
+and |g:tcommentMapLeaderOp2|):
 
     gc{motion}   :: Toggle comments (for small comments within one line 
                     the &filetype_inline style will be used, if 
@@ -135,9 +134,11 @@ g:tcommentMapLeader2           (default: '<Leader>_')
 
                                                     *g:tcommentMapLeaderOp1*
 g:tcommentMapLeaderOp1         (default: 'gc')
+    See |tcomment-operator|.
 
                                                     *g:tcommentMapLeaderOp2*
 g:tcommentMapLeaderOp2         (default: 'gC')
+    See |tcomment-operator|.
 
                                                     *:TComment*
 :[range]TComment[!] ?ARGS...
