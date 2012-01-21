@@ -104,6 +104,8 @@ Contents~
         g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
         g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
+        g:tcomment#replacements_c ........... |g:tcomment#replacements_c|
+        g:tcommentBlockC .................... |g:tcommentBlockC|
         g:tcommentBlockC .................... |g:tcommentBlockC|
         g:tcommentBlockC2 ................... |g:tcommentBlockC2|
         g:tcommentInlineC ................... |g:tcommentInlineC|
@@ -281,6 +283,14 @@ g:tcommentSyntaxMap            (default: {...})
     /filetypeSomeName/. Other syntax names have to be explicitly 
     mapped onto the corresponding filetype.
 
+                                                    *g:tcomment#replacements_c*
+g:tcomment#replacements_c      (default: {...})
+    Replacements for c filetype.
+
+                                                    *g:tcommentBlockC*
+g:tcommentBlockC               (default: {...})
+    Generic c-like block comments.
+
                                                     *g:tcommentBlockC*
 g:tcommentBlockC               (default: {...})
     Generic c-like block comments.
@@ -290,7 +300,7 @@ g:tcommentBlockC2              (default: {...})
     Generic c-like block comments (alternative markup).
 
                                                     *g:tcommentInlineC*
-g:tcommentInlineC              (default: "/* %s */")
+g:tcommentInlineC              (default: g:tcommentLineC)
     Generic c-like comments.
 
                                                     *g:tcommentBlockXML*
