@@ -134,3 +134,15 @@ version: "2.05"
   - Add config for 'nginx' filetype.
   MD5 checksum: 0e23f194638256fb4fa4a729df645966
 
+version: "2.06"
+  - tcomment#Comment(): Remove last item in search history (reported by Raimond)
+  - Add config for conkyrc filetype.
+  - Add config for 'robots' filetype.
+  - tcomment#GetCommentDef(name)
+  - g:tcomment_types: override tcomment's default comment styles (fix #12)
+  - Fixed ft-guessing of htmldjango files
+  - Add definitions for dnsmasq, pac, resolv and squid.
+  - Avoid the problem reported in https://github.com/tomtom/tcomment_vim/pull/18
+  - Handle nested comments in c mode (fix #19)
+  MD5 checksum: 0e23f194638256fb4fa4a729df645966
+
