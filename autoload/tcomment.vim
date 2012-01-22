@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2011-12-23.
-" @Revision:    0.0.436
+" @Last Change: 2012-01-22.
+" @Revision:    0.0.437
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -123,8 +123,6 @@ if !exists("g:tcommentLineC")
                 \ }
 endif
 if !exists("g:tcommentBlockC")
-    " Generic c-like block comments.
-    " :read: let g:tcommentBlockC = {...}   "{{{2
     let g:tcommentBlockC = {
                 \ 'commentstring': '/*%s */',
                 \ 'middle': ' * ',
