@@ -106,7 +106,6 @@ Contents~
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
         g:tcomment#replacements_c ........... |g:tcomment#replacements_c|
         g:tcommentBlockC .................... |g:tcommentBlockC|
-        g:tcommentBlockC .................... |g:tcommentBlockC|
         g:tcommentBlockC2 ................... |g:tcommentBlockC2|
         g:tcommentInlineC ................... |g:tcommentInlineC|
         g:tcommentBlockXML .................. |g:tcommentBlockXML|
@@ -286,10 +285,6 @@ g:tcommentSyntaxMap            (default: {...})
                                                     *g:tcomment#replacements_c*
 g:tcomment#replacements_c      (default: {...})
     Replacements for c filetype.
-
-                                                    *g:tcommentBlockC*
-g:tcommentBlockC               (default: {...})
-    Generic c-like block comments.
 
                                                     *g:tcommentBlockC*
 g:tcommentBlockC               (default: {...})
