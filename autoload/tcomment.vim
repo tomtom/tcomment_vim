@@ -310,6 +310,7 @@ call tcomment#DefineType('php_block',        g:tcommentBlockC   )
 call tcomment#DefineType('php_2_block',      g:tcommentBlockC2  )
 call tcomment#DefineType('po',               '# %s'             )
 call tcomment#DefineType('prolog',           '%% %s'            )
+call tcomment#DefineType('puppet',           '# %s'             )
 call tcomment#DefineType('python',           '# %s'             )
 call tcomment#DefineType('rc',               '// %s'            )
 call tcomment#DefineType('readline',         '# %s'             )
@@ -881,9 +882,11 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
     " TLogVAR pe, md, a:match
     " TLogVAR rv
     if v:version > 702 || (v:version == 702 && has('patch407'))
-        let rv = escape(rv, '')
+        let rv = escape(rv, '
+')
     else
-        let rv = escape(rv, '\')
+        let rv = escape(rv, '\
+')
     endif
     " TLogVAR rv
     " let rv = substitute(rv, '\n', '\\\n', 'g')
