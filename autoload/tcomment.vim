@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-01-23.
-" @Revision:    0.0.439
+" @Last Change: 2012-01-29.
+" @Revision:    0.0.440
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -254,6 +254,7 @@ call tcomment#DefineType('erlang',           '%%%% %s'          )
 call tcomment#DefineType('eruby',            '<%%# %s'          )
 call tcomment#DefineType('fstab',            '# %s'             )
 call tcomment#DefineType('gitcommit',        '# %s'             )
+call tcomment#DefineType('gitignore',        '# %s'             )
 call tcomment#DefineType('gtkrc',            '# %s'             )
 call tcomment#DefineType('go',               '// %s'            )
 call tcomment#DefineType('go_inline',        g:tcommentInlineC  )
