@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-01-29.
-" @Revision:    0.0.440
+" @Last Change: 2012-05-11.
+" @Revision:    0.0.441
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -73,6 +73,9 @@ if !exists("g:tcommentGuessFileType_vim")
 endif
 if !exists("g:tcommentGuessFileType_django")
     let g:tcommentGuessFileType_django = 1   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_eruby")
+    let g:tcommentGuessFileType_eruby = 1   "{{{2
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
