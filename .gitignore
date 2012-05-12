@@ -1,3 +1,6 @@
 tags
 Makefile
+TODO.TXT
+*.vba
+*.vmb
 .last_*
