@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-06-01.
-" @Revision:    0.0.445
+" @Revision:    0.0.455
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -15,13 +15,14 @@ endif
 
 if !exists("g:tcommentModeExtra")
     " Modifies how commenting works.
-    "   > ... Move the cursor to the end of the comment
+    "   >  ... Move the cursor to the end of the comment
+    "   >> ... Like above but move the cursor to the next line
     let g:tcommentModeExtra = ''   "{{{2
 endif
 
 if !exists("g:tcommentOpModeExtra")
     " Modifies how the operator works.
-    "   > ... Move the cursor to the end of the comment
+    " See |g:tcommentOpModeExtra| for a list of possible values.
     let g:tcommentOpModeExtra = ''   "{{{2
 endif
 
@@ -508,6 +509,9 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR commentMode
     if commentMode =~ '>'
         call setpos('.', s:pos_end)
+        if commentMode !~ 'i' && commentMode =~ '>>'
+            norm! l^
+        endif
     else
         " TLogVAR pos
         call setpos('.', pos)

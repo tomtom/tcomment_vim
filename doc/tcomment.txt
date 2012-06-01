@@ -91,6 +91,7 @@ Contents~
         :TCommentInline ..................... |:TCommentInline|
         :TCommentMaybeInline ................ |:TCommentMaybeInline|
         g:tcommentBlankLines ................ |g:tcommentBlankLines|
+        g:tcommentModeExtra ................. |g:tcommentModeExtra|
         g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
         g:tcommentOptions ................... |g:tcommentOptions|
         g:tcomment#ignore_char_type ......... |g:tcomment#ignore_char_type|
@@ -101,6 +102,7 @@ Contents~
         g:tcommentGuessFileType_tskeleton ... |g:tcommentGuessFileType_tskeleton|
         g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
         g:tcommentGuessFileType_django ...... |g:tcommentGuessFileType_django|
+        g:tcommentGuessFileType_eruby ....... |g:tcommentGuessFileType_eruby|
         g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
         g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
@@ -207,10 +209,16 @@ autoload/tcomment.vim~
 g:tcommentBlankLines           (default: 1)
     If true, comment blank lines too
 
+                                                    *g:tcommentModeExtra*
+g:tcommentModeExtra            (default: '')
+    Modifies how commenting works.
+      >  ... Move the cursor to the end of the comment
+      >> ... Like above but move the cursor to the next line
+
                                                     *g:tcommentOpModeExtra*
 g:tcommentOpModeExtra          (default: '')
     Modifies how the operator works.
-      > ... Move the cursor to the end of the comment
+    See |g:tcommentOpModeExtra| for a list of possible values.
 
                                                     *g:tcommentOptions*
 g:tcommentOptions              (default: {})
@@ -265,6 +273,9 @@ g:tcommentGuessFileType_vim    (default: 1)
 
                                                     *g:tcommentGuessFileType_django*
 g:tcommentGuessFileType_django (default: 1)
+
+                                                    *g:tcommentGuessFileType_eruby*
+g:tcommentGuessFileType_eruby  (default: 1)
 
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
