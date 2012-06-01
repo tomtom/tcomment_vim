@@ -3,14 +3,20 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-05-11.
-" @Revision:    0.0.441
+" @Last Change: 2012-06-01.
+" @Revision:    0.0.445
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
 if !exists("g:tcommentBlankLines")
     " If true, comment blank lines too
     let g:tcommentBlankLines = 1    "{{{2
+endif
+
+if !exists("g:tcommentModeExtra")
+    " Modifies how commenting works.
+    "   > ... Move the cursor to the end of the comment
+    let g:tcommentModeExtra = ''   "{{{2
 endif
 
 if !exists("g:tcommentOpModeExtra")
@@ -414,7 +420,7 @@ let s:nullCommentString    = '%s'
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
-    let commentMode   = a:0 >= 1 ? a:1 : 'G'
+    let commentMode   = (a:0 >= 1 ? a:1 : 'G') . g:tcommentModeExtra
     let commentAnyway = a:0 >= 2 ? (a:2 == '!') : 0
     " TLogVAR a:beg, a:end, a:1, commentMode, commentAnyway
     " save the cursor position
