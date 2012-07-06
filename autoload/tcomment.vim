@@ -22,7 +22,7 @@ endif
 
 if !exists("g:tcommentOpModeExtra")
     " Modifies how the operator works.
-    " See |g:tcommentOpModeExtra| for a list of possible values.
+    " See |g:tcommentModeExtra| for a list of possible values.
     let g:tcommentOpModeExtra = ''   "{{{2
 endif
 

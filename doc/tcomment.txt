@@ -218,7 +218,7 @@ g:tcommentModeExtra            (default: '')
                                                     *g:tcommentOpModeExtra*
 g:tcommentOpModeExtra          (default: '')
     Modifies how the operator works.
-    See |g:tcommentOpModeExtra| for a list of possible values.
+    See |g:tcommentModeExtra| for a list of possible values.
 
                                                     *g:tcommentOptions*
 g:tcommentOptions              (default: {})
