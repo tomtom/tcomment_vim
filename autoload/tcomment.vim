@@ -1167,3 +1167,4 @@ endf
 
 redraw
 
+" vim:fo=tcq2w:
