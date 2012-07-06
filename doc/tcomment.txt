@@ -279,7 +279,7 @@ g:tcommentGuessFileType_eruby  (default: 1)
 
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
-    In php files, some syntax regions are wongly highlighted as sql 
+    In php files, some syntax regions are wrongly highlighted as sql 
     markup. We thus ignore sql syntax when guessing the filetype in 
     php files.
 
@@ -357,7 +357,7 @@ tcomment#Comment(beg, end, ...)
             end=STRING       ... Comment postfix
             middle=STRING    ... Middle line comments in block mode
             rxbeg=N          ... Regexp to find the substring of "begin" 
-                                 that should be multipied by "count"
+                                 that should be multiplied by "count"
             rxend=N          ... The above for "end"
             rxmid=N          ... The above for "middle"
             commentstring_rx ... A regexp format string that matches 

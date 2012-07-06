@@ -86,7 +86,7 @@ if !exists("g:tcommentGuessFileType_eruby")
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
-    " In php files, some syntax regions are wongly highlighted as sql 
+    " In php files, some syntax regions are wrongly highlighted as sql 
     " markup. We thus ignore sql syntax when guessing the filetype in 
     " php files.
     let g:tcommentIgnoreTypes_php = 'sql'   "{{{2
@@ -398,7 +398,7 @@ let s:nullCommentString    = '%s'
 "         end=STRING       ... Comment postfix
 "         middle=STRING    ... Middle line comments in block mode
 "         rxbeg=N          ... Regexp to find the substring of "begin" 
-"                              that should be multipied by "count"
+"                              that should be multiplied by "count"
 "         rxend=N          ... The above for "end"
 "         rxmid=N          ... The above for "middle"
 "         commentstring_rx ... A regexp format string that matches 
