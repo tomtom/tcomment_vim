@@ -142,3 +142,4 @@ if (g:tcommentMapLeaderOp2 != '')
     exec 'xnoremap <silent> '. g:tcommentMapLeaderOp2 .' :TCommentMaybeInline<cr>'
 endif
 
+" vim:fo=tcq2w:
