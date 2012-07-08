@@ -149,7 +149,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
     then |:TCommentInline| is used instead.
     The optional range defaults to the current line. With a bang '!', 
     always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -158,7 +158,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
 :[range]TCommentAs[!] commenttype ?ARGS...
     TCommentAs requires g:tcomment_{filetype} to be defined.
     With a bang '!', always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -169,7 +169,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
     made (be it block-wise or not), all lines are commented out at from 
     the current cursor position downwards.
     With a bang '!', always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -179,7 +179,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
     Comment as "block", e.g. use the {&ft}_block comment style. The 
     commented text isn't indented or reformated.
     With a bang '!', always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -188,7 +188,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
 :[range]TCommentInline[!] ?ARGS...
     Use the {&ft}_inline comment style.
     With a bang '!', always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -196,7 +196,7 @@ g:tcommentMapLeaderOp2         (default: 'gC')
                                                     *:TCommentMaybeInline*
 :[range]TCommentMaybeInline[!] ?ARGS...
     With a bang '!', always comment the line.
-    
+
     ARGS... are either (see also |tcomment#Comment()|):
       1. a list of key=value pairs
       2. 1-2 values for: ?commentBegin, ?commentEnd
@@ -218,12 +218,12 @@ g:tcommentModeExtra            (default: '')
                                                     *g:tcommentOpModeExtra*
 g:tcommentOpModeExtra          (default: '')
     Modifies how the operator works.
-    See |g:tcommentOpModeExtra| for a list of possible values.
+    See |g:tcommentModeExtra| for a list of possible values.
 
                                                     *g:tcommentOptions*
 g:tcommentOptions              (default: {})
     Other key-value options used by |tcomment#Comment()|.
-    
+
     Example: If you want to put the opening comment marker always in 
     the first column regardless of the block's indentation, put this 
     into your |vimrc| file: >
@@ -246,7 +246,7 @@ g:tcommentGuessFileType        (default: 0)
     If non-zero, try to guess filetypes.
     tcomment also checks g:tcommentGuessFileType_{&filetype} for 
     filetype specific values.
-    
+
     Values:
       0        ... don't guess
       1        ... guess
@@ -279,7 +279,7 @@ g:tcommentGuessFileType_eruby  (default: 1)
 
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
-    In php files, some syntax regions are wongly highlighted as sql 
+    In php files, some syntax regions are wrongly highlighted as sql 
     markup. We thus ignore sql syntax when guessing the filetype in 
     php files.
 
@@ -323,15 +323,15 @@ tcomment#DefineType(name, commentdef)
     'commentstring' instead. We override the default values here in order 
     to have a blank after the comment marker. Block comments work only if 
     we explicitly define the markup.
-    
+
     The comment definition can be either a string or a dictionary.
-    
+
     If it is a string:
     The format for block comments is similar to 'commentstrings' with the 
     exception that the format strings for blocks can contain a second line 
     that defines how "middle lines" (see :h format-comments) should be 
     displayed.
-    
+
     If it is a dictionary:
     See the help on the args argument of |tcomment#Comment|.
 
@@ -357,7 +357,7 @@ tcomment#Comment(beg, end, ...)
             end=STRING       ... Comment postfix
             middle=STRING    ... Middle line comments in block mode
             rxbeg=N          ... Regexp to find the substring of "begin" 
-                                 that should be multipied by "count"
+                                 that should be multiplied by "count"
             rxend=N          ... The above for "end"
             rxmid=N          ... The above for "middle"
             commentstring_rx ... A regexp format string that matches 
@@ -368,7 +368,7 @@ tcomment#Comment(beg, end, ...)
                                  deducible.
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
-    
+
     commentMode:
       G ... guess the value of commentMode
       B ... block (use extra lines for the comment markers)

@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2012-01-21.
-" @Revision:    723
+" @Last Change: 2012-07-08.
+" @Revision:    724
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -142,3 +142,4 @@ if (g:tcommentMapLeaderOp2 != '')
     exec 'xnoremap <silent> '. g:tcommentMapLeaderOp2 .' :TCommentMaybeInline<cr>'
 endif
 
+" vi: ft=vim:tw=72:ts=4:fo=w2croql
