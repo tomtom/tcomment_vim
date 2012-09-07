@@ -5,3 +5,5 @@ TODO.TXT
 *.vmb
 *.zip
 .last_*
+test
+test_*
