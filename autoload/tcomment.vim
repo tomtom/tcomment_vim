@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.488
+" @Revision:    0.0.501
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -177,6 +177,12 @@ let s:definitions = {}
 " to have a blank after the comment marker. Block comments work only if 
 " we explicitly define the markup.
 "
+" NAME usually is a 'filetype'. You can use special suffixes to define 
+" special comment types. E.g. the name "FILETYPE_block" is used for 
+" block comments for 'filetype'. The name "FILETYPE_inline" is used for 
+" inline comments. If no specialized comment definition exists, the 
+" normal one with name "FILETYPE" is used.
+"
 " The comment definition can be either a string or a dictionary.
 "
 " If it is a string:
@@ -185,8 +191,14 @@ let s:definitions = {}
 " that defines how "middle lines" (see :h format-comments) should be 
 " displayed.
 "
+" Example: If the string is "--%s--\n-- ", lines will be commented as 
+" "--%s--" but the middle lines in block comments will be commented as 
+" "--%s".
+"
 " If it is a dictionary:
-" See the help on the args argument of |tcomment#Comment|.
+" See the help on the args argument of |tcomment#Comment| (see item 1, 
+" args is a list of key=value pairs) to find out which fields can be 
+" used.
 function! tcomment#DefineType(name, commentdef)
     if !has_key(s:definitions, a:name)
         if type(a:commentdef) == 4

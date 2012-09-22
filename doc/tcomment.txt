@@ -15,6 +15,11 @@ override the default choice.
 TComment can properly handle an embedded syntax, e.g., ruby/python/perl 
 regions in vim scripts, HTML or JavaScript in php code etc.
 
+tcomment favours the use of line-wise comment styles. This implies that usually 
+whole line will be commented out. tcomment also knows block-style and inline 
+comments that can be used via special maps (see below) or the |:TCommentAs| 
+command.
+
 Demo:
 http://vimsomnia.blogspot.com/2010/11/tcomment-vim-plugin.html
 
@@ -35,6 +40,17 @@ and |g:tcommentMapLeaderOp2|):
     gcc          :: Toggle comment for the current line
     gC{motion}   :: Comment region
     gCc          :: Comment the current line
+
+In visual mode:
+
+    gc           :: Toggle comments
+    gC           :: Comment selected text
+
+CAVEAT: If you visually select text within a line, the visual mode map will 
+comment out the selected text. If you selected text across several lines, the 
+visual mode map will assume though that you wanted to comment out lines -- 
+since this is how many vim maps work. In order to make tcomment use e.g. inline 
+comments anyway, use the <c-_>i map -- see below.
 
 By default the cursor stays put. If you want the cursor to the end of 
 the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
@@ -324,6 +340,12 @@ tcomment#DefineType(name, commentdef)
     to have a blank after the comment marker. Block comments work only if 
     we explicitly define the markup.
 
+    NAME usually is a 'filetype'. You can use special suffixes to define 
+    special comment types. E.g. the name "FILETYPE_block" is used for 
+    block comments for 'filetype'. The name "FILETYPE_inline" is used for 
+    inline comments. If no specialized comment definition exists, the 
+    normal one with name "FILETYPE" is used.
+
     The comment definition can be either a string or a dictionary.
 
     If it is a string:
@@ -332,8 +354,14 @@ tcomment#DefineType(name, commentdef)
     that defines how "middle lines" (see :h format-comments) should be 
     displayed.
 
+    Example: If the string is "--%s--\n-- ", lines will be commented as 
+    "--%s--" but the middle lines in block comments will be commented as 
+    "--%s".
+
     If it is a dictionary:
-    See the help on the args argument of |tcomment#Comment|.
+    See the help on the args argument of |tcomment#Comment| (see item 1, 
+    args is a list of key=value pairs) to find out which fields can be 
+    used.
 
                                                     *g:tcomment_types*
 g:tcomment_types               (default: {})
