@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-09-20.
-" @Revision:    0.0.482
+" @Last Change: 2012-09-22.
+" @Revision:    0.0.488
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -523,6 +523,7 @@ endf
 
 
 function! s:GetStartEnd(beg, end, commentMode) "{{{3
+    " TLogVAR a:beg, a:end, a:commentMode
     if type(a:beg) == 3
         let [lbeg, cbeg] = a:beg
         let [lend, cend]   = a:end
@@ -540,15 +541,17 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
                 let cend = 0
             else
                 let cend = col("'>")
-                if commentMode =~# 'o'
+                if cend < col('$') && (commentMode =~# 'o' || &selection == 'inclusive')
                     let cend += 1
+                    " TLogVAR cend, col('$')
                 endif
             endif
         else
             let cbeg = 0
-            let cend   = 0
+            let cend = 0
         endif
     endif
+    " TLogVAR lbeg, cbeg, lend, cend
     return [lbeg, cbeg, lend, cend]
 endf
 
