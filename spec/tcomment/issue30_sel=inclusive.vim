@@ -1,8 +1,6 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Created:     2012-09-22.
-" @Last Change: 2012-09-22.
-" @Revision:    9
+" @Revision:    10
 
 SpecBegin 'title': 'issue30 - bug 2 inclusive'
             \, 'options': [{'&selection': 'inclusive'}]
