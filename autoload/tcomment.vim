@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.506
+" @Revision:    0.0.517
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -607,6 +607,8 @@ function! s:ParseArgs(beg, end, commentMode, arglist) "{{{3
         let value = matchstr(arg, '=\zs.*$')
         if key == 'as'
             call extend(args, s:GetCommentDefinitionForType(a:beg, a:end, a:commentMode, value))
+        elseif key == 'mode'
+            let args[key] = a:commentMode . value
         else
             let args[key] = value
         endif
