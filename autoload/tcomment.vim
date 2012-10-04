@@ -454,6 +454,9 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR commentMode, lbeg, cbeg, lend, cend
     " get the correct commentstring
     let cdef = copy(g:tcommentOptions)
+    if exists('b:tcommentOptions')
+        let cdef = extend(cdef, copy(b:tcommentOptions))
+    endif
     if a:0 >= 3 && type(a:3) == 4
         call extend(cdef, a:3)
     else
