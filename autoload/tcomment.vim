@@ -747,7 +747,7 @@ endf
 
 " :nodoc:
 function! tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos) "{{{3
-    let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=']
+    let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=', 'rxbeg=', 'rxend=', 'rxmid=']
     if !empty(a:ArgLead)
         if a:ArgLead =~ '^as='
             call tcomment#CollectFileTypes()
