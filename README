@@ -12,6 +12,11 @@ override the default choice.
 TComment can properly handle an embedded syntax, e.g., ruby/python/perl 
 regions in vim scripts, HTML or JavaScript in php code etc.
 
+tcomment favours the use of line-wise comment styles. This implies that usually 
+whole line will be commented out. tcomment also knows block-style and inline 
+comments that can be used via special maps (see below) or the |:TCommentAs| 
+command.
+
 Demo:
 http://vimsomnia.blogspot.com/2010/11/tcomment-vim-plugin.html
 
@@ -32,6 +37,17 @@ and |g:tcommentMapLeaderOp2|):
     gcc          :: Toggle comment for the current line
     gC{motion}   :: Comment region
     gCc          :: Comment the current line
+
+In visual mode:
+
+    gc           :: Toggle comments
+    gC           :: Comment selected text
+
+CAVEAT: If you visually select text within a line, the visual mode map will 
+comment out the selected text. If you selected text across several lines, the 
+visual mode map will assume though that you wanted to comment out lines -- 
+since this is how many vim maps work. In order to make tcomment use e.g. inline 
+comments anyway, use the <c-_>i map -- see below.
 
 By default the cursor stays put. If you want the cursor to the end of 
 the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
