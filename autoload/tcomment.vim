@@ -548,20 +548,20 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
         let lbeg = a:beg
         let lend = a:end
         let commentMode = a:commentMode
-        if commentMode =~# 'R' || commentMode =~# 'I'
+        " TLogVAR commentMode
+        if commentMode =~# 'R'
+            let cbeg = col('.')
+            let cend = 0
+            let commentMode = substitute(commentMode, '\CR', 'G', 'g')
+        elseif commentMode =~# 'I'
             let cbeg = col("'<")
             if cbeg == 0
                 let cbeg = col('.')
             endif
-            if commentMode =~# 'R'
-                let commentMode = substitute(commentMode, '\CR', 'G', 'g')
-                let cend = 0
-            else
-                let cend = col("'>")
-                if cend < col('$') && (commentMode =~# 'o' || &selection == 'inclusive')
-                    let cend += 1
-                    " TLogVAR cend, col('$')
-                endif
+            let cend = col("'>")
+            if cend < col('$') && (commentMode =~# 'o' || &selection == 'inclusive')
+                let cend += 1
+                " TLogVAR cend, col('$')
             endif
         else
             let cbeg = 0
