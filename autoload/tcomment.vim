@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.501
+" @Revision:    0.0.505
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -406,6 +406,7 @@ let s:nullCommentString    = '%s'
 "   1. a list of key=value pairs where known keys are (see also 
 "      |g:tcommentOptions|):
 "         as=STRING        ... Use a specific comment definition
+"         count=N          ... Repeat the comment string N times
 "         col=N            ... Start the comment at column N (in block 
 "                              mode; must be smaller than |indent()|)
 "         mode=STRING      ... See the notes below on the "commentMode" argument
