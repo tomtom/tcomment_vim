@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-09-22.
-" @Revision:    727
+" @Revision:    728
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -108,7 +108,6 @@ if (g:tcommentMapLeader1 != '')
     exec 'inoremap <silent> '. g:tcommentMapLeader1 .'r <c-o>:TCommentRight<cr>'
     exec 'noremap <silent> '. g:tcommentMapLeader1 .'r :TCommentRight<cr>'
     exec 'vnoremap <silent> '. g:tcommentMapLeader1 .'i :TCommentInline<cr>'
-    exec 'vnoremap <silent> '. g:tcommentMapLeader1 .'r :TCommentRight<cr>'
     exec 'noremap '. g:tcommentMapLeader1 .'b :TCommentBlock<cr>'
     exec 'inoremap '. g:tcommentMapLeader1 .'b <c-o>:TCommentBlock<cr>'
     exec 'noremap '. g:tcommentMapLeader1 .'a :TCommentAs '
@@ -125,7 +124,6 @@ if (g:tcommentMapLeader2 != '')
     exec 'noremap '. g:tcommentMapLeader2 .'<space> :TComment '
     exec 'xnoremap <silent> '. g:tcommentMapLeader2 .'i :TCommentInline<cr>'
     exec 'noremap <silent> '. g:tcommentMapLeader2 .'r :TCommentRight<cr>'
-    exec 'xnoremap <silent> '. g:tcommentMapLeader2 .'r :TCommentRight<cr>'
     exec 'noremap '. g:tcommentMapLeader2 .'b :TCommentBlock<cr>'
     exec 'noremap '. g:tcommentMapLeader2 .'a :TCommentAs '
     exec 'noremap '. g:tcommentMapLeader2 .'n :TCommentAs <c-r>=&ft<cr> '
