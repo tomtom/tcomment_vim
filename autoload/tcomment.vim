@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.517
+" @Revision:    0.0.541
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -470,8 +470,10 @@ function! tcomment#Comment(beg, end, ...)
                 let cdef.end = a:4
             endif
         endif
+        " TLogVAR ax, a:0, a:000
         if a:0 >= ax
-            call extend(cdef, s:ParseArgs(lbeg, lend, commentMode, a:000[ax - 1 : -1]))
+            let cdef = extend(cdef, s:ParseArgs(lbeg, lend, commentMode, a:000[ax - 1 : -1]))
+            " TLogVAR cdef
         endif
         if !empty(get(cdef, 'begin', '')) || !empty(get(cdef, 'end', ''))
             let cdef.commentstring = s:EncodeCommentPart(get(cdef, 'begin', ''))
@@ -479,6 +481,12 @@ function! tcomment#Comment(beg, end, ...)
                         \ . s:EncodeCommentPart(get(cdef, 'end', ''))
         endif
         let commentMode = cdef.mode
+    endif
+    if exists('s:temp_options')
+        let cdef = s:ExtendCDef(lbeg, lend, commentMode, cdef, s:temp_options)
+        " TLogVAR cdef
+        " echom "DBG s:temp_options" string(s:temp_options)
+        unlet s:temp_options
     endif
     if !empty(filter(['count', 'cbeg', 'cend', 'cmid'], 'has_key(cdef, v:val)'))
         call s:RepeatCommentstring(cdef)
@@ -539,6 +547,23 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR pos
         call setpos('.', pos)
     endif
+endf
+
+
+function! tcomment#SetOption(name, arg) "{{{3
+    " TLogVAR a:name, a:arg
+    if !exists('s:temp_options')
+        let s:temp_options = {}
+    endif
+    " if index(['count', 'as'], a:name) != -1
+        if empty(a:arg)
+            if has_key(s:temp_options, a:name)
+                call remove(s:temp_options, a:name)
+            endif
+        else
+            let s:temp_options[a:name] = a:arg
+        endif
+    " endif
 endf
 
 
@@ -605,15 +630,27 @@ function! s:ParseArgs(beg, end, commentMode, arglist) "{{{3
     for arg in a:arglist
         let key = matchstr(arg, '^[^=]\+')
         let value = matchstr(arg, '=\zs.*$')
-        if key == 'as'
-            call extend(args, s:GetCommentDefinitionForType(a:beg, a:end, a:commentMode, value))
-        elseif key == 'mode'
-            let args[key] = a:commentMode . value
-        else
+        if !empty(key)
             let args[key] = value
         endif
     endfor
-    return args
+    return s:ExtendCDef(a:beg, a:end, a:commentMode, {}, args)
+endf
+
+
+function! s:ExtendCDef(beg, end, commentMode, cdef, args)
+    for [key, value] in items(a:args)
+        if key == 'as'
+            call extend(a:cdef, s:GetCommentDefinitionForType(a:beg, a:end, a:commentMode, value))
+        elseif key == 'mode'
+            let a:cdef[key] = a:commentMode . value
+        elseif key == 'count'
+            let a:cdef[key] = str2nr(value)
+        else
+            let a:cdef[key] = value
+        endif
+    endfor
+    return a:cdef
 endf
 
 
