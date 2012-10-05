@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-09-22.
-" @Revision:    728
+" @Revision:    747
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -118,6 +118,11 @@ if (g:tcommentMapLeader1 != '')
     exec 'inoremap '. g:tcommentMapLeader1 .'s <c-o>:TCommentAs <c-r>=&ft<cr>_'
     exec 'noremap <silent> '. g:tcommentMapLeader1 .'cc :<c-u>call tcomment#SetOption("count", v:count1)<cr>'
     exec 'noremap '. g:tcommentMapLeader1 .'ca :<c-u>call tcomment#SetOption("as", input("Comment as: ", &filetype, "customlist,tcomment#Complete"))<cr>'
+    for s:i in range(1, 9)
+        exec 'noremap <silent> '. g:tcommentMapLeader1 . s:i .' :TComment count='. s:i .'<cr>'
+        exec 'vnoremap <silent> '. g:tcommentMapLeader1 . s:i .' :TCommentMaybeInline count='. s:i .'<cr>'
+    endfor
+    unlet s:i
 endif
 if (g:tcommentMapLeader2 != '')
     exec 'noremap <silent> '. g:tcommentMapLeader2 .'_ :TComment<cr>'
