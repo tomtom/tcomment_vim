@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-09-22.
-" @Revision:    747
+" @Revision:    753
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -108,6 +108,8 @@ if (g:tcommentMapLeader1 != '')
     exec 'inoremap <silent> '. g:tcommentMapLeader1 .'r <c-o>:TCommentRight<cr>'
     exec 'noremap <silent> '. g:tcommentMapLeader1 .'r :TCommentRight<cr>'
     exec 'vnoremap <silent> '. g:tcommentMapLeader1 .'i :TCommentInline<cr>'
+    exec 'noremap <silent> '. g:tcommentMapLeader1 .'i v:TCommentInline mode=I#<cr>'
+    exec 'inoremap <silent> '. g:tcommentMapLeader1 .'i <c-\><c-o>v:TCommentInline mode=#<cr>'
     exec 'noremap '. g:tcommentMapLeader1 .'b :TCommentBlock<cr>'
     exec 'inoremap '. g:tcommentMapLeader1 .'b <c-o>:TCommentBlock<cr>'
     exec 'noremap '. g:tcommentMapLeader1 .'a :TCommentAs '

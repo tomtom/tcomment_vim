@@ -445,8 +445,9 @@ function! tcomment#Comment(beg, end, ...)
     let commentAnyway = a:0 >= 2 ? (a:2 == '!') : 0
     " TLogVAR a:beg, a:end, commentMode, commentAnyway
     " save the cursor position
-    let pos = getpos('.')
-    let s:pos_end = getpos("'>")
+    let s:current_pos = getpos('.')
+    let cursor_pos = getpos("'>")
+    let s:cursor_pos = []
     if commentMode =~# 'i'
         let commentMode = substitute(commentMode, '\Ci', line("'<") == line("'>") ? 'I' : 'G', 'g')
     endif
@@ -454,13 +455,17 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR commentMode, lbeg, cbeg, lend, cend
     " get the correct commentstring
     let cdef = copy(g:tcommentOptions)
+    " TLogVAR 1, cdef
     if exists('b:tcommentOptions')
         let cdef = extend(cdef, copy(b:tcommentOptions))
+        " TLogVAR 2, cdef
     endif
     if a:0 >= 3 && type(a:3) == 4
         call extend(cdef, a:3)
+        " TLogVAR 3, cdef
     else
         call extend(cdef, s:GetCommentDefinition(lbeg, lend, commentMode))
+        " TLogVAR 4, cdef
         let ax = 3
         if a:0 >= 3 && a:3 != '' && stridx(a:3, '=') == -1
             let ax = 4
@@ -473,7 +478,7 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR ax, a:0, a:000
         if a:0 >= ax
             let cdef = extend(cdef, s:ParseArgs(lbeg, lend, commentMode, a:000[ax - 1 : -1]))
-            " TLogVAR cdef
+            " TLogVAR 5, cdef
         endif
         if !empty(get(cdef, 'begin', '')) || !empty(get(cdef, 'end', ''))
             let cdef.commentstring = s:EncodeCommentPart(get(cdef, 'begin', ''))
@@ -488,11 +493,13 @@ function! tcomment#Comment(beg, end, ...)
         " echom "DBG s:temp_options" string(s:temp_options)
         unlet s:temp_options
     endif
+    " TLogVAR cdef
     if !empty(filter(['count', 'cbeg', 'cend', 'cmid'], 'has_key(cdef, v:val)'))
         call s:RepeatCommentstring(cdef)
     endif
-    " echom "DBG" string(cdef) string(a:000)
+    " echom "DBG" string(a:000)
     let cms0 = s:BlockGetCommentRx(cdef)
+    " TLogVAR cms0
     " make whitespace optional; this conflicts with comments that require some 
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
@@ -507,6 +514,7 @@ function! tcomment#Comment(beg, end, ...)
         let indent = len(indentStr)
         if col > indent
             let cms0 = repeat(' ', col - indent) . cms0
+            " TLogVAR cms0
         else
             let indentStr = repeat(' ', col)
         endif
@@ -525,9 +533,7 @@ function! tcomment#Comment(beg, end, ...)
         let cmtCheck   = escape('\V\^\(\s\{-}\)'. cmtCheck .'\$', '"/\')
         " final pattern for commenting
         let cmtReplace = s:GetCommentReplace(cdef, cms0)
-        " echom "DBG tcomment#Comment" lbeg .','. lend .'s/\V'. 
-        "             \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
-        "             \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
+        " TLogVAR cmtReplace
         let s:cdef = cdef
         let cmd = lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
@@ -538,15 +544,20 @@ function! tcomment#Comment(beg, end, ...)
     endif
     " reposition cursor
     " TLogVAR commentMode
+    if !empty(s:cursor_pos)
+        let cursor_pos = s:cursor_pos
+    endif
     if commentMode =~ '>'
-        call setpos('.', s:pos_end)
+        call setpos('.', cursor_pos)
         if commentMode !~ 'i' && commentMode =~ '>>'
             norm! l^
         endif
+    elseif commentMode =~ '#'
+        call setpos('.', cursor_pos)
     else
-        " TLogVAR pos
-        call setpos('.', pos)
+        call setpos('.', s:current_pos)
     endif
+    unlet s:cdef s:cursor_pos s:current_pos
 endf
 
 
@@ -813,6 +824,7 @@ endf
 
 function! s:GetCommentDefinitionForType(beg, end, commentMode, filetype) "{{{3
     let cdef = s:GetCommentDefinition(a:beg, a:end, a:commentMode, a:filetype)
+    " TLogVAR cdef
     let cms  = cdef.commentstring
     let commentMode = cdef.mode
     let pre  = substitute(cms, '%s.*$', '', '')
@@ -833,14 +845,17 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
     else
         let cdef = {'mode': a:commentMode}
     endif
+    " TLogVAR cdef
     let cms = get(cdef, 'commentstring', '')
     if empty(cms)
         let filetype = s:Filetype()
         if exists('b:commentstring')
             let cms = b:commentstring
+            " TLogVAR 1, cms
             return s:GetCustomCommentString(filetype, a:commentMode, cms)
         elseif exists('b:commentStart') && b:commentStart != ''
             let cms = s:EncodeCommentPart(b:commentStart) .' %s'
+            " TLogVAR 2, cms
             if exists('b:commentEnd') && b:commentEnd != ''
                 let cms = cms .' '. s:EncodeCommentPart(b:commentEnd)
             endif
@@ -852,6 +867,7 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
             else
                 let altFiletype = g:tcommentGuessFileType_{filetype}
             endif
+            " TLogVAR altFiletype
             return s:GuessFileType(a:beg, a:end, a:commentMode, filetype, altFiletype)
         else
             return s:GetCustomCommentString(filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
@@ -960,8 +976,18 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
     endif
     " TLogVAR rv
     " let md = len(rv) - ml
-    let s:pos_end = getpos('.')
-    let s:pos_end[2] += len(rv)
+    if s:cdef.mode =~ '>'
+        let s:cursor_pos = getpos('.')
+        let s:cursor_pos[2] += len(rv)
+    elseif s:cdef.mode =~ '#'
+        if empty(s:cursor_pos)
+            let prefix_len = match(a:replace, '%s')
+            if prefix_len != -1
+                let s:cursor_pos = copy(s:current_pos)
+                let s:cursor_pos[2] += prefix_len
+            endif
+        endif
+    endif
     " TLogVAR pe, md, a:match
     " TLogVAR rv
     if v:version > 702 || (v:version == 702 && has('patch407'))
@@ -1101,6 +1127,7 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
         endwh
         let n += 1
     endwh
+    " TLogVAR cdef
     return cdef
 endf
 
@@ -1124,6 +1151,7 @@ function! s:CommentMode(commentMode, newmode) "{{{3
 endf
 
 function! s:GuessCurrentCommentString(commentMode)
+    " TLogVAR a:commentMode
     let valid_cms = (stridx(&commentstring, '%s') != -1)
     if &commentstring != s:defaultCommentString && valid_cms
         " The &commentstring appears to have been set and to be valid
@@ -1179,24 +1207,31 @@ endf
 
 " s:GetCustomCommentString(ft, commentMode, ?default="")
 function! s:GetCustomCommentString(ft, commentMode, ...)
+    " TLogVAR a:ft, a:commentMode, a:000
     let commentMode   = a:commentMode
     let customComment = tcomment#TypeExists(a:ft)
     if commentMode =~# 'B' && tcomment#TypeExists(a:ft .'_block')
         let def = s:definitions[a:ft .'_block']
+        " TLogVAR 1, def
     elseif commentMode =~? 'I' && tcomment#TypeExists(a:ft .'_inline')
         let def = s:definitions[a:ft .'_inline']
+        " TLogVAR 2, def
     elseif customComment
         let def = s:definitions[a:ft]
         let commentMode = s:CommentMode(commentMode, 'G')
+        " TLogVAR 3, def
     elseif a:0 >= 1
         let def = {'commentstring': a:1}
         let commentMode = s:CommentMode(commentMode, 'G')
+        " TLogVAR 4, def
     else
         let def = {}
         let commentMode = s:CommentMode(commentMode, 'G')
+        " TLogVAR 5, def
     endif
     let cdef = copy(def)
     let cdef.mode = commentMode
+    " TLogVAR cdef
     return cdef
 endf
 
