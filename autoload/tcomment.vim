@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.575
+" @Revision:    0.0.577
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -17,6 +17,10 @@ if !exists("g:tcommentModeExtra")
     " Modifies how commenting works.
     "   >  ... Move the cursor to the end of the comment
     "   >> ... Like above but move the cursor to the next line
+    "   #  ... Move the cursor to the position of the commented text 
+    "          (NOTE: this only works when creating empty comments using 
+    "          |:TCommentInline| from normal or insert mode and should 
+    "          not be set here as a global option.)
     let g:tcommentModeExtra = ''   "{{{2
 endif
 

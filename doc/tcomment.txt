@@ -231,6 +231,10 @@ g:tcommentModeExtra            (default: '')
     Modifies how commenting works.
       >  ... Move the cursor to the end of the comment
       >> ... Like above but move the cursor to the next line
+      #  ... Move the cursor to the position of the commented text 
+             (NOTE: this only works when creating empty comments using 
+             |:TCommentInline| from normal or insert mode and should 
+             not be set here as a global option.)
 
                                                     *g:tcommentOpModeExtra*
 g:tcommentOpModeExtra          (default: '')
