@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.541
+" @Revision:    0.0.575
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -297,8 +297,8 @@ call tcomment#DefineType('haskell_inline',   '{- %s -}'         )
 call tcomment#DefineType('html',             '<!-- %s -->'      )
 call tcomment#DefineType('html_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('html_block',       g:tcommentBlockXML )
-call tcomment#DefineType('htmldjango',           '{# %s #}'     )
-call tcomment#DefineType('htmldjango_block',     "{%% comment %%}%s{%% endcomment %%}\n ")
+call tcomment#DefineType('htmldjango',       '{# %s #}'     )
+call tcomment#DefineType('htmldjango_block', "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#DefineType('io',               '// %s'            )
 call tcomment#DefineType('jasmine',          '# %s'             )
 call tcomment#DefineType('javaScript',       '// %s'            )
@@ -1033,17 +1033,6 @@ function! s:UnreplaceInLine(text) "{{{3
 endf
 
 
-" function! s:CommentLines(beg, end, cstart, cend, uncomment, cmtCheck, cms0, indentStr) "{{{3
-"     " We want commented lines
-"     " final search pattern for uncommenting
-"     let cmtCheck   = escape('\V\^\(\s\{-}\)'. a:cmtCheck .'\$', '"/\')
-"     " final pattern for commenting
-"     let cmtReplace = escape(a:cms0, '"/')
-"     silent exec a:beg .','. a:end .'s/\V'. 
-"                 \ s:StartColRx(a:cstart) . a:indentStr .'\zs\(\.\{-}\)'. s:EndColRx(a:cend) .'/'.
-"                 \ '\=s:ProcessedLine('. a:uncomment .', submatch(0), "'. a:cmtCheck .'", "'. cmtReplace .'")/ge'
-" endf
-
 function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
     " TLogVAR a:beg, a:end, a:uncomment, a:checkRx, a:cdef, a:indentStr
     let t = @t
@@ -1090,13 +1079,17 @@ endf
 " this requires that a syntax names are prefixed by the filetype name 
 " s:GuessFileType(beg, end, commentMode, filetype, ?fallbackFiletype)
 function! s:GuessFileType(beg, end, commentMode, filetype, ...)
+    " TLogVAR a:beg, a:end, a:commentMode, a:filetype, a:000
     if a:0 >= 1 && a:1 != ''
         let cdef = s:GetCustomCommentString(a:1, a:commentMode)
         if empty(get(cdef, 'commentstring', ''))
             let cdef.commentstring = s:GuessCurrentCommentString(a:commentMode)
         endif
     else
-        let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:CommentMode(a:commentMode, 'G')}
+        let cdef = s:GetCustomCommentString(a:filetype, a:commentMode)
+        if !has_key(cdef, 'commentstring')
+            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:CommentMode(a:commentMode, 'G')}
+        endif
     endif
     let n  = a:beg
     " TLogVAR n, a:beg, a:end
@@ -1107,7 +1100,8 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
         while m < le
             let syntaxName = s:GetSyntaxName(n, m)
             " TLogVAR syntaxName, n, m
-            let ftypeMap   = get(g:tcommentSyntaxMap, syntaxName)
+            let ftypeMap = get(g:tcommentSyntaxMap, syntaxName, '')
+            " TLogVAR ftypeMap
             if !empty(ftypeMap)
                 " TLogVAR ftypeMap
                 return s:GetCustomCommentString(ftypeMap, a:commentMode, cdef.commentstring)
