@@ -131,6 +131,7 @@ Contents~
         tcomment#DefineType ................. |tcomment#DefineType()|
         g:tcomment_types .................... |g:tcomment_types|
         tcomment#Comment .................... |tcomment#Comment()|
+        tcomment#SetOption .................. |tcomment#SetOption()|
         tcomment#Operator ................... |tcomment#Operator()|
         tcomment#OperatorLine ............... |tcomment#OperatorLine()|
         tcomment#OperatorAnyway ............. |tcomment#OperatorAnyway()|
@@ -408,6 +409,9 @@ tcomment#Comment(beg, end, ...)
       o ... operator
     By default, each line in range will be commented by adding the comment 
     prefix and postfix.
+
+                                                    *tcomment#SetOption()*
+tcomment#SetOption(name, arg)
 
                                                     *tcomment#Operator()*
 tcomment#Operator(type, ...)
