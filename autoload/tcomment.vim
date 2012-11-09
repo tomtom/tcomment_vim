@@ -827,9 +827,9 @@ function! s:GetCommentDefinitionForType(beg, end, commentMode, filetype) "{{{3
     " TLogVAR cdef
     let cms  = cdef.commentstring
     let commentMode = cdef.mode
-    let pre  = substitute(cms, '%s.*$', '', '')
+    let pre  = substitute(cms, '%\@<!%s.*$', '', '')
     let pre  = substitute(pre, '%%', '%', 'g')
-    let post = substitute(cms, '^.\{-}%s', '', '')
+    let post = substitute(cms, '^.\{-}%\@<!%s', '', '')
     let post = substitute(post, '%%', '%', 'g')
     let cdef.begin = pre
     let cdef.end   = post
@@ -981,7 +981,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         let s:cursor_pos[2] += len(rv)
     elseif s:cdef.mode =~ '#'
         if empty(s:cursor_pos)
-            let prefix_len = match(a:replace, '%s')
+            let prefix_len = match(a:replace, '%\@<!%s')
             if prefix_len != -1
                 let s:cursor_pos = copy(s:current_pos)
                 let s:cursor_pos[2] += prefix_len
@@ -1051,7 +1051,7 @@ function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
             let @t = substitute(@t, '\n\s*$', '', '')
         else
             let cs = s:BlockGetCommentString(a:cdef)
-            let cs = a:indentStr . substitute(cs, '%s', '%s'. a:indentStr, '')
+            let cs = a:indentStr . substitute(cs, '%\@<!%s', '%s'. a:indentStr, '')
             if ms != ''
                 let ms = a:indentStr . ms
                 let mx = a:indentStr . mx
@@ -1146,7 +1146,7 @@ endf
 
 function! s:GuessCurrentCommentString(commentMode)
     " TLogVAR a:commentMode
-    let valid_cms = (stridx(&commentstring, '%s') != -1)
+    let valid_cms = (match(&commentstring, '%\@<!%s') != -1)
     if &commentstring != s:defaultCommentString && valid_cms
         " The &commentstring appears to have been set and to be valid
         return &commentstring
