@@ -3,13 +3,13 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-09-22.
-" @Revision:    756
+" @Revision:    757
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
-let loaded_tcomment = 206
+let loaded_tcomment = 207
 
 if !exists("g:tcommentMapLeader1")
     " g:tcommentMapLeader1 should be a shortcut that can be used with 
