@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-09-22.
-" @Revision:    757
+" @Revision:    760
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -140,7 +140,7 @@ if (g:tcommentMapLeader2 != '')
     exec 'noremap '. g:tcommentMapLeader2 .'s :TCommentAs <c-r>=&ft<cr>_'
 endif
 if (g:tcommentMapLeaderOp1 != '')
-    exec 'nnoremap <silent> '. g:tcommentMapLeaderOp1 .' :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#Operator<cr>g@'
+    exec 'nnoremap <silent> '. g:tcommentMapLeaderOp1 .' :<c-u>if v:count1 > 1 \| call tcomment#SetOption("count", v:count1) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#Operator<cr>g@'
     for s:i in range(1, 9)
         exec 'nnoremap <silent> '. g:tcommentMapLeaderOp1 . s:i .'c :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("count", '. s:i .') \| set opfunc=tcomment#Operator<cr>g@'
     endfor
