@@ -546,6 +546,7 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR cmd
         exec cmd
         call histdel('search', -1)
+		unlet s:cdef
     endif
     " reposition cursor
     " TLogVAR commentMode
@@ -562,7 +563,7 @@ function! tcomment#Comment(beg, end, ...)
     else
         call setpos('.', s:current_pos)
     endif
-    unlet s:cdef s:cursor_pos s:current_pos
+    unlet s:cursor_pos s:current_pos
 endf
 
 
