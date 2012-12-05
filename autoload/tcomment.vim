@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.591
+" @Revision:    0.0.594
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1131,7 +1131,7 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
         let m  = indent(n) + 1
         let le = len(getline(n))
         " TLogVAR m, le
-        while m < le
+        while m <= le
             let syntaxName = s:GetSyntaxName(n, m)
             " TLogVAR syntaxName, n, m
             let ftypeMap = get(g:tcommentSyntaxMap, syntaxName, '')
