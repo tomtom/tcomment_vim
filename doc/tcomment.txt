@@ -155,6 +155,7 @@ Contents~
         tcomment#OperatorAnyway ............. |tcomment#OperatorAnyway()|
         tcomment#OperatorLineAnyway ......... |tcomment#OperatorLineAnyway()|
         tcomment#CommentAs .................. |tcomment#CommentAs()|
+        tcomment#GuessCommentType ........... |tcomment#GuessCommentType()|
 
 
 ========================================================================
@@ -454,6 +455,24 @@ tcomment#CommentAs(beg, end, commentAnyway, filetype, ?args...)
       2. An args list (see the notes on the "args" argument of 
          |tcomment#Comment()|)
     comment text as if it were of a specific filetype
+
+                                                    *tcomment#GuessCommentType()*
+tcomment#GuessFileType(?options={})
+    A function that makes the s:GuessFileType() function usable for other 
+    library developers.
+
+    The argument is a dictionary with the following keys:
+
+      beg ................ (default = line("."))
+      end ................ (default = line("."))
+      commentMode ........ (default = "G")
+      filetype ........... (default = &filetype)
+      fallbackFiletype ... (default = "")
+
+    This function return a dictionary that contains information about how 
+    to make comments. The information about the filetype of the text 
+    between lines "beg" and "end" is in the "filetype" key of the return 
+    value. It returns the first discernible filetype it encounters.
 
 
 
