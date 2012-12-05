@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.577
+" @Revision:    0.0.591
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1082,6 +1082,33 @@ function! s:Filetype(...) "{{{3
 endf
 
 
+" A function that makes the s:GuessFileType() function usable for other 
+" library developers.
+"
+" The argument is a dictionary with the following keys:
+"
+"   beg ................ (default = line("."))
+"   end ................ (default = line("."))
+"   commentMode ........ (default = "G")
+"   filetype ........... (default = &filetype)
+"   fallbackFiletype ... (default = "")
+"
+" This function return a dictionary that contains information about how 
+" to make comments. The information about the filetype of the text 
+" between lines "beg" and "end" is in the "filetype" key of the return 
+" value. It returns the first discernible filetype it encounters.
+" :display: tcomment#GuessFileType(?options={})
+function! tcomment#GuessCommentType(...) "{{{3
+    let options = a:0 >= 1 ? a:1 : {}
+    let beg = get(options, 'beg', line('.'))
+    let end = get(options, 'end', line('.'))
+    let commentMode = get(options, 'commentMode', '')
+    let filetype = get(options, 'filetype', &filetype)
+    let fallbackFiletype = get(options, 'filetype', '')
+    return s:GuessFileType(beg, end, commentMode, filetype, fallbackFiletype)
+endf
+
+
 " inspired by Meikel Brandmeyer's EnhancedCommentify.vim
 " this requires that a syntax names are prefixed by the filetype name 
 " s:GuessFileType(beg, end, commentMode, filetype, ?fallbackFiletype)
@@ -1232,6 +1259,7 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
     endif
     let cdef = copy(def)
     let cdef.mode = commentMode
+    let cdef.filetype = a:ft
     " TLogVAR cdef
     return cdef
 endf
