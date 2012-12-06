@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.598
+" @Revision:    0.0.604
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -116,6 +116,16 @@ if !exists('g:tcommentSyntaxMap')
             \ 'vimPythonRegion':   'python',
             \ 'vimRubyRegion':     'ruby',
             \ 'vimTclRegion':      'tcl',
+            \ 'phpRegionDelimiter': {
+            \     'prevnonblank': [
+            \         {'match': '<?php', 'filetype': 'php'},
+            \         {'match': '?>', 'filetype': 'html'},
+            \     ],
+            \     'nextnonblank': [
+            \         {'match': '?>', 'filetype': 'php'},
+            \         {'match': '<?php', 'filetype': 'html'},
+            \     ],
+            \ },
             \ }
 endif
 
@@ -1138,13 +1148,41 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     " TLogVAR n, beg, end
     while n <= end
         let m  = indent(n) + 1
-        let le = len(getline(n))
+        let text = getline(n)
+        let le = len(text)
         " TLogVAR m, le
         while m <= le
             let syntaxName = s:GetSyntaxName(n, m)
             " TLogVAR syntaxName, n, m
             let ftypeMap = get(g:tcommentSyntaxMap, syntaxName, '')
             " TLogVAR ftypeMap
+            if !empty(ftypeMap) && type(ftypeMap) == 4
+                if n < a:beg
+                    let key = 'prevnonblank'
+                elseif n > a:end
+                    let key = 'nextnonblank'
+                else
+                    let key = ''
+                endif
+                if empty(key)
+                    unlet! ftypeMap
+                    let ftypeMap = ''
+                else
+                    let mapft = ''
+                    for mapdef in ftypeMap[key]
+                        if strpart(text, m - 1) =~ '^'. mapdef.match
+                            let mapft = mapdef.filetype
+                            break
+                        endif
+                    endfor
+                    unlet! ftypeMap
+                    if empty(mapft)
+                        let ftypeMap = ''
+                    else
+                        let ftypeMap = mapft
+                    endif
+                endif
+            endif
             if !empty(ftypeMap)
                 " TLogVAR ftypeMap
                 return s:GetCustomCommentString(ftypeMap, a:commentMode, cdef.commentstring)
