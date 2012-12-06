@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-09-22.
-" @Revision:    0.0.594
+" @Revision:    0.0.598
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1125,9 +1125,18 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
             let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:CommentMode(a:commentMode, 'G')}
         endif
     endif
-    let n  = a:beg
-    " TLogVAR n, a:beg, a:end
-    while n <= a:end
+    let beg = a:beg
+    let end = nextnonblank(a:end)
+    if end == 0
+        let end = a:end
+        let beg = prevnonblank(a:beg)
+        if beg == 0
+            let beg = a:beg
+        endif
+    endif
+    let n  = beg
+    " TLogVAR n, beg, end
+    while n <= end
         let m  = indent(n) + 1
         let le = len(getline(n))
         " TLogVAR m, le
