@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-09-22.
-" @Revision:    0.0.604
+" @Last Change: 2012-12-10.
+" @Revision:    0.0.614
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -116,6 +116,11 @@ if !exists('g:tcommentSyntaxMap')
             \ 'vimPythonRegion':   'python',
             \ 'vimRubyRegion':     'ruby',
             \ 'vimTclRegion':      'tcl',
+            \ 'Delimiter': {
+            \     'filetype': {
+            \         'php': 'php',
+            \     },
+            \ },
             \ 'phpRegionDelimiter': {
             \     'prevnonblank': [
             \         {'match': '<?php', 'filetype': 'php'},
@@ -1164,9 +1169,11 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
                 else
                     let key = ''
                 endif
-                if empty(key)
+                if empty(key) || !has_key(ftypeMap, key)
+                    let ftypeftype = get(ftypeMap, 'filetype', {})
+                    " TLogVAR ftypeMap, ftypeftype
                     unlet! ftypeMap
-                    let ftypeMap = ''
+                    let ftypeMap = get(ftypeftype, a:filetype, '')
                 else
                     let mapft = ''
                     for mapdef in ftypeMap[key]
