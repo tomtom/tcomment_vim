@@ -88,6 +88,9 @@ endif
 if !exists("g:tcommentGuessFileType_eruby")
     let g:tcommentGuessFileType_eruby = 1   "{{{2
 endif
+if !exists("g:tcommentGuessFileType_smarty")
+    let g:tcommentGuessFileType_smarty = 1   "{{{2
+endif
 
 if !exists("g:tcommentIgnoreTypes_php")
     " In php files, some syntax regions are wrongly highlighted as sql 
