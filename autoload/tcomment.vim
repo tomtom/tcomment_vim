@@ -64,7 +64,7 @@ if !exists("g:tcommentGuessFileType")
     let g:tcommentGuessFileType = 0   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_dsl")
-    " For dsl documents, assumet filetype = xml.
+    " For dsl documents, assume filetype = xml.
     let g:tcommentGuessFileType_dsl = 'xml'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_php")
@@ -87,6 +87,9 @@ if !exists("g:tcommentGuessFileType_django")
 endif
 if !exists("g:tcommentGuessFileType_eruby")
     let g:tcommentGuessFileType_eruby = 1   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_smarty")
+    let g:tcommentGuessFileType_smarty = 1   "{{{2
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
@@ -318,6 +321,7 @@ call tcomment#DefineType('html_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('html_block',       g:tcommentBlockXML )
 call tcomment#DefineType('htmldjango',       '{# %s #}'     )
 call tcomment#DefineType('htmldjango_block', "{%% comment %%}%s{%% endcomment %%}\n ")
+call tcomment#DefineType('ini',              '; %s'             ) " php ini (/etc/php5/...)
 call tcomment#DefineType('io',               '// %s'            )
 call tcomment#DefineType('jasmine',          '# %s'             )
 call tcomment#DefineType('javaScript',       '// %s'            )
