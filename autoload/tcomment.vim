@@ -64,7 +64,7 @@ if !exists("g:tcommentGuessFileType")
     let g:tcommentGuessFileType = 0   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_dsl")
-    " For dsl documents, assumet filetype = xml.
+    " For dsl documents, assume filetype = xml.
     let g:tcommentGuessFileType_dsl = 'xml'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_php")
