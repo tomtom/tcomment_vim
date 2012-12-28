@@ -187,3 +187,19 @@ version: "2.07"
   - Monkey language comment style
   MD5 checksum: 0853c50ebdcd4c52a31b2ad2d514d1e0
 
+version: "2.08"
+  - Enable count for gc operator maps (use e.g. 3gc2l instead of gc3c2l; maybe remove gc<count>c maps later on)
+  - <count>gc operator maps: use v:count instead of v:count1
+  - fixed unlet
+  - Merge branch 'master' of https://github.com/grassofhust/tcomment_vim
+  - Added vhdl to tcomment#DefineType
+  - tcomment#GuessCommentType(): Make filetype guessing accessible for other plugins
+  - FIX: didn't guess filetype correctly for lines containing only one character
+  - Guess filetype: Improved handling of empty lines
+  - g:tcommentSyntaxMap: support additional info on how to handle empty lines
+  - g:tcommentSyntaxMap: support filetype key: explicitly map syntax name per filetype (fixes #39)
+  - Fix typo
+  - Add `g:tcommentGuessFileType_smarty = 1`
+  - Define/handle 'ini' file type (e.g. for php.ini)
+  MD5 checksum: 702082a857ddeaf75d3b4fd884363173
+
