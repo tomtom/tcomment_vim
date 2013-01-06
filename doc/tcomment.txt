@@ -114,6 +114,7 @@ please make sure, you have the current version of vimball (vimscript
 ========================================================================
 Contents~
 
+        g:tcommentMaps ...................... |g:tcommentMaps|
         g:tcommentMapLeader1 ................ |g:tcommentMapLeader1|
         g:tcommentMapLeader2 ................ |g:tcommentMapLeader2|
         g:tcommentMapLeaderOp1 .............. |g:tcommentMapLeaderOp1|
@@ -137,6 +138,7 @@ Contents~
         g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
         g:tcommentGuessFileType_django ...... |g:tcommentGuessFileType_django|
         g:tcommentGuessFileType_eruby ....... |g:tcommentGuessFileType_eruby|
+        g:tcommentGuessFileType_smarty ...... |g:tcommentGuessFileType_smarty|
         g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
         g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
@@ -160,6 +162,10 @@ Contents~
 
 ========================================================================
 plugin/tcomment.vim~
+
+                                                    *g:tcommentMaps*
+g:tcommentMaps                 (default: 1)
+    If true, set maps.
 
                                                     *g:tcommentMapLeader1*
 g:tcommentMapLeader1           (default: '<c-_>')
@@ -294,7 +300,7 @@ g:tcommentGuessFileType        (default: 0)
 
                                                     *g:tcommentGuessFileType_dsl*
 g:tcommentGuessFileType_dsl    (default: 'xml')
-    For dsl documents, assumet filetype = xml.
+    For dsl documents, assume filetype = xml.
 
                                                     *g:tcommentGuessFileType_php*
 g:tcommentGuessFileType_php    (default: 'html')
@@ -316,6 +322,9 @@ g:tcommentGuessFileType_django (default: 1)
 
                                                     *g:tcommentGuessFileType_eruby*
 g:tcommentGuessFileType_eruby  (default: 1)
+
+                                                    *g:tcommentGuessFileType_smarty*
+g:tcommentGuessFileType_smarty (default: 1)
 
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
