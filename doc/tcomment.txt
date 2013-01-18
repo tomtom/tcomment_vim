@@ -146,6 +146,7 @@ Contents~
         g:tcommentBlockC .................... |g:tcommentBlockC|
         g:tcommentBlockC2 ................... |g:tcommentBlockC2|
         g:tcommentInlineC ................... |g:tcommentInlineC|
+        g:tcomment#replacements_xml ......... |g:tcomment#replacements_xml|
         g:tcommentBlockXML .................. |g:tcommentBlockXML|
         g:tcommentInlineXML ................. |g:tcommentInlineXML|
         tcomment#DefineType ................. |tcomment#DefineType()|
@@ -358,12 +359,16 @@ g:tcommentBlockC2              (default: {...})
 g:tcommentInlineC              (default: g:tcommentLineC)
     Generic c-like comments.
 
+                                                    *g:tcomment#replacements_xml*
+g:tcomment#replacements_xml    (default: {...})
+    Replacements for xml filetype.
+
                                                     *g:tcommentBlockXML*
-g:tcommentBlockXML             (default: "<!--%s-->\n  ")
+g:tcommentBlockXML             (default: {...})
     Generic xml-like block comments.
 
                                                     *g:tcommentInlineXML*
-g:tcommentInlineXML            (default: "<!-- %s -->")
+g:tcommentInlineXML            (default: {...})
     Generic xml-like comments.
 
                                                     *tcomment#DefineType()*

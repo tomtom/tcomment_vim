@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    0.0.654
+" @Revision:    0.0.655
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -182,8 +182,8 @@ if !exists("g:tcommentInlineC")
 endif
 
 if !exists('g:tcomment#replacements_xml')
-    " Replacements for c filetype.
-    " :read: let g:tcomment#replacements_c = {...}   "{{{2
+    " Replacements for xml filetype.
+    " :read: let g:tcomment#replacements_xml = {...}   "{{{2
     let g:tcomment#replacements_xml = {
                 \     '-': '&#45;',
                 \     '&': '&#38;',
