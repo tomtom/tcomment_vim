@@ -4,7 +4,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    0.0.615
+" @Revision:    0.0.654
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -181,13 +181,30 @@ if !exists("g:tcommentInlineC")
     let g:tcommentInlineC = g:tcommentLineC   "{{{2
 endif
 
+if !exists('g:tcomment#replacements_xml')
+    " Replacements for c filetype.
+    " :read: let g:tcomment#replacements_c = {...}   "{{{2
+    let g:tcomment#replacements_xml = {
+                \     '-': '&#45;',
+                \     '&': '&#38;',
+                \ }
+endif
+
 if !exists("g:tcommentBlockXML")
     " Generic xml-like block comments.
-    let g:tcommentBlockXML = "<!--%s-->\n  "   "{{{2
+    " :read: let g:tcommentBlockXML = {...}   "{{{2
+    let g:tcommentBlockXML = {
+                \ 'commentstring': "<!--%s-->\n  ",
+                \ 'replacements': g:tcomment#replacements_xml
+                \ }
 endif
 if !exists("g:tcommentInlineXML")
     " Generic xml-like comments.
-    let g:tcommentInlineXML = "<!-- %s -->"   "{{{2
+    " :read: let g:tcommentInlineXML = {...}   "{{{2
+    let g:tcommentInlineXML = {
+                \ 'commentstring': "<!-- %s -->",
+                \ 'replacements': g:tcomment#replacements_xml
+                \ }
 endif
 
 let s:typesDirty = 1
@@ -292,7 +309,7 @@ call tcomment#DefineType('debsources',       '# %s'             )
 call tcomment#DefineType('debcontrol',       '# %s'             )
 call tcomment#DefineType('desktop',          '# %s'             )
 call tcomment#DefineType('dnsmasq',          '# %s'             )
-call tcomment#DefineType('docbk',            '<!-- %s -->'      )
+call tcomment#DefineType('docbk',            g:tcommentInlineXML)
 call tcomment#DefineType('docbk_inline',     g:tcommentInlineXML)
 call tcomment#DefineType('docbk_block',      g:tcommentBlockXML )
 call tcomment#DefineType('dosbatch',         'rem %s'           )
@@ -317,7 +334,7 @@ call tcomment#DefineType('haml',             '-# %s'            )
 call tcomment#DefineType('haskell',          '-- %s'            )
 call tcomment#DefineType('haskell_block',    "{-%s-}\n   "      )
 call tcomment#DefineType('haskell_inline',   '{- %s -}'         )
-call tcomment#DefineType('html',             '<!-- %s -->'      )
+call tcomment#DefineType('html',             g:tcommentInlineXML)
 call tcomment#DefineType('html_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('html_block',       g:tcommentBlockXML )
 call tcomment#DefineType('htmldjango',       '{# %s #}'     )
@@ -386,7 +403,7 @@ call tcomment#DefineType('scss',             '// %s'            )
 call tcomment#DefineType('scss_inline',      g:tcommentInlineC  )
 call tcomment#DefineType('scss_block',       g:tcommentBlockC   )
 call tcomment#DefineType('sed',              '# %s'             )
-call tcomment#DefineType('sgml',             '<!-- %s -->'      )
+call tcomment#DefineType('sgml',             g:tcommentInlineXML)
 call tcomment#DefineType('sgml_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('sgml_block',       g:tcommentBlockXML )
 call tcomment#DefineType('sh',               '# %s'             )
@@ -411,12 +428,12 @@ call tcomment#DefineType('vim',              '" %s'             )
 call tcomment#DefineType('vim_3',            '""" %s'           )
 call tcomment#DefineType('websec',           '# %s'             )
 call tcomment#DefineType('x86conf',          '# %s'             )
-call tcomment#DefineType('xml',              '<!-- %s -->'      )
+call tcomment#DefineType('xml',              g:tcommentInlineXML)
 call tcomment#DefineType('xml_inline',       g:tcommentInlineXML)
 call tcomment#DefineType('xml_block',        g:tcommentBlockXML )
 call tcomment#DefineType('xs',               '// %s'            )
 call tcomment#DefineType('xs_block',         g:tcommentBlockC   )
-call tcomment#DefineType('xslt',             '<!-- %s -->'      )
+call tcomment#DefineType('xslt',             g:tcommentInlineXML)
 call tcomment#DefineType('xslt_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('xslt_block',       g:tcommentBlockXML )
 call tcomment#DefineType('yaml',             '# %s'             )
@@ -1034,14 +1051,8 @@ endf
 
 function! s:ReplaceInLine(text) "{{{3
     if has_key(s:cdef, 'replacements')
-        let text = a:text
-        " TLogVAR text
-        for [token, substitution] in items(s:cdef.replacements)
-            let text = substitute(text, '\V'. escape(token, '\'), substitution, 'g')
-            " TLogVAR token, substitution, text
-        endfor
-        " TLogVAR text
-        return text
+        let replacements = s:cdef.replacements
+        return s:DoReplacements(a:text, keys(replacements), values(replacements))
     else
         return a:text
     endif
@@ -1050,15 +1061,39 @@ endf
 
 function! s:UnreplaceInLine(text) "{{{3
     if has_key(s:cdef, 'replacements')
-        let text = a:text
-        " TLogVAR text
-        for [substitution, token] in items(s:cdef.replacements)
-            " TLogVAR substitution, token
-            let text = substitute(text, '\V'. escape(token, '\'), substitution, 'g')
-        endfor
-        return text
+        let replacements = s:cdef.replacements
+        return s:DoReplacements(a:text, values(replacements), keys(replacements))
     else
         return a:text
+    endif
+endf
+
+
+function! s:DoReplacements(text, tokens, replacements) "{{{3
+    let rx = '\V\('. join(map(a:tokens, 'escape(v:val, ''\'')'), '\|') .'\)'
+    let texts = split(a:text, rx .'\zs', 1)
+    let texts = map(texts, 's:InlineReplacement(v:val, rx, a:tokens, a:replacements)')
+    let text = join(texts, '')
+    return text
+endf
+
+
+function! s:InlineReplacement(text, rx, tokens, replacements) "{{{3
+    " TLogVAR a:text, a:rx, a:replacements
+    let matches = split(a:text, '\ze'. a:rx .'\$', 1)
+    if len(matches) == 1
+        return a:text
+    else
+        let match = matches[-1]
+        let idx = index(a:tokens, match)
+        " TLogVAR matches, match, idx
+        if idx != -1
+            let matches[-1] = a:replacements[idx]
+            " TLogVAR matches
+            return join(matches, '')
+        else
+            throw 'TComment: Internal error: cannot find '. string(match) .' in '. string(a:tokens)
+        endif
     endif
 endf
 
