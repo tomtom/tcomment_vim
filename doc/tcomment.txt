@@ -427,6 +427,8 @@ tcomment#Comment(beg, end, ...)
                                  that should be multiplied by "count"
             rxend=N          ... The above for "end"
             rxmid=N          ... The above for "middle"
+            mixedindent=BOOL ... If true, allow use of mixed 
+                                 characters for indentation
             commentstring_rx ... A regexp format string that matches 
                                  commented lines (no new groups may be 
                                  introduced, the |regexp| is |\V|; % have 

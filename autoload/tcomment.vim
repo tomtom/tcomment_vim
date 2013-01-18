@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    676
+" @Revision:    685
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -48,12 +48,6 @@ if !exists('g:tcomment#ignore_char_type')
     " behaviour. Be prepared that the result may not always match your 
     " intentions.
     let g:tcomment#ignore_char_type = 1   "{{{2
-endif
-
-if !exists('g:tcomment#mixed_indentation')
-    " If true, take precautions to deal with a mix of tabs and blanks 
-    " for indentation.
-    let g:tcomment#mixed_indentation = 0   "{{{2
 endif
 
 if !exists("g:tcommentGuessFileType")
@@ -472,6 +466,8 @@ let s:nullCommentString    = '%s'
 "                              that should be multiplied by "count"
 "         rxend=N          ... The above for "end"
 "         rxmid=N          ... The above for "middle"
+"         mixedindent=BOOL ... If true, allow use of mixed 
+"                              characters for indentation
 "         commentstring_rx ... A regexp format string that matches 
 "                              commented lines (no new groups may be 
 "                              introduced, the |regexp| is |\V|; % have 
@@ -556,10 +552,11 @@ function! tcomment#Comment(beg, end, ...)
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
     " turn commentstring into a search pattern
     let cmtCheck = printf(cmtCheck, '\(\_.\{-}\)')
+    let s:cdef = cdef
     " set commentMode and indentStr
     let [indentStr, uncomment] = s:CommentDef(lbeg, lend, cmtCheck, commentMode, cbeg, cend)
     " TLogVAR indentStr, uncomment
-    let col = get(cdef, 'col', -1)
+    let col = get(s:cdef, 'col', -1)
     if col >= 0
         let col -= 1
         let indent = len(indentStr)
@@ -576,17 +573,16 @@ function! tcomment#Comment(beg, end, ...)
     " go
     if commentMode =~# 'B'
         " We want a comment block
-        call s:CommentBlock(lbeg, lend, uncomment, cmtCheck, cdef, indentStr)
+        call s:CommentBlock(lbeg, lend, uncomment, cmtCheck, s:cdef, indentStr)
     else
         " call s:CommentLines(lbeg, lend, cbeg, cend, uncomment, cmtCheck, cms0, indentStr)
         " We want commented lines
         " final search pattern for uncommenting
         let cmtCheck   = escape('\V\^\(\s\{-}\)'. cmtCheck .'\$', '"/\')
         " final pattern for commenting
-        let cmtReplace = s:GetCommentReplace(cdef, cms0)
+        let cmtReplace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmtReplace
-        let s:cdef = cdef
-        if g:tcomment#mixed_indentation && !empty(indentStr)
+        if get(s:cdef, 'mixedindent', 0) && !empty(indentStr)
             let cbeg = strdisplaywidth(indentStr, cbeg)
             let indentStr = ''
         endif
@@ -597,7 +593,6 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR cmd
         exec cmd
         call histdel('search', -1)
-		unlet s:cdef
     endif
     " reposition cursor
     " TLogVAR commentMode
@@ -614,7 +609,7 @@ function! tcomment#Comment(beg, end, ...)
     else
         call setpos('.', s:current_pos)
     endif
-    unlet s:cursor_pos s:current_pos
+    unlet! s:cursor_pos s:current_pos s:cdef
 endf
 
 
@@ -962,7 +957,7 @@ endf
 function! s:StartColRx(pos)
     if a:pos == 0
         return '\^'
-    elseif g:tcomment#mixed_indentation
+    elseif get(s:cdef, 'mixedindent', 0)
         return '\%>'. a:pos .'v'
     else
         return '\%'. a:pos .'c'
