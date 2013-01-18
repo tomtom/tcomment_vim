@@ -1,10 +1,9 @@
-" tcomment.vim
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    0.0.655
+" @Revision:    676
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -49,6 +48,12 @@ if !exists('g:tcomment#ignore_char_type')
     " behaviour. Be prepared that the result may not always match your 
     " intentions.
     let g:tcomment#ignore_char_type = 1   "{{{2
+endif
+
+if !exists('g:tcomment#mixed_indentation')
+    " If true, take precautions to deal with a mix of tabs and blanks 
+    " for indentation.
+    let g:tcomment#mixed_indentation = 0   "{{{2
 endif
 
 if !exists("g:tcommentGuessFileType")
@@ -581,6 +586,11 @@ function! tcomment#Comment(beg, end, ...)
         let cmtReplace = s:GetCommentReplace(cdef, cms0)
         " TLogVAR cmtReplace
         let s:cdef = cdef
+        if g:tcomment#mixed_indentation && !empty(indentStr)
+            let cbeg = strdisplaywidth(indentStr, cbeg)
+            let indentStr = ''
+        endif
+        " TLogVAR commentMode, lbeg, cbeg
         let cmd = lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
@@ -952,6 +962,8 @@ endf
 function! s:StartColRx(pos)
     if a:pos == 0
         return '\^'
+    elseif g:tcomment#mixed_indentation
+        return '\%>'. a:pos .'v'
     else
         return '\%'. a:pos .'c'
     endif
