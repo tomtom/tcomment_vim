@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    686
+" @Revision:    691
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -583,7 +583,7 @@ function! tcomment#Comment(beg, end, ...)
         let cmtReplace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmtReplace
         if get(s:cdef, 'mixedindent', 0) && !empty(indentStr)
-            let cbeg = strdisplaywidth(indentStr, cbeg)
+            let cbeg = strdisplaywidth(indentStr, cbeg) + 1
             let indentStr = ''
         endif
         " TLogVAR commentMode, lbeg, cbeg
@@ -958,7 +958,7 @@ function! s:StartColRx(pos)
     if a:pos == 0
         return '\^'
     elseif get(s:cdef, 'mixedindent', 0)
-        return '\%>'. a:pos .'v'
+        return '\%'. a:pos .'v'
     else
         return '\%'. a:pos .'c'
     endif
