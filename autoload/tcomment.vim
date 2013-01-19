@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    685
+" @Revision:    686
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1077,11 +1077,15 @@ endf
 
 
 function! s:DoReplacements(text, tokens, replacements) "{{{3
-    let rx = '\V\('. join(map(a:tokens, 'escape(v:val, ''\'')'), '\|') .'\)'
-    let texts = split(a:text, rx .'\zs', 1)
-    let texts = map(texts, 's:InlineReplacement(v:val, rx, a:tokens, a:replacements)')
-    let text = join(texts, '')
-    return text
+    if empty(a:tokens)
+        return a:text
+    else
+        let rx = '\V\('. join(map(a:tokens, 'escape(v:val, ''\'')'), '\|') .'\)'
+        let texts = split(a:text, rx .'\zs', 1)
+        let texts = map(texts, 's:InlineReplacement(v:val, rx, a:tokens, a:replacements)')
+        let text = join(texts, '')
+        return text
+    endif
 endf
 
 
