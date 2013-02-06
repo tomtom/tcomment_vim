@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    693
+" @Revision:    699
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -855,8 +855,14 @@ function! tcomment#Complete(ArgLead, CmdLine, CursorPos) "{{{3
 endf
 
 
+let s:first_completion = 0
+
 " :nodoc:
 function! tcomment#CompleteArgs(ArgLead, CmdLine, CursorPos) "{{{3
+    if v:version < 703 && !s:first_completion
+        redraw
+        let s:first_completion = 1
+    endif
     let completions = ['as=', 'col=', 'count=', 'mode=', 'begin=', 'end=', 'rxbeg=', 'rxend=', 'rxmid=']
     if !empty(a:ArgLead)
         if a:ArgLead =~ '^as='
@@ -1407,7 +1413,5 @@ function! s:BlockGetMiddleString(cdef)
     endif
 endf
 
-
-redraw
 
 " vi: ft=vim:tw=72:ts=4:fo=w2croql
