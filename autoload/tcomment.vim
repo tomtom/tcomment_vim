@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2012-12-10.
-" @Revision:    699
+" @Revision:    747
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -103,6 +103,14 @@ if !exists('g:tcomment#syntax_substitute')
     " Perform replacements on the syntax name.
     let g:tcomment#syntax_substitute = {
                 \ '\C^javaScript': {'sub': 'javascript'}
+                \ }
+endif
+
+if !exists('g:tcomment#filetype_map')
+    " Keys must match the full |filetype|. Regexps must be |magic|. No 
+    " regexp modifiers (like |\V|) are allowed.
+    " let g:tcomment#filetype_map = {...}   "{{{2
+    let g:tcomment#filetype_map = {
                 \ }
 endif
 
@@ -552,7 +560,9 @@ function! tcomment#Comment(beg, end, ...)
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
     let cmtCheck = s:FEscapeCommentString(cmtCheck)
     " turn commentstring into a search pattern
+    " TLogVAR cmtCheck
     let cmtCheck = printf(cmtCheck, '\(\_.\{-}\)')
+    " TLogVAR cdef, cmtCheck
     let s:cdef = cdef
     " set commentMode and indentStr
     let [indentStr, uncomment] = s:CommentDef(lbeg, lend, cmtCheck, commentMode, cbeg, cend)
@@ -907,7 +917,7 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
     " TLogVAR cdef
     let cms = get(cdef, 'commentstring', '')
     if empty(cms)
-        let filetype = s:Filetype()
+        let filetype = s:Filetype(ft)
         if exists('b:commentstring')
             let cms = b:commentstring
             " TLogVAR 1, cms
@@ -919,17 +929,14 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
                 let cms = cms .' '. s:EncodeCommentPart(b:commentEnd)
             endif
             return s:GetCustomCommentString(filetype, a:commentMode, cms)
-        elseif g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
-                    \ && g:tcommentGuessFileType_{filetype} =~ '[^0]')
-            if g:tcommentGuessFileType_{filetype} == 1
-                let altFiletype = ''
-            else
-                let altFiletype = g:tcommentGuessFileType_{filetype}
-            endif
-            " TLogVAR altFiletype
-            return s:GuessFileType(a:beg, a:end, a:commentMode, filetype, altFiletype)
         else
-            return s:GetCustomCommentString(filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
+            let [use_guess_ft, altFiletype] = s:AltFiletype(ft)
+            " TLogVAR use_guess_ft, altFiletype
+            if use_guess_ft
+                return s:GuessFileType(a:beg, a:end, a:commentMode, filetype, altFiletype)
+            else
+                return s:GetCustomCommentString(filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
+            endif
         endif
         let cdef.commentstring = cms
     endif
@@ -1156,9 +1163,51 @@ endf
 
 
 function! s:Filetype(...) "{{{3
-    let ft = a:0 >= 1 ? a:1 : &filetype
-    let ft = substitute(ft, '\..*$', '', '')
-    return ft
+    let ft = a:0 >= 1 && !empty(a:1) ? a:1 : &filetype
+    let pos = a:0 >= 2 ? a:2 : 0
+    " TLogVAR ft, pos
+    if !exists('s:filetype_map_rx')
+        let fts_rx = '^'. join(map(keys(g:tcomment#filetype_map), 'escape(v:val, ''\'')'), '\|') .'$'
+    endif
+    if ft =~ fts_rx
+        for [ft_rx, ftrv] in items(g:tcomment#filetype_map)
+            if ft =~ ft_rx
+                return substitute(ft, ft_rx, ftrv, '')
+            endif
+        endfor
+    endif
+    let fts = split(ft, '^\@!\.')
+    " TLogVAR fts
+    " let ft = substitute(ft, '\..*$', '', '')
+    let rv = get(fts, pos, ft)
+    " TLogVAR fts, rv
+    return rv
+endf
+
+
+function! s:AltFiletype(filetype) "{{{3
+    let filetype = empty(a:filetype) ? &filetype : a:filetype
+    " TLogVAR a:filetype, filetype
+    if g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
+                \ && g:tcommentGuessFileType_{filetype} =~ '[^0]')
+        if g:tcommentGuessFileType_{filetype} == 1
+            if filetype =~ '^.\{-}\..\+$'
+                let altFiletype = s:Filetype(filetype, 1)
+            else
+                let altFiletype = ''
+            endif
+        else
+            let altFiletype = g:tcommentGuessFileType_{filetype}
+        endif
+        " TLogVAR altFiletype
+        return [1, altFiletype]
+    elseif filetype =~ '^.\{-}\..\+$'
+        let altFiletype = s:Filetype(filetype, 1)
+        " TLogVAR altFiletype
+        return [1, altFiletype]
+    else
+        return [0, '']
+    endif
 endf
 
 
