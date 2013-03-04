@@ -550,6 +550,7 @@ function! tcomment#Comment(beg, end, ...)
     " make whitespace optional; this conflicts with comments that require some 
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
+    let cmtCheck = s:FEscapeCommentString(cmtCheck)
     " turn commentstring into a search pattern
     let cmtCheck = printf(cmtCheck, '\(\_.\{-}\)')
     let s:cdef = cdef
@@ -1021,6 +1022,10 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     return [indentStr, uncomment]
 endf
 
+function! s:FEscapeCommentString(string) "{{{3
+    return substitute(a:string, '%s\@!', '%%', 'g')
+endf
+
 function! s:ProcessedLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
     if !(a:match =~ '\S' || g:tcommentBlankLines)
@@ -1032,7 +1037,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         let rv = s:UnreplaceInLine(rv)
     else
         let rv = s:ReplaceInLine(a:match)
-        let rv = printf(a:replace, rv)
+        let rv = printf(s:FEscapeCommentString(a:replace), rv)
     endif
     " TLogVAR rv
     " let md = len(rv) - ml
