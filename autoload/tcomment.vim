@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    753
+" @Revision:    754
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -121,6 +121,7 @@ if !exists('g:tcommentSyntaxMap')
     " mapped onto the corresponding filetype.
     " :read: let g:tcommentSyntaxMap = {...}   "{{{2
     let g:tcommentSyntaxMap = {
+            \ 'erubyExpression':   'ruby',
             \ 'vimMzSchemeRegion': 'scheme',
             \ 'vimPerlRegion':     'perl',
             \ 'vimPythonRegion':   'python',
