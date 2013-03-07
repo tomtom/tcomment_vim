@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    754
+" @Revision:    768
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -542,6 +542,7 @@ function! tcomment#Comment(beg, end, ...)
                         \ . s:EncodeCommentPart(get(cdef, 'end', ''))
         endif
         let commentMode = cdef.mode
+        " TLogVAR commentMode
     endif
     if exists('s:temp_options')
         let cdef = s:ExtendCDef(lbeg, lend, commentMode, cdef, s:temp_options)
@@ -597,7 +598,7 @@ function! tcomment#Comment(beg, end, ...)
             let cbeg = strdisplaywidth(indentStr, cbeg)
             let indentStr = ''
         endif
-        " TLogVAR commentMode, lbeg, cbeg
+        " TLogVAR commentMode, lbeg, cbeg, lend, cend
         let cmd = lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
@@ -945,10 +946,11 @@ endf
 
 function! s:StartPosRx(mode, line, col)
     " TLogVAR a:mode, a:line, a:col
+    let col = get(s:cdef, 'mixedindent', 0) ? a:col - 1 : a:col
     if a:mode =~# 'I'
-        return s:StartLineRx(a:line) . s:StartColRx(a:col)
+        return s:StartLineRx(a:line) . s:StartColRx(col)
     else
-        return s:StartColRx(a:col)
+        return s:StartColRx(col)
     endif
 endf
 
