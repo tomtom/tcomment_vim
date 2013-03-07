@@ -969,7 +969,7 @@ function! s:EndLineRx(pos)
 endf
 
 function! s:StartColRx(pos)
-    if a:pos == 0
+    if a:pos <= 1
         return '\^'
     elseif get(s:cdef, 'mixedindent', 0)
         return '\%>'. a:pos .'v'
