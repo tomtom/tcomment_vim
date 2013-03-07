@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2012-12-10.
-" @Revision:    747
+" @Last Change: 2013-03-07.
+" @Revision:    753
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -558,7 +558,6 @@ function! tcomment#Comment(beg, end, ...)
     " make whitespace optional; this conflicts with comments that require some 
     " whitespace
     let cmtCheck = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
-    let cmtCheck = s:FEscapeCommentString(cmtCheck)
     " turn commentstring into a search pattern
     " TLogVAR cmtCheck
     let cmtCheck = printf(cmtCheck, '\(\_.\{-}\)')
@@ -1029,10 +1028,6 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     return [indentStr, uncomment]
 endf
 
-function! s:FEscapeCommentString(string) "{{{3
-    return substitute(a:string, '%s\@!', '%%', 'g')
-endf
-
 function! s:ProcessedLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
     if !(a:match =~ '\S' || g:tcommentBlankLines)
@@ -1044,7 +1039,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         let rv = s:UnreplaceInLine(rv)
     else
         let rv = s:ReplaceInLine(a:match)
-        let rv = printf(s:FEscapeCommentString(a:replace), rv)
+        let rv = printf(a:replace, rv)
     endif
     " TLogVAR rv
     " let md = len(rv) - ml
