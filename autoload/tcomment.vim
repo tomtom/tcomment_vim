@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    770
+" @Revision:    771
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -157,7 +157,7 @@ endif
 if !exists("g:tcommentInlineC")
     " Generic c-like comments.
     " :read: let g:tcommentInlineC = {...}   "{{{2
-    let g:tcommentInlineC = {   "{{{2
+    let g:tcommentInlineC = {
                 \ 'commentstring': '/* %s */',
                 \ 'replacements': g:tcomment#replacements_c
                 \ }
