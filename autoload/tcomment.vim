@@ -497,7 +497,7 @@ let s:nullCommentString    = '%s'
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
-    let commentMode   = (a:0 >= 1 ? a:1 : 'G') . g:tcommentModeExtra
+    let commentMode   = (a:0 >= 1 ? a:1 : 'G') . s:CleanModeExtra(g:tcommentModeExtra, a:beg, a:end)
     let commentAnyway = a:0 >= 2 ? (a:2 == '!') : 0
     " TLogVAR a:beg, a:end, commentMode, commentAnyway
     " save the cursor position
@@ -769,7 +769,7 @@ function! tcomment#Operator(type, ...) "{{{3
         " TLogVAR lbeg, lend, cbeg, cend
         " echom "DBG tcomment#Operator" lbeg col("'[") col("'<") lend col("']") col("'>")
         norm! 
-        let commentMode .= g:tcommentOpModeExtra
+        let commentMode .= s:CleanModeExtra(g:tcommentOpModeExtra, lbeg, lend)
         if a:type =~ 'line\|block' || g:tcomment#ignore_char_type
             call tcomment#Comment(lbeg, lend, commentMode.'o', bang)
         else
@@ -1348,6 +1348,13 @@ function! s:GetSyntaxName(lnum, col) "{{{3
 endf
 
 
+function! s:CleanModeExtra(extra, beg, end) "{{{3
+    if a:beg == a:end
+        return substitute(a:extra, '\C[B]', '', 'g')
+    else
+        return substitute(a:extra, '\C[IR]', '', 'g')
+    endif
+endf
 
 
 function! s:GuessCommentMode(commentMode) "{{{3
