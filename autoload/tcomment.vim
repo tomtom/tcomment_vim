@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    771
+" @Revision:    803
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -502,10 +502,12 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR a:beg, a:end, commentMode, commentAnyway
     " save the cursor position
     let s:current_pos = getpos('.')
+    " echom "DBG current_pos=" string(s:current_pos)
     let cursor_pos = getpos("'>")
     let s:cursor_pos = []
     if commentMode =~# 'i'
         let commentMode = substitute(commentMode, '\Ci', line("'<") == line("'>") ? 'I' : 'G', 'g')
+        " TLogVAR 1, commentMode
     endif
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, commentMode)
     " TLogVAR commentMode, lbeg, cbeg, lend, cend
@@ -520,8 +522,10 @@ function! tcomment#Comment(beg, end, ...)
         call extend(cdef, a:3)
         " TLogVAR 3, cdef
     else
-        call extend(cdef, s:GetCommentDefinition(lbeg, lend, commentMode))
-        " TLogVAR 4, cdef
+        let cdef0 = s:GetCommentDefinition(lbeg, lend, commentMode)
+        " TLogVAR 4.1, cdef, cdef0
+        call extend(cdef, cdef0)
+        " TLogVAR 4.2, cdef
         let ax = 3
         if a:0 >= 3 && a:3 != '' && stridx(a:3, '=') == -1
             let ax = 4
@@ -542,15 +546,15 @@ function! tcomment#Comment(beg, end, ...)
                         \ . s:EncodeCommentPart(get(cdef, 'end', ''))
         endif
         let commentMode = cdef.mode
-        " TLogVAR commentMode
+        " TLogVAR 2, commentMode
     endif
     if exists('s:temp_options')
         let cdef = s:ExtendCDef(lbeg, lend, commentMode, cdef, s:temp_options)
-        " TLogVAR cdef
+        " TLogVAR 6, cdef
         " echom "DBG s:temp_options" string(s:temp_options)
         unlet s:temp_options
     endif
-    " TLogVAR cdef
+    " TLogVAR 7, cdef
     if !empty(filter(['count', 'cbeg', 'cend', 'cmid'], 'has_key(cdef, v:val)'))
         call s:RepeatCommentstring(cdef)
     endif
@@ -607,7 +611,8 @@ function! tcomment#Comment(beg, end, ...)
         call histdel('search', -1)
     endif
     " reposition cursor
-    " TLogVAR commentMode
+    " TLogVAR 3, commentMode
+    " echom "DBG cursor_pos" string(s:cursor_pos)
     if !empty(s:cursor_pos)
         let cursor_pos = s:cursor_pos
     endif
@@ -946,11 +951,11 @@ endf
 
 function! s:StartPosRx(mode, line, col)
     " TLogVAR a:mode, a:line, a:col
-    let col = get(s:cdef, 'mixedindent', 0) ? a:col - 1 : a:col
     if a:mode =~# 'I'
+        let col = get(s:cdef, 'mixedindent', 0) ? a:col - 1 : a:col
         return s:StartLineRx(a:line) . s:StartColRx(col)
     else
-        return s:StartColRx(col)
+        return s:StartColRx(a:col)
     endif
 endf
 
@@ -1045,6 +1050,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         let rv = printf(a:replace, rv)
     endif
     " TLogVAR rv
+    " echom "DBG s:cdef.mode" string(s:cdef.mode) string(s:cursor_pos)
     " let md = len(rv) - ml
     if s:cdef.mode =~ '>'
         let s:cursor_pos = getpos('.')
@@ -1052,9 +1058,11 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
     elseif s:cdef.mode =~ '#'
         if empty(s:cursor_pos)
             let prefix_len = match(a:replace, '%\@<!%s')
+            " TLogVAR a:replace, prefix_len
             if prefix_len != -1
                 let s:cursor_pos = copy(s:current_pos)
                 let s:cursor_pos[2] += prefix_len
+                " echom "DBG s:current_pos=" string(s:current_pos) "s:cursor_pos=" string(s:cursor_pos)
             endif
         endif
     endif
@@ -1249,7 +1257,7 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     else
         let cdef = s:GetCustomCommentString(a:filetype, a:commentMode)
         if !has_key(cdef, 'commentstring')
-            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:CommentMode(a:commentMode, 'G')}
+            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode)}
         endif
     endif
     let beg = a:beg
@@ -1340,8 +1348,14 @@ function! s:GetSyntaxName(lnum, col) "{{{3
 endf
 
 
-function! s:CommentMode(commentMode, newmode) "{{{3
-    return substitute(a:commentMode, '\w\+', a:newmode, 'g')
+
+
+function! s:GuessCommentMode(commentMode) "{{{3
+    if a:commentMode =~# '[IRB]'
+        return a:commentMode
+    else
+        return substitute(a:commentMode, '\w\+', 'G', 'g')
+    endif
 endf
 
 function! s:GuessCurrentCommentString(commentMode)
@@ -1412,15 +1426,15 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
         " TLogVAR 2, def
     elseif customComment
         let def = s:definitions[a:ft]
-        let commentMode = s:CommentMode(commentMode, 'G')
+        let commentMode = s:GuessCommentMode(commentMode)
         " TLogVAR 3, def
     elseif a:0 >= 1
         let def = {'commentstring': a:1}
-        let commentMode = s:CommentMode(commentMode, 'G')
+        let commentMode = s:GuessCommentMode(commentMode)
         " TLogVAR 4, def
     else
         let def = {}
-        let commentMode = s:CommentMode(commentMode, 'G')
+        let commentMode = s:GuessCommentMode(commentMode)
         " TLogVAR 5, def
     endif
     let cdef = copy(def)
