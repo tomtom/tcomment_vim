@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    892
+" @Revision:    901
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1086,7 +1086,9 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
             let s:cursor_pos[2] += len(rv)
         elseif s:cdef.mode =~ '#'
             if empty(s:cursor_pos) || s:current_pos[1] == s:processedline_lnum
-                let prefix_len = strdisplaywidth(matchstr(a:replace, '^.*%\@<!\ze%s'))
+                let prefix = matchstr(a:replace, '^.*%\@<!\ze%s')
+                let prefix = substitute(prefix, '%\(.\)', '\1', 'g')
+                let prefix_len = strdisplaywidth(prefix)
                 " TLogVAR a:replace, prefix_len
                 if prefix_len != -1
                     let s:cursor_pos = copy(s:current_pos)
@@ -1183,8 +1185,8 @@ function! s:CommentBlock(beg, end, commentMode, uncomment, checkRx, cdef, indent
         let ms = s:BlockGetMiddleString(a:cdef)
         let mx = escape(ms, '\')
         let cs = s:BlockGetCommentString(a:cdef)
-        let prefix = matchstr(cs, '^.*%\@<!\ze%s')
-        let postfix = matchstr(cs, '%\@<!%s\zs.*$')
+        let prefix = substitute(matchstr(cs, '^.*%\@<!\ze%s'), '%\(.\)', '\1', 'g')
+        let postfix = substitute(matchstr(cs, '%\@<!%s\zs.*$'), '%\(.\)', '\1', 'g')
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
             " TLogVAR 1, @t
