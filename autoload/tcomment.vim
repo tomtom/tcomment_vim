@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    803
+" @Revision:    892
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -468,6 +468,7 @@ let s:nullCommentString    = '%s'
 "         col=N            ... Start the comment at column N (in block 
 "                              mode; must be smaller than |indent()|)
 "         mode=STRING      ... See the notes below on the "commentMode" argument
+"         mode_extra=STRING ... Add to commentMode
 "         begin=STRING     ... Comment prefix
 "         end=STRING       ... Comment postfix
 "         middle=STRING    ... Middle line comments in block mode
@@ -486,7 +487,7 @@ let s:nullCommentString    = '%s'
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
-" commentMode:
+" commentMode (see also ¦g:tcommentModeExtra¦):
 "   G ... guess the value of commentMode
 "   B ... block (use extra lines for the comment markers)
 "   i ... maybe inline, guess
@@ -497,19 +498,28 @@ let s:nullCommentString    = '%s'
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
-    let commentMode   = (a:0 >= 1 ? a:1 : 'G') . s:CleanModeExtra(g:tcommentModeExtra, a:beg, a:end)
+    let commentMode   = s:AddModeExtra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
     let commentAnyway = a:0 >= 2 ? (a:2 == '!') : 0
     " TLogVAR a:beg, a:end, commentMode, commentAnyway
     " save the cursor position
-    let s:current_pos = getpos('.')
+    if exists('w:tcommentPos')
+        let s:current_pos = copy(w:tcommentPos)
+    else
+        let s:current_pos = getpos('.')
+    endif
     " echom "DBG current_pos=" string(s:current_pos)
     let cursor_pos = getpos("'>")
+    " TLogVAR cursor_pos
     let s:cursor_pos = []
     if commentMode =~# 'i'
         let commentMode = substitute(commentMode, '\Ci', line("'<") == line("'>") ? 'I' : 'G', 'g')
         " TLogVAR 1, commentMode
     endif
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, commentMode)
+    if exists('s:temp_options') && has_key(s:temp_options, 'mode_extra')
+        let commentMode = s:AddModeExtra(commentMode, s:temp_options.mode_extra, lbeg, lend)
+        unlet s:temp_options.mode_extra
+    endif
     " TLogVAR commentMode, lbeg, cbeg, lend, cend
     " get the correct commentstring
     let cdef = copy(g:tcommentOptions)
@@ -570,8 +580,8 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR cdef, cmtCheck
     let s:cdef = cdef
     " set commentMode and indentStr
-    let [indentStr, uncomment] = s:CommentDef(lbeg, lend, cmtCheck, commentMode, cbeg, cend)
-    " TLogVAR indentStr, uncomment
+    let [lbeg, lend, indentStr, uncomment] = s:CommentDef(lbeg, lend, cmtCheck, commentMode, cbeg, cend)
+    " TLogVAR lbeg, lend, indentStr, uncomment
     let col = get(s:cdef, 'col', -1)
     if col >= 0
         let col -= 1
@@ -587,9 +597,10 @@ function! tcomment#Comment(beg, end, ...)
         let uncomment = 0
     endif
     " go
+    " TLogVAR commentMode
     if commentMode =~# 'B'
         " We want a comment block
-        call s:CommentBlock(lbeg, lend, uncomment, cmtCheck, s:cdef, indentStr)
+        call s:CommentBlock(lbeg, lend, commentMode, uncomment, cmtCheck, s:cdef, indentStr)
     else
         " call s:CommentLines(lbeg, lend, cbeg, cend, uncomment, cmtCheck, cms0, indentStr)
         " We want commented lines
@@ -603,6 +614,7 @@ function! tcomment#Comment(beg, end, ...)
             let indentStr = ''
         endif
         " TLogVAR commentMode, lbeg, cbeg, lend, cend
+        let s:processedline_lnum = lbeg
         let cmd = lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
                     \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
@@ -612,7 +624,7 @@ function! tcomment#Comment(beg, end, ...)
     endif
     " reposition cursor
     " TLogVAR 3, commentMode
-    " echom "DBG cursor_pos" string(s:cursor_pos)
+    " echom "DBG s:cursor_pos" string(s:cursor_pos)
     if !empty(s:cursor_pos)
         let cursor_pos = s:cursor_pos
     endif
@@ -623,6 +635,9 @@ function! tcomment#Comment(beg, end, ...)
         endif
     elseif commentMode =~ '#'
         call setpos('.', cursor_pos)
+        if exists('w:tcommentPos')
+            let w:tcommentPos = cursor_pos
+        endif
     else
         call setpos('.', s:current_pos)
     endif
@@ -744,7 +759,6 @@ function! tcomment#Operator(type, ...) "{{{3
     let sel_save = &selection
     set selection=inclusive
     let reg_save = @@
-    " let pos = getpos('.')
     try
         if a:type == 'line'
             silent exe "normal! '[V']"
@@ -769,7 +783,7 @@ function! tcomment#Operator(type, ...) "{{{3
         " TLogVAR lbeg, lend, cbeg, cend
         " echom "DBG tcomment#Operator" lbeg col("'[") col("'<") lend col("']") col("'>")
         norm! 
-        let commentMode .= s:CleanModeExtra(g:tcommentOpModeExtra, lbeg, lend)
+        let commentMode = s:AddModeExtra(commentMode, g:tcommentOpModeExtra, lbeg, lend)
         if a:type =~ 'line\|block' || g:tcomment#ignore_char_type
             call tcomment#Comment(lbeg, lend, commentMode.'o', bang)
         else
@@ -778,11 +792,13 @@ function! tcomment#Operator(type, ...) "{{{3
     finally
         let &selection = sel_save
         let @@ = reg_save
-        if g:tcommentOpModeExtra !~ '>'
-            " TLogVAR pos
-            " call setpos('.', pos)
+        " TLogVAR g:tcommentOpModeExtra
+        if g:tcommentOpModeExtra !~ '[#>]'
             if exists('w:tcommentPos')
-                call setpos('.', w:tcommentPos)
+                " TLogVAR w:tcommentPos
+                if w:tcommentPos != getpos('.')
+                    call setpos('.', w:tcommentPos)
+                endif
                 unlet! w:tcommentPos
             else
                 echohl WarningMsg
@@ -999,17 +1015,20 @@ function! s:GetIndentString(line, start)
 endf
 
 function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
+    " TLogVAR a:beg, a:end, a:checkRx, a:commentMode, a:cstart, a:cend
+    let beg = a:beg
+    let end = a:end
     let mdrx = '\V'. s:StartColRx(a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndColRx(0)
-    " let mdrx = '\V'. s:StartPosRx(a:commentMode, a:beg, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:commentMode, a:end, 0)
-    let line = getline(a:beg)
+    " let mdrx = '\V'. s:StartPosRx(a:commentMode, beg, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:commentMode, end, 0)
+    let line = getline(beg)
     if a:cstart != 0 && a:cend != 0
         let line = strpart(line, 0, a:cend - 1)
     endif
     let uncomment = (line =~ mdrx)
-    let indentStr = s:GetIndentString(a:beg, a:cstart)
-    let il = indent(a:beg)
-    let n  = a:beg + 1
-    while n <= a:end
+    let indentStr = s:GetIndentString(beg, a:cstart)
+    let il = indent(beg)
+    let n  = beg + 1
+    while n <= end
         if getline(n) =~ '\S'
             let jl = indent(n)
             if jl < il
@@ -1027,56 +1046,76 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     if a:commentMode =~# 'B'
         let t = @t
         try
-            silent exec 'norm! '. a:beg.'G1|v'.a:end.'G$"ty'
+            silent exec 'norm! '. beg.'G1|v'.end.'G$"ty'
+            " TLogVAR @t, mdrx
             let uncomment = (@t =~ mdrx)
+            if !uncomment && a:commentMode =~ 'o'
+                let mdrx1 = substitute(mdrx, '\\$$', '\\n\\$', '')
+                " TLogVAR mdrx1
+                if @t =~ mdrx1
+                    let uncomment = 1
+                    " let end -= 1
+                endif
+            endif
         finally
             let @t = t
         endtry
     endif
-    return [indentStr, uncomment]
+    return [beg, end, indentStr, uncomment]
 endf
 
 function! s:ProcessedLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
-    if !(a:match =~ '\S' || g:tcommentBlankLines)
-        return a:match
-    endif
-    let ml = len(a:match)
-    if a:uncomment
-        let rv = substitute(a:match, a:checkRx, '\1\2', '')
-        let rv = s:UnreplaceInLine(rv)
-    else
-        let rv = s:ReplaceInLine(a:match)
-        let rv = printf(a:replace, rv)
-    endif
-    " TLogVAR rv
-    " echom "DBG s:cdef.mode" string(s:cdef.mode) string(s:cursor_pos)
-    " let md = len(rv) - ml
-    if s:cdef.mode =~ '>'
-        let s:cursor_pos = getpos('.')
-        let s:cursor_pos[2] += len(rv)
-    elseif s:cdef.mode =~ '#'
-        if empty(s:cursor_pos)
-            let prefix_len = match(a:replace, '%\@<!%s')
-            " TLogVAR a:replace, prefix_len
-            if prefix_len != -1
-                let s:cursor_pos = copy(s:current_pos)
-                let s:cursor_pos[2] += prefix_len
-                " echom "DBG s:current_pos=" string(s:current_pos) "s:cursor_pos=" string(s:cursor_pos)
+    try
+        if !(a:match =~ '\S' || g:tcommentBlankLines)
+            return a:match
+        endif
+        let ml = len(a:match)
+        if a:uncomment
+            let rv = substitute(a:match, a:checkRx, '\1\2', '')
+            let rv = s:UnreplaceInLine(rv)
+        else
+            let rv = s:ReplaceInLine(a:match)
+            let rv = printf(a:replace, rv)
+        endif
+        " TLogVAR rv
+        " echom "DBG s:cdef.mode=" string(s:cdef.mode) "s:cursor_pos=" string(s:cursor_pos)
+        " let md = len(rv) - ml
+        if s:cdef.mode =~ '>'
+            let s:cursor_pos = getpos('.')
+            let s:cursor_pos[2] += len(rv)
+        elseif s:cdef.mode =~ '#'
+            if empty(s:cursor_pos) || s:current_pos[1] == s:processedline_lnum
+                let prefix_len = strdisplaywidth(matchstr(a:replace, '^.*%\@<!\ze%s'))
+                " TLogVAR a:replace, prefix_len
+                if prefix_len != -1
+                    let s:cursor_pos = copy(s:current_pos)
+                    if a:uncomment
+                        let s:cursor_pos[2] -= prefix_len
+                        if s:cursor_pos[2] < 1
+                            let s:cursor_pos[2] = 1
+                        endif
+                    else
+                        let s:cursor_pos[2] += prefix_len
+                    endif
+                    " echom "DBG s:current_pos=" string(s:current_pos) "s:cursor_pos=" string(s:cursor_pos)
+                endif
             endif
         endif
-    endif
-    " TLogVAR pe, md, a:match
-    " TLogVAR rv
-    if v:version > 702 || (v:version == 702 && has('patch407'))
-        let rv = escape(rv, "\r")
-    else
-        let rv = escape(rv, "\\r")
-    endif
-    " TLogVAR rv
-    " let rv = substitute(rv, '\n', '\\\n', 'g')
-    " TLogVAR rv
-    return rv
+        " TLogVAR pe, md, a:match
+        " TLogVAR rv
+        if v:version > 702 || (v:version == 702 && has('patch407'))
+            let rv = escape(rv, "\r")
+        else
+            let rv = escape(rv, "\\r")
+        endif
+        " TLogVAR rv
+        " let rv = substitute(rv, '\n', '\\\n', 'g')
+        " TLogVAR rv
+        return rv
+    finally
+        let s:processedline_lnum += 1
+    endtry
 endf
 
 
@@ -1133,24 +1172,50 @@ function! s:InlineReplacement(text, rx, tokens, replacements) "{{{3
 endf
 
 
-function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
+function! s:CommentBlock(beg, end, commentMode, uncomment, checkRx, cdef, indentStr)
     " TLogVAR a:beg, a:end, a:uncomment, a:checkRx, a:cdef, a:indentStr
     let t = @t
     let sel_save = &selection
     set selection=exclusive
     try
         silent exec 'norm! '. a:beg.'G1|v'.a:end.'G$"td'
+        " TLogVAR @t
         let ms = s:BlockGetMiddleString(a:cdef)
         let mx = escape(ms, '\')
+        let cs = s:BlockGetCommentString(a:cdef)
+        let prefix = matchstr(cs, '^.*%\@<!\ze%s')
+        let postfix = matchstr(cs, '%\@<!%s\zs.*$')
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
+            " TLogVAR 1, @t
             if ms != ''
                 let @t = substitute(@t, '\V\n'. a:indentStr . mx, '\n'. a:indentStr, 'g')
+                " TLogVAR 2, @t
             endif
             let @t = substitute(@t, '^\n', '', '')
             let @t = substitute(@t, '\n\s*$', '', '')
+            if a:commentMode =~ '#'
+                let s:cursor_pos = copy(s:current_pos)
+                let prefix_lines = len(substitute(prefix, "[^\n]", '', 'g')) + 1
+                let postfix_lines = len(substitute(postfix, "[^\n]", '', 'g')) + 1
+                " TODO: more precise solution (when cursor is placed on 
+                " postfix or prefix
+                if s:cursor_pos[1] > a:beg
+                    let s:cursor_pos[1] -= prefix_lines
+                    if s:cursor_pos[1] > a:end - postfix_lines
+                        let s:cursor_pos[1] -= postfix_lines
+                    endif
+                    if s:cursor_pos[1] < 1
+                        let s:cursor_pos[1] = 1
+                    endif
+                endif
+                let prefix_len = strdisplaywidth(mx)
+                let s:cursor_pos[2] -= prefix_len
+                if s:cursor_pos[2] < 1
+                    let s:cursor_pos[2] = 1
+                endif
+            endif
         else
-            let cs = s:BlockGetCommentString(a:cdef)
             let cs = a:indentStr . substitute(cs, '%\@<!%s', '%s'. a:indentStr, '')
             if ms != ''
                 let ms = a:indentStr . ms
@@ -1159,6 +1224,13 @@ function! s:CommentBlock(beg, end, uncomment, checkRx, cdef, indentStr)
                 let @t = ms . substitute(@t, '\n'. a:indentStr, '\n'. mx, 'g')
             endif
             let @t = printf(cs, "\n". @t ."\n")
+            if a:commentMode =~ '#'
+                let s:cursor_pos = copy(s:current_pos)
+                let s:cursor_pos[1] += len(substitute(prefix, "[^\n]", '', 'g')) + 1
+                let prefix_len = strdisplaywidth(mx)
+                let s:cursor_pos[2] += prefix_len
+                " echom "DBG s:current_pos=" string(s:current_pos) "s:cursor_pos=" string(s:cursor_pos)
+            endif
         endif
         silent norm! "tP
     finally
@@ -1348,12 +1420,22 @@ function! s:GetSyntaxName(lnum, col) "{{{3
 endf
 
 
-function! s:CleanModeExtra(extra, beg, end) "{{{3
+function! s:AddModeExtra(mode, extra, beg, end) "{{{3
     if a:beg == a:end
-        return substitute(a:extra, '\C[B]', '', 'g')
+        let extra = substitute(a:extra, '\C[B]', '', 'g')
     else
-        return substitute(a:extra, '\C[IR]', '', 'g')
+        let extra = substitute(a:extra, '\C[IR]', '', 'g')
     endif
+    let mode = a:mode
+    if extra =~# 'B'
+        let mode = substitute(mode, '\c[gir]', '', 'g')
+    endif
+    if extra =~# '[IR]'
+        let mode = substitute(mode, '\c[gb]', '', 'g')
+    endif
+    let rv = mode . extra
+    " TLogVAR a:mode, a:extra, mode, extra, rv
+    return rv
 endf
 
 
