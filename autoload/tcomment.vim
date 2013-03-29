@@ -1323,13 +1323,19 @@ endf
 " s:GuessFileType(beg, end, commentMode, filetype, ?fallbackFiletype)
 function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     " TLogVAR a:beg, a:end, a:commentMode, a:filetype, a:000
+    " TLogVAR cdef
+    let cdef0 = s:GetCustomCommentString(a:filetype, a:commentMode)
     if a:0 >= 1 && a:1 != ''
         let cdef = s:GetCustomCommentString(a:1, a:commentMode)
+        " TLogVAR 0, cdef
+        let cdef = extend(cdef, cdef0, 'keep')
+        " TLogVAR 1, cdef
         if empty(get(cdef, 'commentstring', ''))
             let cdef.commentstring = s:GuessCurrentCommentString(a:commentMode)
         endif
+        " TLogVAR 2, cdef
     else
-        let cdef = s:GetCustomCommentString(a:filetype, a:commentMode)
+        let cdef = cdef0
         if !has_key(cdef, 'commentstring')
             let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode)}
         endif
