@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    929
+" @Revision:    930
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -385,6 +385,7 @@ call tcomment#DefineType('pascal_inline',    '(* %s *)'         )
 call tcomment#DefineType('pascal_block',     "(*%s*)\n   "      )
 call tcomment#DefineType('perl',             '# %s'             )
 call tcomment#DefineType('perl_block',       "=cut%s=cut"       )
+call tcomment#DefineType('pfmain',           '# %s'             )
 call tcomment#DefineType('php',              {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '// %s'})
 call tcomment#DefineType('php_inline',       g:tcommentInlineC  )
 call tcomment#DefineType('php_block',        g:tcommentBlockC   )
