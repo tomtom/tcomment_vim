@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    930
+" @Revision:    946
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -486,6 +486,9 @@ let s:nullCommentString    = '%s'
 "                              to be doubled); "commentstring", "begin" 
 "                              and optionally "end" must be defined or 
 "                              deducible.
+"         strip_whitespace ... Strip trailing whitespace: if 1, strip 
+"                              from empty lines only, if 2, always strip 
+"                              whitespace
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
@@ -616,10 +619,10 @@ function! tcomment#Comment(beg, end, ...)
             let indentStr = ''
         endif
         " TLogVAR commentMode, lbeg, cbeg, lend, cend
-        let s:processedline_lnum = lbeg
+        let s:processline_lnum = lbeg
         let cmd = lbeg .','. lend .'s/\V'. 
                     \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
-                    \ '\=s:ProcessedLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
+                    \ '\=s:ProcessLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
         " TLogVAR cmd
         exec cmd
         call histdel('search', -1)
@@ -1067,7 +1070,7 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     return [beg, end, indentStr, uncomment]
 endf
 
-function! s:ProcessedLine(uncomment, match, checkRx, replace)
+function! s:ProcessLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
     try
         if !(a:match =~ '\S' || g:tcommentBlankLines)
@@ -1080,6 +1083,10 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         else
             let rv = s:ReplaceInLine(a:match)
             let rv = printf(a:replace, rv)
+            let strip_whitespace = get(s:cdef, 'strip_whitespace', 0)
+            if strip_whitespace == 2 || (strip_whitespace == 1 && ml == 0)
+                let rv = substitute(rv, '\s\+$', '', '')
+            endif
         endif
         " TLogVAR rv
         " echom "DBG s:cdef.mode=" string(s:cdef.mode) "s:cursor_pos=" string(s:cursor_pos)
@@ -1088,7 +1095,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
             let s:cursor_pos = getpos('.')
             let s:cursor_pos[2] += len(rv)
         elseif s:cdef.mode =~ '#'
-            if empty(s:cursor_pos) || s:current_pos[1] == s:processedline_lnum
+            if empty(s:cursor_pos) || s:current_pos[1] == s:processline_lnum
                 let prefix = matchstr(a:replace, '^.*%\@<!\ze%s')
                 let prefix = substitute(prefix, '%\(.\)', '\1', 'g')
                 let prefix_len = strdisplaywidth(prefix)
@@ -1119,7 +1126,7 @@ function! s:ProcessedLine(uncomment, match, checkRx, replace)
         " TLogVAR rv
         return rv
     finally
-        let s:processedline_lnum += 1
+        let s:processline_lnum += 1
     endtry
 endf
 

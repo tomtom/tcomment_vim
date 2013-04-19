@@ -435,6 +435,9 @@ tcomment#Comment(beg, end, ...)
                                  to be doubled); "commentstring", "begin" 
                                  and optionally "end" must be defined or 
                                  deducible.
+            strip_whitespace ... Strip trailing whitespace: if 1, strip 
+                                 from empty lines only, if 2, always strip 
+                                 whitespace
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
