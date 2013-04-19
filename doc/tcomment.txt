@@ -143,9 +143,8 @@ Contents~
         g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
         g:tcomment#replacements_c ........... |g:tcomment#replacements_c|
-        g:tcommentBlockC .................... |g:tcommentBlockC|
-        g:tcommentBlockC2 ................... |g:tcommentBlockC2|
         g:tcommentInlineC ................... |g:tcommentInlineC|
+        g:tcommentBlockC2 ................... |g:tcommentBlockC2|
         g:tcomment#replacements_xml ......... |g:tcomment#replacements_xml|
         g:tcommentBlockXML .................. |g:tcommentBlockXML|
         g:tcommentInlineXML ................. |g:tcommentInlineXML|
@@ -347,17 +346,14 @@ g:tcommentSyntaxMap            (default: {...})
 g:tcomment#replacements_c      (default: {...})
     Replacements for c filetype.
 
-                                                    *g:tcommentBlockC*
-g:tcommentBlockC               (default: {...})
-    Generic c-like block comments.
+                                                    *g:tcommentInlineC*
+g:tcommentInlineC              (default: {...})
+    Generic c-like comments.
 
                                                     *g:tcommentBlockC2*
 g:tcommentBlockC2              (default: {...})
+    Generic c-like block comments.
     Generic c-like block comments (alternative markup).
-
-                                                    *g:tcommentInlineC*
-g:tcommentInlineC              (default: g:tcommentLineC)
-    Generic c-like comments.
 
                                                     *g:tcomment#replacements_xml*
 g:tcomment#replacements_xml    (default: {...})
@@ -420,6 +416,7 @@ tcomment#Comment(beg, end, ...)
             col=N            ... Start the comment at column N (in block 
                                  mode; must be smaller than |indent()|)
             mode=STRING      ... See the notes below on the "commentMode" argument
+            mode_extra=STRING ... Add to commentMode
             begin=STRING     ... Comment prefix
             end=STRING       ... Comment postfix
             middle=STRING    ... Middle line comments in block mode
@@ -441,7 +438,7 @@ tcomment#Comment(beg, end, ...)
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
-    commentMode:
+    commentMode (see also ¦g:tcommentModeExtra¦):
       G ... guess the value of commentMode
       B ... block (use extra lines for the comment markers)
       i ... maybe inline, guess
