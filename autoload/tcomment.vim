@@ -112,6 +112,7 @@ if !exists('g:tcomment#filetype_map')
     " let g:tcomment#filetype_map = {...}   "{{{2
     let g:tcomment#filetype_map = {
                 \ 'rails-views': 'html',
+                \ 'mkd': 'html',
                 \ }
 endif
 
@@ -307,6 +308,7 @@ call tcomment#DefineType('clojure',          {'commentstring': '; %s', 'count': 
 call tcomment#DefineType('clojure_inline',   '; %s'             )
 call tcomment#DefineType('clojurescript',    ';; %s'            )
 call tcomment#DefineType('clojurescript_inline', '; %s'         )
+call tcomment#DefineType('cmake',            '# %s'             )
 call tcomment#DefineType('coffee',           '# %s'             )
 call tcomment#DefineType('conf',             '# %s'             )
 call tcomment#DefineType('conkyrc',          '# %s'             )
@@ -425,6 +427,8 @@ call tcomment#DefineType('spss',             '* %s.'            )
 call tcomment#DefineType('spss_block',       "* %s."            )
 call tcomment#DefineType('sql',              '-- %s'            )
 call tcomment#DefineType('squid',            '# %s'             )
+call tcomment#DefineType('sshconfig',        '# %s'             )
+call tcomment#DefineType('sshdconfig',       '# %s'             )
 call tcomment#DefineType('st',               '" %s "'           )
 call tcomment#DefineType('tcl',              '# %s'             )
 call tcomment#DefineType('tex',              '%% %s'            )
