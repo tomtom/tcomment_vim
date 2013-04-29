@@ -307,6 +307,7 @@ call tcomment#DefineType('clojure',          {'commentstring': '; %s', 'count': 
 call tcomment#DefineType('clojure_inline',   '; %s'             )
 call tcomment#DefineType('clojurescript',    ';; %s'            )
 call tcomment#DefineType('clojurescript_inline', '; %s'         )
+call tcomment#DefineType('cmake',            '# %s'             )
 call tcomment#DefineType('coffee',           '# %s'             )
 call tcomment#DefineType('conf',             '# %s'             )
 call tcomment#DefineType('conkyrc',          '# %s'             )
