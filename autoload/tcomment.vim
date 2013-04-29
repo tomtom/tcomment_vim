@@ -112,6 +112,7 @@ if !exists('g:tcomment#filetype_map')
     " let g:tcomment#filetype_map = {...}   "{{{2
     let g:tcomment#filetype_map = {
                 \ 'rails-views': 'html',
+                \ 'mkd': 'html',
                 \ }
 endif
 
