@@ -248,8 +248,10 @@ let s:definitions = {}
 " See the help on the args argument of |tcomment#Comment| (see item 1, 
 " args is a list of key=value pairs) to find out which fields can be 
 " used.
-function! tcomment#DefineType(name, commentdef)
-    if !has_key(s:definitions, a:name)
+" :display: tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
+function! tcomment#DefineType(name, commentdef, ...)
+    let use = a:0 >= 2 ? a:2 : !has_key(s:definitions, a:name)
+    if use
         if type(a:commentdef) == 4
             let cdef = copy(a:commentdef)
         else
