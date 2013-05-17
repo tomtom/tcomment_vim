@@ -493,6 +493,10 @@ let s:nullCommentString    = '%s'
 "                              to be doubled); "commentstring", "begin" 
 "                              and optionally "end" must be defined or 
 "                              deducible.
+"         whitespace       ... Define whether commented text is 
+"                              surrounded with whitespace; if
+"                              both ... surround with whitespace (default)
+"                              no   ... don't use whitespace
 "         strip_whitespace ... Strip trailing whitespace: if 1, strip 
 "                              from empty lines only, if 2, always strip 
 "                              whitespace
@@ -577,6 +581,9 @@ function! tcomment#Comment(beg, end, ...)
         unlet s:temp_options
     endif
     " TLogVAR 7, cdef
+    if has_key(cdef, 'whitespace')
+        call s:SetWhitespaceMode(cdef)
+    endif
     if !empty(filter(['count', 'cbeg', 'cend', 'cmid'], 'has_key(cdef, v:val)'))
         call s:RepeatCommentstring(cdef)
     endif
@@ -705,6 +712,24 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
     endif
     " TLogVAR lbeg, cbeg, lend, cend
     return [lbeg, cbeg, lend, cend]
+endf
+
+
+function! s:SetWhitespaceMode(cdef) "{{{3
+    let mode = a:cdef.whitespace
+    let cms = s:BlockGetCommentString(a:cdef)
+    let mid = s:BlockGetMiddleString(a:cdef)
+    if mode == 'no' || mode == 'right'
+        let cms = substitute(cms, '\s\+\ze%\@<!%s', '', 'g')
+        let mid = substitute(mid, '\s\+\ze%\@<!%s', '', 'g')
+    endif
+    if mode == 'no' || mode == 'left'
+        let cms = substitute(cms, '%\@<!%s\zs\s\+', '', 'g')
+        let mid = substitute(mid, '%\@<!%s\zs\s\+', '', 'g')
+    endif
+    let a:cdef.commentstring = cms
+    let a:cdef.middle = mid
+    return a:cdef
 endf
 
 
