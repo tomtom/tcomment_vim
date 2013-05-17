@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    994
+" @Revision:    1006
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -721,16 +721,32 @@ function! s:SetWhitespaceMode(cdef) "{{{3
     let mode = a:cdef.whitespace
     let cms = s:BlockGetCommentString(a:cdef)
     let mid = s:BlockGetMiddleString(a:cdef)
-    if mode == 'no' || mode == 'right'
-        let cms = substitute(cms, '\s\+\ze%\@<!%s', '', 'g')
-        let mid = substitute(mid, '\s\+\ze%\@<!%s', '', 'g')
+    let cms0 = cms
+    let mid0 = mid
+    " TLogVAR mode, cms, mid
+    if mode =~ '^\(n\%[o]\|l\%[eft]\|r\%[ight]\)$'
+        if mode == 'no' || mode == 'right'
+            let cms = substitute(cms, '\s\+\ze%\@<!%s', '', 'g')
+            let mid = substitute(mid, '\s\+\ze%\@<!%s', '', 'g')
+        endif
+        if mode == 'no' || mode == 'left'
+            let cms = substitute(cms, '%\@<!%s\zs\s\+', '', 'g')
+            let mid = substitute(mid, '%\@<!%s\zs\s\+', '', 'g')
+        endif
+    elseif mode =~ '^\(b\%[oth]\)$'
+        let cms = substitute(cms, '\S\zs\ze%\@<!%s', ' ', 'g')
+        let mid = substitute(mid, '\S\zs\ze%\@<!%s', ' ', 'g')
+        let cms = substitute(cms, '%\@<!%s\zs\ze\S', ' ', 'g')
+        let mid = substitute(mid, '%\@<!%s\zs\ze\S', ' ', 'g')
     endif
-    if mode == 'no' || mode == 'left'
-        let cms = substitute(cms, '%\@<!%s\zs\s\+', '', 'g')
-        let mid = substitute(mid, '%\@<!%s\zs\s\+', '', 'g')
+    if cms != cms0
+        " TLogVAR cms
+        let a:cdef.commentstring = cms
     endif
-    let a:cdef.commentstring = cms
-    let a:cdef.middle = mid
+    if mid != mid0
+        " TLogVAR mid
+        let a:cdef.middle = mid
+    endif
     return a:cdef
 endf
 
@@ -1641,7 +1657,7 @@ function! tcomment#TextObjectInlineComment() "{{{3
     let lnum = pos[1]
     let col  = pos[2]
     let cmtf = '\V'. printf(cms, '\.\{-}\%'. lnum .'l\%'. col .'c\.\{-}')
-    TLogVAR cmtf, search(cmtf,'cwn')
+    " TLogVAR cmtf, search(cmtf,'cwn')
     if search(cmtf, 'cw') > 0
         let pos0 = getpos('.')
         if search(cmtf, 'cwe') > 0
