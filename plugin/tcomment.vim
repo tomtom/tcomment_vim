@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2012-11-26.
-" @Revision:    771
+" @Revision:    777
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -36,6 +36,10 @@ endif
 if !exists("g:tcommentMapLeaderOp2")
     " See |tcomment-operator|.
     let g:tcommentMapLeaderOp2 = 'gC' "{{{2
+endif
+
+if !exists('g:tcommentTextObjectInlineComment')
+    let g:tcommentTextObjectInlineComment = 'ic'   "{{{2
 endif
 
 
@@ -163,6 +167,10 @@ if g:tcommentMaps
         exec 'nnoremap <silent> '. g:tcommentMapLeaderOp2 .'c :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$'
         exec 'nnoremap <silent> '. g:tcommentMapLeaderOp2 .'b :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@'
         exec 'xnoremap <silent> '. g:tcommentMapLeaderOp2 .' :TCommentMaybeInline!<cr>'
+    endif
+    if g:tcommentTextObjectInlineComment != ''
+        exec 'vnoremap' g:tcommentTextObjectInlineComment ':<c-U>silent call tcomment#TextObjectInlineComment()<cr>'
+        exec 'omap' g:tcommentTextObjectInlineComment ':normal v'. g:tcommentTextObjectInlineComment .'<cr>'
     endif
 endif
 
