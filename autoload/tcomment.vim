@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1006
+" @Revision:    1009
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -415,6 +415,8 @@ call tcomment#DefineType('scala',            '// %s'            )
 call tcomment#DefineType('scala_inline',     g:tcommentInlineC  )
 call tcomment#DefineType('scala_block',      g:tcommentBlockC   )
 call tcomment#DefineType('scheme',           '; %s'             )
+call tcomment#DefineType('scheme_block',     '#|%s|#'           )
+" call tcomment#DefineType('scheme_s',         '#;%s'             )
 call tcomment#DefineType('scss',             '// %s'            )
 call tcomment#DefineType('scss_inline',      g:tcommentInlineC  )
 call tcomment#DefineType('scss_block',       g:tcommentBlockC   )
