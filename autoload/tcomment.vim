@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1015
+" @Revision:    1016
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -328,6 +328,7 @@ call tcomment#DefineType('docbk_inline',     g:tcommentInlineXML)
 call tcomment#DefineType('dosbatch',         'rem %s'           )
 call tcomment#DefineType('dosini',           '; %s'             )
 call tcomment#DefineType('dsl',              '; %s'             )
+call tcomment#DefineType('dustjs',           '{! %s !}'         )
 call tcomment#DefineType('dylan',            '// %s'            )
 call tcomment#DefineType('eiffel',           '-- %s'            )
 call tcomment#DefineType('erlang',           '%%%% %s'          )
