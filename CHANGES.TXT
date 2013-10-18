@@ -203,3 +203,53 @@ version: "2.08"
   - Define/handle 'ini' file type (e.g. for php.ini)
   MD5 checksum: 702082a857ddeaf75d3b4fd884363173
 
+  - Adds Scala support
+  - Support for (firefox) chromemanifest filetype
+  - g:tcommentMaps: If true, set maps (fixes #42)
+  - addon-info
+  - Enable replacements for xml/html/... (fixes #44)
+  - Experimental option g:tcomment#mixed_indentation: Deal with inconsistent indentation styles (fixes #43)
+  - Experimental option 'mixedindent': Deal with inconsistent indentation styles (fixes #43)
+  - s:DoReplacements(): Handle an empty list of tokens correctly
+  - mixedindent: Set virtual column to strdisplaywidth(indentStr, cbeg) + 1
+  - mixedindent: mixedindentUndo previous change; use \%>v again
+  - Call :redraw only when tcomment#Complete* was called for the first time if v:version < 703
+  - s:FEscapeCommentString(): Correctly deal comment string that include %
+  - More flexible handling of "dotted" filetypes (fixes #45)
+  - Undo previous changes (s:FEscapeCommentString) (fixes #46)
+  - Map erubyExpression syntax to ruby filetype
+  - s:StartColRx(pos): Use ^ for pos 0-1 (fixes #47)
+  - If mixedindent: use col - 1
+  - Derive g:tcommentLineC from g:tcommentInlineC so that you can set g:tcommentLineC without having to set g:tcommentInlineC
+  - mixedindent: Adjust column only for inline comments
+  - g:tcommentModeExtra: Basic support for preferring block-type comments 'B' uncommenting doesn't work properly when called from operator maps
+  - Support for gcb maps (block comments) and experimental support for '#' mode extra for operator maps (fixes #49)
+  - opextra =~'#*: Adjust for commentstring containing printf placeholders (%) (closes #49)
+  - s:GuessFileType(): If there is no custom definition for the fallback filetype, use the filetype (fixes #45)
+  - g:tcomment#filetype_map now works on filetype parts (when using dotted filetype) & special support for rails-views (fixes #45)
+  - Support for postfix main (thanks to ypid)
+  - strip_whitespace option (closes #54)
+  - Support for cmake.
+  - Support for markdown.
+  - Support for sshdconfig.
+  - Support for sshconfig.
+  - Support for gnuplot (fixes #56)
+  - Support slim template
+  - s:CommentDef(): Uncommenting: correct string for &selection == inclusive (fixes #53)
+  - Support for esmtprc.
+  - "whitespace" option: Define whether to surround commented text with whitespace
+  - Experimental inline comment text object (not functional yet)
+  - tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
+  - s:SetWhitespaceMode(cdef): Add whitespace if mode = "both" and the commentstring doesn't include whitespace
+  - Support for R6RS scheme block comments (fixes #60)
+  - Support for upstart.
+  - Support for racket filetype (fixes #60)
+  - Added form support
+  - Adding htmljinja support (same as htmldjango).
+  - Adding lua support
+  - Objective C++
+  - Support for salt stacks (closes #66); sort order of filetypes
+  - Support for dustjs (closes #67)
+  MD5 checksum: d507f7e6d171034a45e2d349561d29f1
+version: "2.09"
+
