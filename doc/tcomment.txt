@@ -119,6 +119,7 @@ Contents~
         g:tcommentMapLeader2 ................ |g:tcommentMapLeader2|
         g:tcommentMapLeaderOp1 .............. |g:tcommentMapLeaderOp1|
         g:tcommentMapLeaderOp2 .............. |g:tcommentMapLeaderOp2|
+        g:tcommentTextObjectInlineComment ... |g:tcommentTextObjectInlineComment|
         :TComment ........................... |:TComment|
         :TCommentAs ......................... |:TCommentAs|
         :TCommentRight ...................... |:TCommentRight|
@@ -158,6 +159,7 @@ Contents~
         tcomment#OperatorLineAnyway ......... |tcomment#OperatorLineAnyway()|
         tcomment#CommentAs .................. |tcomment#CommentAs()|
         tcomment#GuessCommentType ........... |tcomment#GuessCommentType()|
+        tcomment#TextObjectInlineComment .... |tcomment#TextObjectInlineComment()|
 
 
 ========================================================================
@@ -184,6 +186,9 @@ g:tcommentMapLeaderOp1         (default: 'gc')
                                                     *g:tcommentMapLeaderOp2*
 g:tcommentMapLeaderOp2         (default: 'gC')
     See |tcomment-operator|.
+
+                                                    *g:tcommentTextObjectInlineComment*
+g:tcommentTextObjectInlineComment (default: 'ic')
 
                                                     *:TComment*
 :[range]TComment[!] ?ARGS...
@@ -368,7 +373,7 @@ g:tcommentInlineXML            (default: {...})
     Generic xml-like comments.
 
                                                     *tcomment#DefineType()*
-tcomment#DefineType(name, commentdef)
+tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
     If you don't explicitly define a comment style, |:TComment| will use 
     'commentstring' instead. We override the default values here in order 
     to have a blank after the comment marker. Block comments work only if 
@@ -432,6 +437,10 @@ tcomment#Comment(beg, end, ...)
                                  to be doubled); "commentstring", "begin" 
                                  and optionally "end" must be defined or 
                                  deducible.
+            whitespace       ... Define whether commented text is 
+                                 surrounded with whitespace; if
+                                 both ... surround with whitespace (default)
+                                 no   ... don't use whitespace
             strip_whitespace ... Strip trailing whitespace: if 1, strip 
                                  from empty lines only, if 2, always strip 
                                  whitespace
@@ -489,6 +498,9 @@ tcomment#GuessFileType(?options={})
     to make comments. The information about the filetype of the text 
     between lines "beg" and "end" is in the "filetype" key of the return 
     value. It returns the first discernible filetype it encounters.
+
+                                                    *tcomment#TextObjectInlineComment()*
+tcomment#TextObjectInlineComment()
 
 
 
