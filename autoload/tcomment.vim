@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1016
+" @Revision:    1021
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -102,7 +102,8 @@ if !exists('g:tcomment#syntax_substitute')
     " :read: let g:tcomment#syntax_substitute = {...}   "{{{2
     " Perform replacements on the syntax name.
     let g:tcomment#syntax_substitute = {
-                \ '\C^javaScript': {'sub': 'javascript'}
+                \ '\C^javaScript\ze\(\u\|$\)': {'sub': 'javascript'},
+                \ '\C^js\ze\(\u\|$\)': {'sub': 'javascript'}
                 \ }
 endif
 
