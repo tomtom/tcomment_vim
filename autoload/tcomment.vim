@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1021
+" @Revision:    1025
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -704,7 +704,7 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
     " TLogVAR a:beg, a:end, a:commentMode
     if type(a:beg) == 3
         let [lbeg, cbeg] = a:beg
-        let [lend, cend]   = a:end
+        let [lend, cend] = a:end
     else
         let lbeg = a:beg
         let lend = a:end
@@ -730,7 +730,11 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
         endif
     endif
     " TLogVAR lbeg, cbeg, lend, cend
-    return [lbeg, cbeg, lend, cend]
+    if lend < lbeg || (lend == lbeg && cend < cbeg)
+        return [lend, cend, lbeg, cbeg]
+    else
+        return [lbeg, cbeg, lend, cend]
+    endif
 endf
 
 
