@@ -1048,8 +1048,7 @@ endf
 function! s:StartPosRx(mode, line, col)
     " TLogVAR a:mode, a:line, a:col
     if a:mode =~# 'I'
-        let col = get(s:cdef, 'mixedindent', 0) ? a:col - 1 : a:col
-        return s:StartLineRx(a:line) . s:StartColRx(col)
+        return s:StartLineRx(a:line) . s:StartColRx(a:col)
     else
         return s:StartColRx(a:col)
     endif
@@ -1072,12 +1071,14 @@ function! s:EndLineRx(pos)
 endf
 
 function! s:StartColRx(pos)
-    if a:pos <= 1
+    let mixedindent = get(s:cdef, 'mixedindent', 0)
+    let pos = mixedindent ? a:pos - 1 : a:pos
+    if pos <= 1
         return '\^'
-    elseif get(s:cdef, 'mixedindent', 0)
-        return '\%>'. a:pos .'v'
+    elseif mixedindent
+        return '\%>'. pos .'v'
     else
-        return '\%'. a:pos .'c'
+        return '\%'. pos .'c'
     endif
 endf
 
