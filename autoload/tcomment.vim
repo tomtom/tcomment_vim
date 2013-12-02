@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1025
+" @Revision:    1040
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -516,9 +516,10 @@ let s:nullCommentString    = '%s'
 "                              surrounded with whitespace; if
 "                              both ... surround with whitespace (default)
 "                              no   ... don't use whitespace
-"         strip_whitespace ... Strip trailing whitespace: if 1, strip 
-"                              from empty lines only, if 2, always strip 
-"                              whitespace
+"         strip_whitespace ... Strip trailing whitespace: if 1 
+"                              (default), strip from empty lines only, 
+"                              if 2, always strip whitespace; if 0, 
+"                              don't strip any whitespace
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
@@ -1162,7 +1163,7 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
         else
             let rv = s:ReplaceInLine(a:match)
             let rv = printf(a:replace, rv)
-            let strip_whitespace = get(s:cdef, 'strip_whitespace', 0)
+            let strip_whitespace = get(s:cdef, 'strip_whitespace', 1)
             if strip_whitespace == 2 || (strip_whitespace == 1 && ml == 0)
                 let rv = substitute(rv, '\s\+$', '', '')
             endif
