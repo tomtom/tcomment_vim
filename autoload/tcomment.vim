@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1040
+" @Revision:    1042
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1156,14 +1156,14 @@ endf
 function! s:ProcessLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
     try
-        if !(a:match =~ '\S' || g:tcommentBlankLines)
+        if !(g:tcommentBlankLines || a:match =~ '\S')
             return a:match
         endif
-        let ml = len(a:match)
         if a:uncomment
             let rv = substitute(a:match, a:checkRx, '\1\2', '')
             let rv = s:UnreplaceInLine(rv)
         else
+            let ml = len(a:match)
             let rv = s:ReplaceInLine(a:match)
             let rv = printf(a:replace, rv)
             let strip_whitespace = get(s:cdef, 'strip_whitespace', 1)
@@ -1173,7 +1173,6 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
         endif
         " TLogVAR rv
         " echom "DBG s:cdef.mode=" string(s:cdef.mode) "s:cursor_pos=" string(s:cursor_pos)
-        " let md = len(rv) - ml
         if s:cdef.mode =~ '>'
             let s:cursor_pos = getpos('.')
             let s:cursor_pos[2] += len(rv)
@@ -1197,7 +1196,7 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
                 endif
             endif
         endif
-        " TLogVAR pe, md, a:match
+        " TLogVAR pe, a:match
         " TLogVAR rv
         if v:version > 702 || (v:version == 702 && has('patch407'))
             let rv = escape(rv, "\r")
