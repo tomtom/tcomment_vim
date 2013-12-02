@@ -747,11 +747,13 @@ function! s:SetWhitespaceMode(cdef) "{{{3
     let mid0 = mid
     " TLogVAR mode, cms, mid
     if mode =~ '^\(n\%[o]\|l\%[eft]\|r\%[ight]\)$'
-        if mode == 'no' || mode == 'right'
+        " Remove whitespace on the left
+        if mode =~ '^n\%[o]$' || mode =~ '^r\%[ight]$'
             let cms = substitute(cms, '\s\+\ze%\@<!%s', '', 'g')
             let mid = substitute(mid, '\s\+\ze%\@<!%s', '', 'g')
         endif
-        if mode == 'no' || mode == 'left'
+        " Remove whitespace on the right
+        if mode =~ '^n\%[o]$' || mode =~ '^l\%[eft]$'
             let cms = substitute(cms, '%\@<!%s\zs\s\+', '', 'g')
             let mid = substitute(mid, '%\@<!%s\zs\s\+', '', 'g')
         endif
