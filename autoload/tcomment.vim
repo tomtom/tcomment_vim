@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-03-07.
-" @Revision:    1042
+" @Revision:    1046
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -417,6 +417,7 @@ call tcomment#DefineType('racket',           '; %s'             )
 call tcomment#DefineType('racket_block',     '#|%s|#'           )
 call tcomment#DefineType('rc',               '// %s'            )
 call tcomment#DefineType('readline',         '# %s'             )
+call tcomment#DefineType('remind',           {'commentstring_rx': '\[;#] %s', 'commentstring': '# %s'})
 call tcomment#DefineType('resolv',           '# %s'             )
 call tcomment#DefineType('robots',           '# %s'             )
 call tcomment#DefineType('ruby',             '# %s'             )
