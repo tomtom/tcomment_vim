@@ -1081,15 +1081,20 @@ function! s:EndLineRx(pos)
     return '\%'. a:pos .'l'
 endf
 
-function! s:StartColRx(pos)
+
+function! s:StartColRx(mode, col)
     let mixedindent = get(s:cdef, 'mixedindent', 0)
-    let pos = mixedindent ? a:pos - 1 : a:pos
-    if pos <= 1
+    if a:mode =~# '[IR]'
+        let col = mixedindent ? a:col - 1 : a:col
+    else
+        let col = a:col
+    endif
+    if col <= 1
         return '\^'
     elseif mixedindent
-        return '\%>'. pos .'v'
+        return '\%>'. col .'v'
     else
-        return '\%'. pos .'c'
+        return '\%'. col .'c'
     endif
 endf
 
@@ -1110,7 +1115,7 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     " TLogVAR a:beg, a:end, a:checkRx, a:commentMode, a:cstart, a:cend
     let beg = a:beg
     let end = a:end
-    let mdrx = '\V'. s:StartColRx(a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndColRx(0)
+    let mdrx = '\V'. s:StartColRx(a:commentMode, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndColRx(0)
     " let mdrx = '\V'. s:StartPosRx(a:commentMode, beg, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:commentMode, end, 0)
     let line = getline(beg)
     if a:cstart != 0 && a:cend != 0
