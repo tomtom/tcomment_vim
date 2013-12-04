@@ -498,6 +498,7 @@ function! s:DefaultValue(option)
     return default
 endf
 
+
 let s:defaultComments      = s:DefaultValue('comments')
 let s:defaultCommentString = s:DefaultValue('commentstring')
 let s:nullCommentString    = '%s'
@@ -659,7 +660,8 @@ function! tcomment#Comment(beg, end, ...)
         " call s:CommentLines(lbeg, lend, cbeg, cend, uncomment, cmtCheck, cms0, indentStr)
         " We want commented lines
         " final search pattern for uncommenting
-        let cmtCheck   = escape('\V\^\(\s\{-}\)'. cmtCheck .'\$', '"/\')
+        let cmtCheck   = '\V\^\(\s\{-}\)'. cmtCheck .'\$'
+        " let cmtCheck   = escape(cmtCheck, '"/\')
         " final pattern for commenting
         let cmtReplace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmtReplace
@@ -669,12 +671,45 @@ function! tcomment#Comment(beg, end, ...)
         endif
         " TLogVAR commentMode, lbeg, cbeg, lend, cend
         let s:processline_lnum = lbeg
-        let cmd = lbeg .','. lend .'s/\V'. 
-                    \ s:StartPosRx(commentMode, lbeg, cbeg) . indentStr .'\zs\(\_.\{-}\)'. s:EndPosRx(commentMode, lend, cend) .'/'.
-                    \ '\=s:ProcessLine('. uncomment .', submatch(0), "'. cmtCheck .'", "'. cmtReplace .'")/ge'
-        " TLogVAR cmd
-        exec cmd
-        call histdel('search', -1)
+        let end_rx = s:EndPosRx(commentMode, lend, cend)
+        let postfix_rx = end_rx == '\$' ? '' : '\.\*\$'
+        let prefix_rx = '\^\.\{-}' . s:StartPosRx(commentMode, lbeg, cbeg)
+        let comment_rx = '\V'
+                    \ . '\('. prefix_rx . indentStr . '\)'
+                    \ .'\('
+                    \ .'\(\_.\{-}\)'
+                    \ . end_rx
+                    \ .'\)'
+                    \ .'\(' . postfix_rx . '\)'
+        " TLogVAR comment_rx
+        let @x = comment_rx
+        for lnum in range(lbeg, lend)
+            let line0 = getline(lnum)
+            " TLogVAR line0
+            let lmatch = matchlist(line0, comment_rx)
+            " TLogVAR lmatch
+            if empty(lmatch) && g:tcomment#blank_lines >= 2
+                let lline0 = strdisplaywidth(line0)
+                " TLogVAR lline0, cbeg
+                if lline0 < cbeg
+                    let line0 = line0 . repeat(' ', cbeg - lline0)
+                    let lmatch = [line0, line0, '', '', '']
+                    " TLogVAR "padded", line0, lmatch
+                endif
+            endif
+            if !empty(lmatch)
+                let part1 = s:ProcessLine(uncomment, lmatch[2], cmtCheck, cmtReplace)
+                " TLogVAR part1
+                let line1 = lmatch[1] . part1 . lmatch[4]
+                if uncomment && g:tcomment#rstrip_on_uncomment > 0
+                    if g:tcomment#rstrip_on_uncomment == 2 || line1 !~ '\S'
+                        let line1 = substitute(line1, '\s\+$', '', '')
+                    endif
+                endif
+                " TLogVAR line1
+                call setline(lnum, line1)
+            endif
+        endfor
     endif
     " reposition cursor
     " TLogVAR 3, commentMode
@@ -874,7 +909,7 @@ function! tcomment#Operator(type, ...) "{{{3
         let lend = line("']")
         let cbeg = col("'[")
         let cend = col("']")
-        " TLogVAR lbeg, lend, cbeg, cend
+        " TLogVAR commentMode, commentMode1, lbeg, lend, cbeg, cend
         " echom "DBG tcomment#Operator" lbeg col("'[") col("'<") lend col("']") col("'>")
         norm! 
         let commentMode = s:AddModeExtra(commentMode, g:tcommentOpModeExtra, lbeg, lend)
@@ -1084,6 +1119,7 @@ function! s:StartLineRx(pos)
     return '\%'. a:pos .'l'
 endf
 
+
 function! s:EndLineRx(pos)
     return '\%'. a:pos .'l'
 endf
@@ -1105,6 +1141,7 @@ function! s:StartColRx(mode, col)
     endif
 endf
 
+
 function! s:EndColRx(pos)
     if a:pos == 0
         return '\$'
@@ -1113,10 +1150,12 @@ function! s:EndColRx(pos)
     endif
 endf
 
+
 function! s:GetIndentString(line, start)
     let start = a:start > 0 ? a:start - 1 : 0
     return substitute(strpart(getline(a:line), start), '\V\^\s\*\zs\.\*\$', '', '')
 endf
+
 
 function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     " TLogVAR a:beg, a:end, a:checkRx, a:commentMode, a:cstart, a:cend
@@ -1129,7 +1168,7 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
         let line = strpart(line, 0, a:cend - 1)
     endif
     let uncomment = (line =~ mdrx)
-    " TLogVAR 1, uncomment
+    " TLogVAR 1, uncomment, line
     let indentStr = s:GetIndentString(beg, a:cstart)
     let il = indent(beg)
     let n  = beg + 1
@@ -1176,10 +1215,11 @@ function! s:CommentDef(beg, end, checkRx, commentMode, cstart, cend)
     return [beg, end, indentStr, uncomment]
 endf
 
+
 function! s:ProcessLine(uncomment, match, checkRx, replace)
     " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
     try
-        if !(g:tcommentBlankLines || a:match =~ '\S')
+        if !(g:tcomment#blank_lines > 0 || a:match =~ '\S')
             return a:match
         endif
         if a:uncomment
@@ -1603,6 +1643,7 @@ function! s:GuessCurrentCommentString(commentMode)
     endif
 endf
 
+
 function! s:ConstructFromComments(commentMode)
     exec s:ExtractCommentsPart('')
     if a:commentMode =~# 'G' && line != ''
@@ -1619,6 +1660,7 @@ function! s:ConstructFromComments(commentMode)
         return s:nullCommentString
     endif
 endf
+
 
 function! s:ExtractCommentsPart(key)
     " let key   = a:key != "" ? a:key .'[^:]*' : ""
@@ -1671,8 +1713,10 @@ function! s:GetCommentReplace(cdef, cms0)
     else
         let rs = a:cms0
     endif
-    return escape(rs, '"/')
+    return rs
+    " return escape(rs, '"/')
 endf
+
 
 function! s:BlockGetCommentRx(cdef)
     if has_key(a:cdef, 'commentstring_rx')
@@ -1684,6 +1728,7 @@ function! s:BlockGetCommentRx(cdef)
     endif
 endf
 
+
 function! s:BlockGetCommentString(cdef)
     if has_key(a:cdef, 'middle')
         return a:cdef.commentstring
@@ -1691,6 +1736,7 @@ function! s:BlockGetCommentString(cdef)
         return matchstr(a:cdef.commentstring, '^.\{-}\ze\(\n\|$\)')
     endif
 endf
+
 
 function! s:BlockGetMiddleString(cdef)
     if has_key(a:cdef, 'middle')
