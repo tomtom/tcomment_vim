@@ -272,8 +272,15 @@ endf
 
 " :nodoc:
 " Return 1 if a comment type is defined.
-function! tcomment#TypeExists(name)
-    return has_key(s:definitions, a:name)
+function! tcomment#TypeExists(name, ...)
+    let mode = a:0 >= 1 ? a:1 : ''
+    let name = a:name
+    if mode =~? 'b'
+        let name .= '_block'
+    elseif mode =~? 'i'
+        let name .= '_inline'
+    endif
+    return has_key(s:definitions, name) ? name : ''
 endf
 
 " :doc:
