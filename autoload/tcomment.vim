@@ -1453,7 +1453,7 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
     else
         let cdef = cdef0
         if !has_key(cdef, 'commentstring')
-            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode)}
+            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode, '')}
         endif
     endif
     let beg = a:beg
@@ -1563,13 +1563,16 @@ function! s:AddModeExtra(mode, extra, beg, end) "{{{3
 endf
 
 
-function! s:GuessCommentMode(commentMode) "{{{3
-    if a:commentMode =~# '[IRB]'
+function! s:GuessCommentMode(commentMode, customCommentMode) "{{{3
+    if a:commentMode =~# '[B]' && !empty(a:customCommentMode)
+        return a:commentMode
+    elseif a:commentMode =~# '[IR]' 
         return a:commentMode
     else
         return substitute(a:commentMode, '\w\+', 'G', 'g')
     endif
 endf
+
 
 function! s:GuessCurrentCommentString(commentMode)
     " TLogVAR a:commentMode
@@ -1626,28 +1629,28 @@ function! s:ExtractCommentsPart(key)
     return 'let '. var .'="'. escape(val, '"') .'"'
 endf
 
+
 " s:GetCustomCommentString(ft, commentMode, ?default="")
 function! s:GetCustomCommentString(ft, commentMode, ...)
     " TLogVAR a:ft, a:commentMode, a:000
     let commentMode   = a:commentMode
     let customComment = tcomment#TypeExists(a:ft)
-    if commentMode =~# 'B' && tcomment#TypeExists(a:ft .'_block')
-        let def = s:definitions[a:ft .'_block']
+    let customCommentMode = tcomment#TypeExists(a:ft, commentMode)
+    " TLogVAR customComment, customCommentMode
+    if commentMode =~# '[IB]' && !empty(customCommentMode)
+        let def = s:definitions[customCommentMode]
         " TLogVAR 1, def
-    elseif commentMode =~? 'I' && tcomment#TypeExists(a:ft .'_inline')
-        let def = s:definitions[a:ft .'_inline']
-        " TLogVAR 2, def
-    elseif customComment
-        let def = s:definitions[a:ft]
-        let commentMode = s:GuessCommentMode(commentMode)
+    elseif !empty(customComment)
+        let def = s:definitions[customComment]
+        let commentMode = s:GuessCommentMode(commentMode, customCommentMode)
         " TLogVAR 3, def
     elseif a:0 >= 1
         let def = {'commentstring': a:1}
-        let commentMode = s:GuessCommentMode(commentMode)
+        let commentMode = s:GuessCommentMode(commentMode, '')
         " TLogVAR 4, def
     else
         let def = {}
-        let commentMode = s:GuessCommentMode(commentMode)
+        let commentMode = s:GuessCommentMode(commentMode, '')
         " TLogVAR 5, def
     endif
     let cdef = copy(def)
@@ -1656,6 +1659,7 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
     " TLogVAR cdef
     return cdef
 endf
+
 
 function! s:GetCommentReplace(cdef, cms0)
     if has_key(a:cdef, 'commentstring_rx')
