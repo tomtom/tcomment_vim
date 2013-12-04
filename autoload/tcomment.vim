@@ -7,9 +7,12 @@
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
-if !exists("g:tcommentBlankLines")
-    " If true, comment blank lines too
-    let g:tcommentBlankLines = 1    "{{{2
+if !exists("g:tcomment#blank_lines")
+    " If 1, comment blank lines too.
+    " If 2, also comment blank lines within indented code blocks.
+    let g:tcomment#blank_lines = 2    "{{{2
+endif
+
 endif
 
 if !exists("g:tcommentModeExtra")
