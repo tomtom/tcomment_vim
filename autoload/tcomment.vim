@@ -3,13 +3,14 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-12-04.
-" @Revision:    1154
+" @Revision:    1158
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
 if !exists("g:tcomment#blank_lines")
     " If 1, comment blank lines too.
-    " If 2, also comment blank lines within indented code blocks.
+    " If 2, also comment blank lines within indented code blocks 
+    " (requires mixedindent -- see |tcomment#Comment()|).
     let g:tcomment#blank_lines = 2    "{{{2
 endif
 

@@ -126,7 +126,8 @@ Contents~
         :TCommentBlock ...................... |:TCommentBlock|
         :TCommentInline ..................... |:TCommentInline|
         :TCommentMaybeInline ................ |:TCommentMaybeInline|
-        g:tcommentBlankLines ................ |g:tcommentBlankLines|
+        g:tcomment#blank_lines .............. |g:tcomment#blank_lines|
+        g:tcomment#rstrip_on_uncomment ...... |g:tcomment#rstrip_on_uncomment|
         g:tcommentModeExtra ................. |g:tcommentModeExtra|
         g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
         g:tcommentOptions ................... |g:tcommentOptions|
@@ -252,9 +253,16 @@ g:tcommentTextObjectInlineComment (default: 'ic')
 ========================================================================
 autoload/tcomment.vim~
 
-                                                    *g:tcommentBlankLines*
-g:tcommentBlankLines           (default: 1)
-    If true, comment blank lines too
+                                                    *g:tcomment#blank_lines*
+g:tcomment#blank_lines         (default: 2)
+    If 1, comment blank lines too.
+    If 2, also comment blank lines within indented code blocks 
+    (requires mixedindent -- see |tcomment#Comment()|).
+
+                                                    *g:tcomment#rstrip_on_uncomment*
+g:tcomment#rstrip_on_uncomment (default: 1)
+    If 1, remove right-hand whitespace on uncomment from empty lines.
+    If 2, remove right-hand whitespace on uncomment from all lines.
 
                                                     *g:tcommentModeExtra*
 g:tcommentModeExtra            (default: '')
@@ -441,9 +449,10 @@ tcomment#Comment(beg, end, ...)
                                  surrounded with whitespace; if
                                  both ... surround with whitespace (default)
                                  no   ... don't use whitespace
-            strip_whitespace ... Strip trailing whitespace: if 1, strip 
-                                 from empty lines only, if 2, always strip 
-                                 whitespace
+            strip_whitespace ... Strip trailing whitespace: if 1 
+                                 (default), strip from empty lines only, 
+                                 if 2, always strip whitespace; if 0, 
+                                 don't strip any whitespace
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
