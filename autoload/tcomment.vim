@@ -1053,22 +1053,25 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
     return cdef
 endf
 
+
 function! s:StartPosRx(mode, line, col)
     " TLogVAR a:mode, a:line, a:col
-    if a:mode =~# 'I'
-        return s:StartLineRx(a:line) . s:StartColRx(a:col)
-    else
-        return s:StartColRx(a:col)
-    endif
+    " if a:mode =~# 'I'
+    "     return s:StartLineRx(a:line) . s:StartColRx(a:mode, a:col)
+    " else
+        return s:StartColRx(a:mode, a:col)
+    " endif
 endf
 
+
 function! s:EndPosRx(mode, line, col)
-    if a:mode =~# 'I'
-        return s:EndLineRx(a:line) . s:EndColRx(a:col)
-    else
+    " if a:mode =~# 'I'
+    "     return s:EndLineRx(a:line) . s:EndColRx(a:col)
+    " else
         return s:EndColRx(a:col)
-    endif
+    " endif
 endf
+
 
 function! s:StartLineRx(pos)
     return '\%'. a:pos .'l'
