@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2013-03-07.
-" @Revision:    1046
+" @Last Change: 2013-12-04.
+" @Revision:    1154
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -13,6 +13,10 @@ if !exists("g:tcomment#blank_lines")
     let g:tcomment#blank_lines = 2    "{{{2
 endif
 
+if !exists('g:tcomment#rstrip_on_uncomment')
+    " If 1, remove right-hand whitespace on uncomment from empty lines.
+    " If 2, remove right-hand whitespace on uncomment from all lines.
+    let g:tcomment#rstrip_on_uncomment = 1   "{{{2
 endif
 
 if !exists("g:tcommentModeExtra")
