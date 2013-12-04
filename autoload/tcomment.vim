@@ -721,7 +721,7 @@ function! s:GetStartEnd(beg, end, commentMode) "{{{3
         " TLogVAR commentMode
         if commentMode =~# 'R'
             let cbeg = col('.')
-            let cend = 0
+            let cend = col('$')
             let commentMode = substitute(commentMode, '\CR', 'G', 'g')
         elseif commentMode =~# 'I'
             let cbeg = col("'<")
