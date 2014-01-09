@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-12-04.
-" @Revision:    1158
+" @Revision:    1173
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -226,6 +226,15 @@ if !exists("g:tcommentInlineXML")
                 \ }
 endif
 
+if !exists('g:tcomment#ignore_comment_def')
+    " A list of names or filetypes, which should be ignored by 
+    " |tcomment#DefineType()| -- no custom comment definition will be 
+    " stored for these names.
+    "
+    " This variable should be set before loading autoload/tcomment.vim.
+    let g:tcomment#ignore_comment_def = []   "{{{2
+endif
+
 let s:typesDirty = 1
 
 let s:definitions = {}
@@ -259,7 +268,9 @@ let s:definitions = {}
 " used.
 " :display: tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
 function! tcomment#DefineType(name, commentdef, ...)
-    let use = a:0 >= 2 ? a:2 : !has_key(s:definitions, a:name)
+    let basename = matchstr(a:name, '^[^_]\+')
+    let use = a:0 >= 2 ? a:2 : len(filter(copy(g:tcomment#ignore_comment_def), 'v:val == basename')) == 0
+    " TLogVAR a:name, use
     if use
         if type(a:commentdef) == 4
             let cdef = copy(a:commentdef)
@@ -532,6 +543,8 @@ let s:nullCommentString    = '%s'
 "         whitespace       ... Define whether commented text is 
 "                              surrounded with whitespace; if
 "                              both ... surround with whitespace (default)
+"                              left ... keep whitespace on the left
+"                              right... keep whitespace on the right
 "                              no   ... don't use whitespace
 "         strip_whitespace ... Strip trailing whitespace: if 1 
 "                              (default), strip from empty lines only, 
