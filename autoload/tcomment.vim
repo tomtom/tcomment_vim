@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2013-12-04.
-" @Revision:    1173
+" @Revision:    1174
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -44,7 +44,7 @@ if !exists('g:tcommentOptions')
     " the first column regardless of the block's indentation, put this 
     " into your |vimrc| file: >
     "   let g:tcommentOptions = {'col': 1}
-    let g:tcommentOptions = {}   "{{{2
+    let g:tcommentOptions = {'mixedindent': 1}   "{{{2
 endif
 
 if !exists('g:tcomment#ignore_char_type')
