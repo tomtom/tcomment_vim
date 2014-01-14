@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2013-12-04.
-" @Revision:    1174
+" @Last Change: 2014-01-13.
+" @Revision:    1175
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -44,7 +44,7 @@ if !exists('g:tcommentOptions')
     " the first column regardless of the block's indentation, put this 
     " into your |vimrc| file: >
     "   let g:tcommentOptions = {'col': 1}
-    let g:tcommentOptions = {'mixedindent': 1}   "{{{2
+    let g:tcommentOptions = {}   "{{{2
 endif
 
 if !exists('g:tcomment#ignore_char_type')
@@ -679,7 +679,7 @@ function! tcomment#Comment(beg, end, ...)
         " final pattern for commenting
         let cmtReplace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmtReplace
-        if get(s:cdef, 'mixedindent', 0) && !empty(indentStr)
+        if get(s:cdef, 'mixedindent', 1) && !empty(indentStr)
             let cbeg = strdisplaywidth(indentStr, cbeg)
             let indentStr = ''
         endif
@@ -1140,7 +1140,7 @@ endf
 
 
 function! s:StartColRx(mode, col)
-    let mixedindent = get(s:cdef, 'mixedindent', 0)
+    let mixedindent = get(s:cdef, 'mixedindent', 1)
     if a:mode =~# '[IR]'
         let col = mixedindent ? a:col - 1 : a:col
     else
