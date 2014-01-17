@@ -150,6 +150,7 @@ Contents~
         g:tcomment#replacements_xml ......... |g:tcomment#replacements_xml|
         g:tcommentBlockXML .................. |g:tcommentBlockXML|
         g:tcommentInlineXML ................. |g:tcommentInlineXML|
+        g:tcomment#ignore_comment_def ....... |g:tcomment#ignore_comment_def|
         tcomment#DefineType ................. |tcomment#DefineType()|
         g:tcomment_types .................... |g:tcomment_types|
         tcomment#Comment .................... |tcomment#Comment()|
@@ -380,6 +381,14 @@ g:tcommentBlockXML             (default: {...})
 g:tcommentInlineXML            (default: {...})
     Generic xml-like comments.
 
+                                                    *g:tcomment#ignore_comment_def*
+g:tcomment#ignore_comment_def  (default: [])
+    A list of names or filetypes, which should be ignored by 
+    |tcomment#DefineType()| -- no custom comment definition will be 
+    stored for these names.
+
+    This variable should be set before loading autoload/tcomment.vim.
+
                                                     *tcomment#DefineType()*
 tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
     If you don't explicitly define a comment style, |:TComment| will use 
@@ -448,6 +457,8 @@ tcomment#Comment(beg, end, ...)
             whitespace       ... Define whether commented text is 
                                  surrounded with whitespace; if
                                  both ... surround with whitespace (default)
+                                 left ... keep whitespace on the left
+                                 right... keep whitespace on the right
                                  no   ... don't use whitespace
             strip_whitespace ... Strip trailing whitespace: if 1 
                                  (default), strip from empty lines only, 

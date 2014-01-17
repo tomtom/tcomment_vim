@@ -3,13 +3,13 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2013-11-11.
-" @Revision:    781
+" @Revision:    783
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
-let loaded_tcomment = 209
+let loaded_tcomment = 300
 
 if !exists('g:tcommentMaps')
     " If true, set maps.
