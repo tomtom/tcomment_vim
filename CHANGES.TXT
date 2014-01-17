@@ -253,3 +253,28 @@ version: "2.08"
   MD5 checksum: d507f7e6d171034a45e2d349561d29f1
 version: "2.09"
 
+  - Help template
+  - Add asciidoc (//) and expect (#) definitions
+  - Fix xs commentstring
+  - Accept js as alias for javascript (fixes #70)
+  - Adding hy support
+  - s:GetStartEnd(): Make sure end >= begin (fixes #73)
+  - strip_whitespace defaults to 1 (fixes #54)
+  - "whitespace" option: Consistently use partial matching
+  - mixedindent option: Check only in s:StartColRx()
+  - s:CommentDef(): Minor optimization
+  - Support for remind filetype (closes #74)
+  - tcomment#TypeExists(name, ...): takes a mode as optional second argument
+  - R comments: Properly set cend to col('$')
+  - s:StartPosRx(), s:EndPosRx(): Ignore lnum in I mode
+  - s:StartColRx(): Takes a col as second argument
+  - Renamed g:tcommentBlankLines to g:tcomment#blank_lines (can be 0, 1, 2)
+  - s:GetCustomCommentString(): Take into account whether a custom comment style is defined for block & inline comments
+  - g:tcomment#rstrip_on_uncomment: Remove right-hand whitespace on uncomment
+  - Use a loop, not :s
+  - g:tcomment#ignore_comment_def
+  - mixedindent option defaults to 1
+  - mixedindent defaults to 1
+  MD5 checksum: c2668f9147783d47e640133e51ba20e4
+version: "3.00"
+
