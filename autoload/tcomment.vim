@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-01-13.
-" @Revision:    1175
+" @Revision:    1181
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1635,7 +1635,7 @@ endf
 
 function! s:GuessCurrentCommentString(commentMode)
     " TLogVAR a:commentMode
-    let valid_cms = (match(&commentstring, '%\@<!%s') != -1)
+    let valid_cms = (match(&commentstring, '%\@<!\(%%\)*%s') != -1)
     if &commentstring != s:defaultCommentString && valid_cms
         " The &commentstring appears to have been set and to be valid
         return &commentstring
