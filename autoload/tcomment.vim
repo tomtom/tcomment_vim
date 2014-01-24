@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-01-13.
-" @Revision:    1183
+" @Revision:    1248
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1108,7 +1108,8 @@ function! s:GetCommentDefinition(beg, end, commentMode, ...)
             if use_guess_ft
                 return s:GuessFileType(a:beg, a:end, a:commentMode, filetype, altFiletype)
             else
-                return s:GetCustomCommentString(filetype, a:commentMode, s:GuessCurrentCommentString(a:commentMode))
+                let [guessCommentMode, guessCMS] = s:GuessCurrentCommentString(a:commentMode)
+                return s:GetCustomCommentString(filetype, guessCommentMode, guessCMS, guessCommentMode == a:commentMode)
             endif
         endif
         let cdef.commentstring = cms
@@ -1512,13 +1513,17 @@ function! s:GuessFileType(beg, end, commentMode, filetype, ...)
         let cdef = extend(cdef, cdef0, 'keep')
         " TLogVAR 1, cdef
         if empty(get(cdef, 'commentstring', ''))
-            let cdef.commentstring = s:GuessCurrentCommentString(a:commentMode)
+            let [guessCommentMode, guessCMS] = s:GuessCurrentCommentString(a:commentMode)
+            let cdef.commentstring = guessCMS
         endif
         " TLogVAR 2, cdef
     else
         let cdef = cdef0
+        " TLogVAR 3, cdef
         if !has_key(cdef, 'commentstring')
-            let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode, '')}
+            let [guessCommentMode, guessCMS] = s:GuessCurrentCommentString(a:commentMode)
+            let cdef = {'commentstring': guessCMS, 'mode': guessCommentMode}
+            " let cdef = {'commentstring': s:GuessCurrentCommentString(0), 'mode': s:GuessCommentMode(a:commentMode, '')}
         endif
     endif
     let beg = a:beg
@@ -1642,67 +1647,92 @@ endf
 function! s:GuessCurrentCommentString(commentMode)
     " TLogVAR a:commentMode
     let valid_cms = (match(&commentstring, '%\@<!\(%%\)*%s') != -1)
+    let guessCommentMode = s:GuessCommentMode(a:commentMode, '')
     if &commentstring != s:defaultCommentString && valid_cms
         " The &commentstring appears to have been set and to be valid
-        return &commentstring
+        return [guesscommentmode, &commentstring]
     endif
     if &comments != s:defaultComments
         " the commentstring is the default one, so we assume that it wasn't 
         " explicitly set; we then try to reconstruct &cms from &comments
-        let cms = s:ConstructFromComments(a:commentMode)
-        if cms != s:nullCommentString
-            return cms
+        let [comMode, comCMS] = s:ConstructFromComments(a:commentMode)
+        " TLogVAR comMode, comCMS
+        if comCMS != s:nullCommentString
+            return [comMode, comCMS]
         endif
     endif
     if valid_cms
         " Before &commentstring appeared not to be set. As we don't know 
         " better we return it anyway if it is valid
-        return &commentstring
+        return [guessCommentMode, &commentstring]
     else
         " &commentstring is invalid. So we return the identity string.
-        return s:nullCommentString
+        return [guessCommentMode, s:nullCommentString]
     endif
 endf
 
 
 function! s:ConstructFromComments(commentMode)
-    exec s:ExtractCommentsPart('')
-    if a:commentMode =~# 'G' && line != ''
-        return line .' %s'
+    " TLogVAR a:commentMode
+    let comments = s:ExtractCommentsPart()
+    " TLogVAR comments
+    if a:commentMode =~? '[bi]' && !empty(comments.s.string)
+        let mode = a:commentMode
+        let cms = comments.s.string .' %s '. comments.e.string
+        if a:commentMode =~? '[b]' && !empty(comments.m.string)
+            let mshift = str2nr(matchstr(comments.s.flags, '\(^\|[^-]\)\zs\d\+'))
+            let mindent = repeat(' ', mshift)
+            let cms .= "\n". mindent . comments.m.string
+        endif
+        " TLogVAR mode, cms
+        return [mode, cms]
     endif
-    exec s:ExtractCommentsPart('s')
-    if s != ''
-        exec s:ExtractCommentsPart('e')
-        return s.' %s '.e
-    endif
-    if line != ''
-        return line .' %s'
+    let mode = s:GuessCommentMode(a:commentMode, '')
+    if !empty(comments.line.string)
+        let cms = comments.line.string .' %s'
+    elseif !empty(comments.s.string)
+        let cms = comments.s.string .' %s '. comments.e.string
     else
-        return s:nullCommentString
+        let cms = s:nullCommentString
     endif
+    return [mode, cms]
 endf
 
 
-function! s:ExtractCommentsPart(key)
-    " let key   = a:key != "" ? a:key .'[^:]*' : ""
-    let key = a:key . '[bnflrxO0-9-]*'
-    let val = substitute(&comments, '^\(.\{-},\)\{-}'. key .':\([^,]\+\).*$', '\2', '')
-    if val == &comments
-        let val = ''
-    else
-        let val = substitute(val, '%', '%%', 'g')
-    endif
-    let var = a:key == '' ? 'line' : a:key
-    return 'let '. var .'="'. escape(val, '"') .'"'
+function! s:ExtractCommentsPart()
+    let comments = {
+                \ 'line': {'string': '', 'flags': ''},
+                \ 's':    {'string': '', 'flags': ''},
+                \ 'm':    {'string': '', 'flags': ''},
+                \ 'e':    {'string': '', 'flags': ''},
+                \ }
+    let rx = '\C\([nbfsmelrOx0-9-]*\):\(\%(\\,\|[^,]\)*\)'
+    let comparts = split(&l:comments, rx .'\zs,')
+    for part in comparts
+        let ml = matchlist(part, '^'. rx .'$')
+        let flags = ml[1]
+        let string = substitute(ml[2], '\\,', ',', 'g')
+        if flags !~# 'O'
+            let flag = matchstr(flags, '^[sme]')
+            if empty(flag)
+                let flag = 'line'
+            endif
+            let string = substitute(string, '%', '%%', 'g')
+            let comments[flag] = {'string': string, 'flags': flags}
+        endif
+    endfor
+    return comments
 endf
 
 
-" s:GetCustomCommentString(ft, commentMode, ?default="")
+" s:GetCustomCommentString(ft, commentMode, ?default="", ?customCommentMode="")
 function! s:GetCustomCommentString(ft, commentMode, ...)
     " TLogVAR a:ft, a:commentMode, a:000
     let commentMode   = a:commentMode
     let customComment = tcomment#TypeExists(a:ft)
     let customCommentMode = tcomment#TypeExists(a:ft, commentMode)
+    let default = a:0 >= 1 ? a:1 : ''
+    let defaultCustomCommentMode = a:0 >= 2 ? a:2 : customCommentMode
     " TLogVAR customComment, customCommentMode
     if commentMode =~# '[IB]' && !empty(customCommentMode)
         let def = s:definitions[customCommentMode]
@@ -1711,9 +1741,9 @@ function! s:GetCustomCommentString(ft, commentMode, ...)
         let def = s:definitions[customComment]
         let commentMode = s:GuessCommentMode(commentMode, customCommentMode)
         " TLogVAR 3, def
-    elseif a:0 >= 1
-        let def = {'commentstring': a:1}
-        let commentMode = s:GuessCommentMode(commentMode, '')
+    elseif !empty(default)
+        let def = {'commentstring': default}
+        let commentMode = s:GuessCommentMode(commentMode, defaultCustomCommentMode)
         " TLogVAR 4, def
     else
         let def = {}
