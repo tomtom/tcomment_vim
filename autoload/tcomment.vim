@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-01-13.
-" @Revision:    1248
+" @Revision:    1249
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1650,7 +1650,7 @@ function! s:GuessCurrentCommentString(commentMode)
     let guessCommentMode = s:GuessCommentMode(a:commentMode, '')
     if &commentstring != s:defaultCommentString && valid_cms
         " The &commentstring appears to have been set and to be valid
-        return [guesscommentmode, &commentstring]
+        return [guessCommentMode, &commentstring]
     endif
     if &comments != s:defaultComments
         " the commentstring is the default one, so we assume that it wasn't 
