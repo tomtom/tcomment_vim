@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-01-13.
-" @Revision:    1181
+" @Revision:    1183
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -484,6 +484,10 @@ call tcomment#DefineType('tpl',              '<!-- %s -->'      )
 call tcomment#DefineType('typoscript',       '# %s'             )
 call tcomment#DefineType('upstart',          '# %s'             )
 call tcomment#DefineType('vhdl',             '-- %s'            )
+call tcomment#DefineType('verilog',          '// %s'            )
+call tcomment#DefineType('verilog_block',    g:tcommentBlockC   )
+call tcomment#DefineType('verilog_systemverilog',       '// %s' )
+call tcomment#DefineType('verilog_systemverilog_block', g:tcommentBlockC)
 call tcomment#DefineType('viki',             '%% %s'            )
 call tcomment#DefineType('viki_3',           '%%%%%% %s'        )
 call tcomment#DefineType('viki_inline',      '{cmt: %s}'        )
