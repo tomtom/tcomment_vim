@@ -131,6 +131,8 @@ Contents~
         g:tcommentModeExtra ................. |g:tcommentModeExtra|
         g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
         g:tcommentOptions ................... |g:tcommentOptions|
+        g:tcomment#options_comments ......... |g:tcomment#options_comments|
+        g:tcomment#options_commentstring .... |g:tcomment#options_commentstring|
         g:tcomment#ignore_char_type ......... |g:tcomment#ignore_char_type|
         g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
         g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
@@ -290,6 +292,14 @@ g:tcommentOptions              (default: {})
       let g:tcommentOptions = {'col': 1}
 <
 
+                                                    *g:tcomment#options_comments*
+g:tcomment#options_comments    (default: {'whitespace': 'both'})
+    Options when using a the 'comments' option.
+
+                                                    *g:tcomment#options_commentstring*
+g:tcomment#options_commentstring (default: {'whitespace': 'both'})
+    Options when using a the 'commentstring' option.
+
                                                     *g:tcomment#ignore_char_type*
 g:tcomment#ignore_char_type    (default: 1)
     |text-objects| for use with |tcomment#Operator| can have different 
@@ -429,7 +439,7 @@ g:tcomment_types               (default: {})
 
                                                     *tcomment#Comment()*
 tcomment#Comment(beg, end, ...)
-    tcomment#Comment(line1, line2, ?commentMode, ?commentAnyway, ?args...)
+    tcomment#Comment(line1, line2, ?comment_mode, ?comment_anyway, ?args...)
     args... are either:
       1. a list of key=value pairs where known keys are (see also 
          |g:tcommentOptions|):
@@ -437,8 +447,8 @@ tcomment#Comment(beg, end, ...)
             count=N          ... Repeat the comment string N times
             col=N            ... Start the comment at column N (in block 
                                  mode; must be smaller than |indent()|)
-            mode=STRING      ... See the notes below on the "commentMode" argument
-            mode_extra=STRING ... Add to commentMode
+            mode=STRING      ... See the notes below on the "comment_mode" argument
+            mode_extra=STRING ... Add to comment_mode
             begin=STRING     ... Comment prefix
             end=STRING       ... Comment postfix
             middle=STRING    ... Middle line comments in block mode
@@ -467,8 +477,8 @@ tcomment#Comment(beg, end, ...)
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
-    commentMode (see also ¦g:tcommentModeExtra¦):
-      G ... guess the value of commentMode
+    comment_mode (see also ¦g:tcommentModeExtra¦):
+      G ... guess the value of comment_mode
       B ... block (use extra lines for the comment markers)
       i ... maybe inline, guess
       I ... inline
@@ -494,7 +504,7 @@ tcomment#OperatorAnyway(type)
 tcomment#OperatorLineAnyway(type)
 
                                                     *tcomment#CommentAs()*
-tcomment#CommentAs(beg, end, commentAnyway, filetype, ?args...)
+tcomment#CommentAs(beg, end, comment_anyway, filetype, ?args...)
     Where args is either:
       1. A count NUMBER
       2. An args list (see the notes on the "args" argument of 
@@ -510,7 +520,7 @@ tcomment#GuessFileType(?options={})
 
       beg ................ (default = line("."))
       end ................ (default = line("."))
-      commentMode ........ (default = "G")
+      comment_mode ........ (default = "G")
       filetype ........... (default = &filetype)
       fallbackFiletype ... (default = "")
 
