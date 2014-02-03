@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2014-01-13.
-" @Revision:    1325
+" @Last Change: 2014-02-03.
+" @Revision:    1334
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -697,7 +697,7 @@ function! tcomment#Comment(beg, end, ...)
         let cmt_replace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmt_replace
         if get(s:cdef, 'mixedindent', 1) && !empty(indentStr)
-            let cbeg = strdisplaywidth(indentStr, cbeg)
+            let cbeg = s:Strdisplaywidth(indentStr, cbeg)
             let indentStr = ''
         endif
         " TLogVAR comment_mode, lbeg, cbeg, lend, cend
@@ -720,7 +720,7 @@ function! tcomment#Comment(beg, end, ...)
             let lmatch = matchlist(line0, comment_rx)
             " TLogVAR lmatch
             if empty(lmatch) && g:tcomment#blank_lines >= 2
-                let lline0 = strdisplaywidth(line0)
+                let lline0 = s:Strdisplaywidth(line0)
                 " TLogVAR lline0, cbeg
                 if lline0 < cbeg
                     let line0 = line0 . repeat(' ', cbeg - lline0)
@@ -763,6 +763,18 @@ function! tcomment#Comment(beg, end, ...)
     endif
     unlet! s:cursor_pos s:current_pos s:cdef
 endf
+
+
+if v:version >= 703
+    function! s:Strdisplaywidth(...) "{{{3
+        return call('strdisplaywidth', a:000)
+    endf
+else
+    function! s:Strdisplaywidth(string, ...) "{{{3
+        " NOTE: Col argument is ignored
+        return strlen(substitute(a:string, ".", "x", "g"))
+    endf
+endif
 
 
 function! tcomment#SetOption(name, arg) "{{{3
@@ -1296,7 +1308,7 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
             if empty(s:cursor_pos) || s:current_pos[1] == s:processline_lnum
                 let prefix = matchstr(a:replace, '^.*%\@<!\ze%s')
                 let prefix = substitute(prefix, '%\(.\)', '\1', 'g')
-                let prefix_len = strdisplaywidth(prefix)
+                let prefix_len = s:Strdisplaywidth(prefix)
                 " TLogVAR a:replace, prefix_len
                 if prefix_len != -1
                     let s:cursor_pos = copy(s:current_pos)
@@ -1419,7 +1431,7 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
                         let s:cursor_pos[1] = 1
                     endif
                 endif
-                let prefix_len = strdisplaywidth(mx)
+                let prefix_len = s:Strdisplaywidth(mx)
                 let s:cursor_pos[2] -= prefix_len
                 if s:cursor_pos[2] < 1
                     let s:cursor_pos[2] = 1
@@ -1437,7 +1449,7 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
             if a:comment_mode =~ '#'
                 let s:cursor_pos = copy(s:current_pos)
                 let s:cursor_pos[1] += len(substitute(prefix, "[^\n]", '', 'g')) + 1
-                let prefix_len = strdisplaywidth(mx)
+                let prefix_len = s:Strdisplaywidth(mx)
                 let s:cursor_pos[2] += prefix_len
                 " echom "DBG s:current_pos=" string(s:current_pos) "s:cursor_pos=" string(s:cursor_pos)
             endif
