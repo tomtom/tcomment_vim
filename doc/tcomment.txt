@@ -376,7 +376,6 @@ g:tcommentInlineC              (default: {...})
 
                                                     *g:tcommentBlockC2*
 g:tcommentBlockC2              (default: {...})
-    Generic c-like block comments.
     Generic c-like block comments (alternative markup).
 
                                                     *g:tcomment#replacements_xml*
