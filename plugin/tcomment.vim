@@ -2,14 +2,18 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2013-11-11.
-" @Revision:    787
+" @Last Change: 2014-02-05.
+" @Revision:    789
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
 let loaded_tcomment = 300
+
+let s:save_cpo = &cpo
+set cpo&vim
+
 
 if !exists('g:tcommentMaps')
     " If true, set maps.
@@ -174,4 +178,7 @@ if g:tcommentMaps
     endif
 endif
 
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vi: ft=vim:tw=72:ts=4:fo=w2croql
