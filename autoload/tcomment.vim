@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1413
+" @Revision:    1419
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -581,7 +581,8 @@ let s:null_comment_string    = '%s'
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
-    let comment_mode   = s:AddModeExtra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
+    let comment_mode0  = s:AddModeExtra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
+    let comment_mode   = comment_mode0
     let comment_anyway = a:0 >= 2 ? (a:2 == '!') : 0
     " TLogVAR a:beg, a:end, comment_mode, comment_anyway
     " save the cursor position
@@ -599,11 +600,15 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR 1, comment_mode
     endif
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, comment_mode)
+    " TLogVAR lbeg, cbeg, lend, cend, col('$')
+    if comment_mode ==? 'I' && comment_mode0 =~# 'i' && lbeg == lend && cend >= col('$') - 1
+        let comment_mode = 'R'
+    endif
     if exists('s:temp_options') && has_key(s:temp_options, 'mode_extra')
         let comment_mode = s:AddModeExtra(comment_mode, s:temp_options.mode_extra, lbeg, lend)
+        " TLogVAR comment_mode
         unlet s:temp_options.mode_extra
     endif
-    " TLogVAR comment_mode, lbeg, cbeg, lend, cend
     " get the correct commentstring
     let cdef = copy(g:tcommentOptions)
     " TLogVAR 1, cdef
