@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1419
+" @Revision:    1424
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -602,7 +602,12 @@ function! tcomment#Comment(beg, end, ...)
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, comment_mode)
     " TLogVAR lbeg, cbeg, lend, cend, col('$')
     if comment_mode ==? 'I' && comment_mode0 =~# 'i' && lbeg == lend && cend >= col('$') - 1
-        let comment_mode = 'R'
+        if cbeg <= 1
+            let comment_mode = 'G'
+        else
+            let comment_mode = 'R'
+        endif
+        " TLogVAR comment_mode
     endif
     if exists('s:temp_options') && has_key(s:temp_options, 'mode_extra')
         let comment_mode = s:AddModeExtra(comment_mode, s:temp_options.mode_extra, lbeg, lend)
