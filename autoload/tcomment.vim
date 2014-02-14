@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1424
+" @Revision:    1463
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -600,8 +600,8 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR 1, comment_mode
     endif
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, comment_mode)
-    " TLogVAR lbeg, cbeg, lend, cend, col('$')
-    if comment_mode ==? 'I' && comment_mode0 =~# 'i' && lbeg == lend && cend >= col('$') - 1
+    " TLogVAR lbeg, cbeg, lend, cend, virtcol('$')
+    if comment_mode ==? 'I' && comment_mode0 =~# 'i' && lbeg == lend && cend >= virtcol('$') - 1
         if cbeg <= 1
             let comment_mode = 'G'
         else
@@ -821,18 +821,18 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
         let comment_mode = a:comment_mode
         " TLogVAR comment_mode
         if comment_mode =~# 'R'
-            let cbeg = col('.')
-            let cend = col('$')
+            let cbeg = virtcol('.')
+            let cend = virtcol('$')
             let comment_mode = substitute(comment_mode, '\CR', 'G', 'g')
         elseif comment_mode =~# 'I'
-            let cbeg = col("'<")
+            let cbeg = virtcol("'<")
             if cbeg == 0
-                let cbeg = col('.')
+                let cbeg = virtcol('.')
             endif
-            let cend = col("'>")
-            if cend < col('$') && (comment_mode =~# 'o' || &selection == 'inclusive')
+            let cend = virtcol("'>")
+            if cend < virtcol('$') && (comment_mode =~# 'o' || &selection == 'inclusive')
                 let cend += 1
-                " TLogVAR cend, col('$')
+                " TLogVAR cend, virtcol('$')
             endif
         else
             let cbeg = 0
@@ -987,21 +987,21 @@ function! tcomment#Operator(type, ...) "{{{3
         endif
         let lbeg = line("'[")
         let lend = line("']")
-        let cend = col("']")
+        let cend = virtcol("']")
         if type == 'char'
-            if cend >= col('$') - 1
+            if lbeg == lend && cend >= virtcol('$') - 1
                 let comment_mode = 'R'
             elseif g:tcomment#ignore_char_type && lbeg != lend
                 silent exe "normal! '[V']"
-                let cend = col("']")
+                let cend = virtcol("']")
                 let comment_mode = 'G'
                 let type = 'line'
             endif
         endif
-        let cbeg = col("'[")
-        " TLogVAR comment_mode, comment_mode1, lbeg, lend, cbeg, cend, col('$')
+        let cbeg = virtcol("'[")
+        " TLogVAR comment_mode, comment_mode1, lbeg, lend, cbeg, cend, virtcol('$')
         " TLogVAR comment_mode
-        " echom "DBG tcomment#Operator" lbeg col("'[") col("'<") lend col("']") col("'>")
+        " echom "DBG tcomment#Operator" lbeg virtcol("'[") virtcol("'<") lend virtcol("']") virtcol("'>")
         norm! 
         let comment_mode = s:AddModeExtra(comment_mode, g:tcommentOpModeExtra, lbeg, lend)
         " TLogVAR comment_mode, type
@@ -1229,8 +1229,8 @@ function! s:EndLineRx(pos)
 endf
 
 
-function! s:StartColRx(comment_mode, col)
-    let mixedindent = get(s:cdef, 'mixedindent', 1)
+function! s:StartColRx(comment_mode, col, ...)
+    let mixedindent = a:0 >= 1 ? a:1 : get(s:cdef, 'mixedindent', 1)
     " TLogVAR a:comment_mode, a:col, mixedindent
     if a:comment_mode =~# '[IR]'
         let col = mixedindent ? a:col - 1 : a:col
@@ -1242,7 +1242,7 @@ function! s:StartColRx(comment_mode, col)
     elseif mixedindent
         return '\%>'. col .'v'
     else
-        return '\%'. col .'c'
+        return '\%'. col .'v'
     endif
 endf
 
@@ -1258,7 +1258,7 @@ function! s:EndColRx(comment_mode, pos)
             let mod = ''
         endif
         " TLogVAR &selection, mod
-        return '\%'. mod . a:pos .'c'
+        return '\%'. mod . a:pos .'v'
     endif
 endf
 
@@ -1273,7 +1273,11 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cstart, cend)
     " TLogVAR a:beg, a:end, a:checkRx, a:comment_mode, a:cstart, a:cend
     let beg = a:beg
     let end = a:end
-    let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndColRx(a:comment_mode, 0)
+    let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cstart) .'\s\*'
+    if get(s:cdef, 'mixedindent', 1)
+        let mdrx .= s:StartColRx(a:comment_mode, a:cstart, 0) .'\s\*'
+    endif
+    let mdrx .= a:checkRx .'\s\*'. s:EndColRx(a:comment_mode, 0)
     " let mdrx = '\V'. s:StartPosRx(a:comment_mode, beg, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:comment_mode, end, 0)
     " TLogVAR mdrx
     let line = getline(beg)
@@ -1372,7 +1376,6 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
                 endif
             endif
         endif
-        " TLogVAR pe, a:match
         " TLogVAR rv
         if v:version > 702 || (v:version == 702 && has('patch407'))
             let rv = escape(rv, "\r")
@@ -1488,10 +1491,21 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
         else
             let cs = a:indentStr . substitute(cs, '%\@<!%s', '%s'. a:indentStr, '')
             if ms != ''
-                let ms = a:indentStr . ms
-                let mx = a:indentStr . mx
-                let @t = substitute(@t, '^'. a:indentStr, '', 'g')
-                let @t = ms . substitute(@t, '\n'. a:indentStr, '\n'. mx, 'g')
+                let lines = []
+                let lnum = 0
+                let indentlen = s:Strdisplaywidth(a:indentStr)
+                let rx = '^.\{-}\%>'. indentlen .'v\zs'
+                for line in split(@t, '\n')
+                    if lnum == 0
+                        let line = substitute(line, rx, ms, '')
+                    else
+                        let line = substitute(line, rx, mx, '')
+                    endif
+                    call add(lines, line)
+                    let lnum += 1
+                endfor
+                let @t = join(lines, "\n")
+                " TLogVAR @t
             endif
             let @t = printf(cs, "\n". @t ."\n")
             if a:comment_mode =~ '#'
