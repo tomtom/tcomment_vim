@@ -152,7 +152,7 @@ nnoremap <silent> <Plug>TComment-gCb :let w:tcommentPos = getpos(".") \| call tc
 xnoremap <Plug>TComment-gC :TCommentMaybeInline!<cr>
 
 vnoremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
-omap <Plug>TComment-ic :normal v <Plug>TComment-ic <cr>
+noremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
 
 nnoremap <silent> <Plug>TComment-gcc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@$
 nnoremap <silent> <Plug>TComment-gcb :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
