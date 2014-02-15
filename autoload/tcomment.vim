@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1463
+" @Revision:    1480
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -180,6 +180,9 @@ if !exists("g:tcommentInlineC")
     " :read: let g:tcommentInlineC = {...}   "{{{2
     let g:tcommentInlineC = {
                 \ 'commentstring': '/* %s */',
+                \ 'rxbeg': '\*\+',
+                \ 'rxend': '',
+                \ 'rxmid': '',
                 \ 'replacements': g:tcomment#replacements_c
                 \ }
 endif
@@ -1458,6 +1461,7 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
         let cs = s:BlockGetCommentString(a:cdef)
         let prefix = substitute(matchstr(cs, '^.*%\@<!\ze%s'), '%\(.\)', '\1', 'g')
         let postfix = substitute(matchstr(cs, '%\@<!%s\zs.*$'), '%\(.\)', '\1', 'g')
+        " TLogVAR ms, mx, cs, prefix, postfix
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
             " TLogVAR 1, @t
@@ -1490,24 +1494,36 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
             endif
         else
             let cs = a:indentStr . substitute(cs, '%\@<!%s', '%s'. a:indentStr, '')
+            " TLogVAR cs, ms
             if ms != ''
                 let lines = []
                 let lnum = 0
                 let indentlen = s:Strdisplaywidth(a:indentStr)
                 let rx = '^.\{-}\%>'. indentlen .'v\zs'
-                for line in split(@t, '\n')
-                    if lnum == 0
-                        let line = substitute(line, rx, ms, '')
-                    else
-                        let line = substitute(line, rx, mx, '')
-                    endif
-                    call add(lines, line)
-                    let lnum += 1
-                endfor
+                " TLogVAR a:indentStr, indentlen, rx, @t, empty(@t)
+                if @t =~ '^\n\?$'
+                    let lines = [a:indentStr . ms]
+                    let cs .= "\n"
+                    " TLogVAR 1, lines
+                else
+                    for line in split(@t, '\n')
+                        " TLogVAR 1, line
+                        if lnum == 0
+                            let line = substitute(line, rx, ms, '')
+                        else
+                            let line = substitute(line, rx, mx, '')
+                        endif
+                        " TLogVAR 2, line
+                        call add(lines, line)
+                        let lnum += 1
+                    endfor
+                    " TLogVAR 2, lines
+                endif
                 let @t = join(lines, "\n")
-                " TLogVAR @t
+                " TLogVAR 3, @t
             endif
             let @t = printf(cs, "\n". @t ."\n")
+            " TLogVAR 4, cs, @t, a:comment_mode
             if a:comment_mode =~ '#'
                 let s:cursor_pos = copy(s:current_pos)
                 let s:cursor_pos[1] += len(substitute(prefix, "[^\n]", '', 'g')) + 1

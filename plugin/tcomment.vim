@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-02-05.
-" @Revision:    804
+" @Revision:    807
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -125,7 +125,7 @@ vnoremap <Plug>TComment-<c-_>i :TCommentInline<cr>
 noremap <Plug>TComment-<c-_>i v:TCommentInline mode=I#<cr>
 inoremap <Plug>TComment-<c-_>i <c-\><c-o>v:TCommentInline mode=#<cr>
 noremap <Plug>TComment-<c-_>b :TCommentBlock<cr>
-inoremap <Plug>TComment-<c-_>b <c-o>:TCommentBlock<cr>
+inoremap <Plug>TComment-<c-_>b <c-o>:TCommentBlock mode=#<cr>
 noremap <Plug>TComment-<c-_>a :TCommentAs 
 inoremap <Plug>TComment-<c-_>a <c-o>:TCommentAs 
 noremap <Plug>TComment-<c-_>n :TCommentAs <c-r>=&ft<cr> 
@@ -161,9 +161,9 @@ xnoremap <Plug>TComment-gc :TCommentMaybeInline<cr>
 nnoremap <silent> <Plug>TComment-gc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#Operator<cr>g@
 
 for s:i in range(1, 9)
-    exec 'noremap <Plug>TComment-<c-_>' . s:i . ' :TComment count='. s:i .'<cr>'
-    exec 'inoremap <Plug>TComment-<c-_>' . s:i . ' <c-\><c-o>:TComment count='. s:i .'<cr>'
-    exec 'vnoremap <Plug>TComment-<c-_>' . s:i . ' :TCommentMaybeInline count='. s:i .'<cr>'
+    exec 'noremap <Plug>TComment-<c-_>' . s:i . ' :call tcomment#SetOption("count", '. s:i .')<cr>'
+    exec 'inoremap <Plug>TComment-<c-_>' . s:i . ' <c-\><c-o>:call tcomment#SetOption("count", '. s:i .')<cr>'
+    exec 'vnoremap <Plug>TComment-<c-_>' . s:i . ' :call tcomment#SetOption("count", '. s:i .')<cr>'
 endfor
 for s:i in range(1, 9)
     exec 'nnoremap <silent> <Plug>TComment-gc' . s:i .'c :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("count", '. s:i .') \| set opfunc=tcomment#Operator<cr>g@'
