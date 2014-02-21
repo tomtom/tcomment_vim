@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1480
+" @Revision:    1547
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -684,20 +684,12 @@ function! tcomment#Comment(beg, end, ...)
     let cmt_check = printf(cmt_check, '\(\_.\{-}\)')
     " TLogVAR cdef, cmt_check
     let s:cdef = cdef
-    " set comment_mode and indentStr
-    let [lbeg, lend, indentStr, uncomment] = s:CommentDef(lbeg, lend, cmt_check, comment_mode, cbeg, cend)
-    " TLogVAR lbeg, lend, indentStr, uncomment
-    let col = get(s:cdef, 'col', -1)
-    if col >= 0
-        let col -= 1
-        let indent = len(indentStr)
-        if col > indent
-            let cms0 = repeat(' ', col - indent) . cms0
-            " TLogVAR cms0
-        else
-            let indentStr = repeat(' ', col)
-        endif
-    endif
+    " set comment_mode
+    let [lbeg, lend, uncomment] = s:CommentDef(lbeg, lend, cmt_check, comment_mode, cbeg, cend)
+    " TLogVAR lbeg, lend, cbeg, cend, uncomment
+    " echom "DBG" string(s:cdef)
+    let cbeg = get(s:cdef, 'col', cbeg)
+    " TLogVAR cbeg
     if comment_anyway
         let uncomment = 0
     endif
@@ -705,9 +697,8 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR comment_mode
     if comment_mode =~# 'B'
         " We want a comment block
-        call s:CommentBlock(lbeg, lend, comment_mode, uncomment, cmt_check, s:cdef, indentStr)
+        call s:CommentBlock(lbeg, lend, cbeg, cend, comment_mode, uncomment, cmt_check, s:cdef)
     else
-        " call s:CommentLines(lbeg, lend, cbeg, cend, uncomment, cmt_check, cms0, indentStr)
         " We want commented lines
         " final search pattern for uncommenting
         let cmt_check   = '\V\^\(\s\{-}\)'. cmt_check .'\$'
@@ -715,24 +706,20 @@ function! tcomment#Comment(beg, end, ...)
         " final pattern for commenting
         let cmt_replace = s:GetCommentReplace(s:cdef, cms0)
         " TLogVAR cmt_replace
-        if get(s:cdef, 'mixedindent', 1) && !empty(indentStr)
-            let cbeg = s:Strdisplaywidth(indentStr, cbeg)
-            let indentStr = ''
-        endif
         " TLogVAR comment_mode, lbeg, cbeg, lend, cend
         let s:processline_lnum = lbeg
         let end_rx = s:EndPosRx(comment_mode, lend, cend)
         let postfix_rx = end_rx == '\$' ? '' : '\.\*\$'
         let prefix_rx = '\^\.\{-}' . s:StartPosRx(comment_mode, lbeg, cbeg)
         let comment_rx = '\V'
-                    \ . '\('. prefix_rx . indentStr . '\)'
+                    \ . '\('. prefix_rx . '\)'
                     \ .'\('
                     \ .'\(\_.\{-}\)'
                     \ . end_rx
                     \ .'\)'
                     \ .'\(' . postfix_rx . '\)'
         " TLogVAR comment_rx
-        let @x = comment_rx
+        " let @x = comment_rx " DBG
         for lnum in range(lbeg, lend)
             let line0 = getline(lnum)
             " TLogVAR line0
@@ -827,6 +814,7 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
             let cbeg = virtcol('.')
             let cend = virtcol('$')
             let comment_mode = substitute(comment_mode, '\CR', 'G', 'g')
+            " TLogVAR "R", cbeg, cend, comment_mode
         elseif comment_mode =~# 'I'
             let cbeg = virtcol("'<")
             if cbeg == 0
@@ -837,13 +825,24 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
                 let cend += 1
                 " TLogVAR cend, virtcol('$')
             endif
+            " TLogVAR "I", cbeg, cend, comment_mode
         else
-            let cbeg = 0
+            let cbeg = -1
             let cend = 0
+            for lnum in range(a:beg, a:end)
+                let indentwidth = indent(lnum)
+                " TLogVAR lnum, indentwidth, getline(lnum)
+                if cbeg == -1 || indentwidth < cbeg
+                    let cbeg = indentwidth
+                endif
+            endfor
+            if cbeg == -1
+                let cbeg = 0
+            endif
         endif
     endif
     " TLogVAR lbeg, cbeg, lend, cend
-    if lend < lbeg || (lend == lbeg && cend < cbeg)
+    if lend < lbeg || (lend == lbeg && cend > 0 && cend < cbeg)
         return [lend, cend, lbeg, cbeg]
     else
         return [lbeg, cbeg, lend, cend]
@@ -1266,49 +1265,40 @@ function! s:EndColRx(comment_mode, pos)
 endf
 
 
-function! s:GetIndentString(line, start)
-    let start = a:start > 0 ? a:start - 1 : 0
-    return substitute(strpart(getline(a:line), start), '\V\^\s\*\zs\.\*\$', '', '')
-endf
-
-
-function! s:CommentDef(beg, end, checkRx, comment_mode, cstart, cend)
-    " TLogVAR a:beg, a:end, a:checkRx, a:comment_mode, a:cstart, a:cend
+function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
+    " TLogVAR a:beg, a:end, a:checkRx, a:comment_mode, a:cbeg, a:cend
     let beg = a:beg
     let end = a:end
-    let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cstart) .'\s\*'
     if get(s:cdef, 'mixedindent', 1)
-        let mdrx .= s:StartColRx(a:comment_mode, a:cstart, 0) .'\s\*'
+        let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
+        let mdrx .= s:StartColRx(a:comment_mode, a:cbeg + 1, 0) .'\s\*'
+    else
+        let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
     endif
     let mdrx .= a:checkRx .'\s\*'. s:EndColRx(a:comment_mode, 0)
-    " let mdrx = '\V'. s:StartPosRx(a:comment_mode, beg, a:cstart) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:comment_mode, end, 0)
+    " let mdrx = '\V'. s:StartPosRx(a:comment_mode, beg, a:cbeg) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:comment_mode, end, 0)
     " TLogVAR mdrx
     let line = getline(beg)
-    if a:cstart != 0 && a:cend != 0
+    if a:cbeg != 0 && a:cend != 0
         let line = strpart(line, 0, a:cend - 1)
     endif
     let uncomment = (line =~ mdrx)
     " TLogVAR 1, uncomment, line
-    let indentStr = s:GetIndentString(beg, a:cstart)
-    let il = indent(beg)
     let n  = beg + 1
-    while n <= end
-        if getline(n) =~ '\S'
-            let jl = indent(n)
-            if jl < il
-                let indentStr = s:GetIndentString(n, a:cstart)
-                let il = jl
-            endif
-            if a:comment_mode =~# 'G'
-                if !(getline(n) =~ mdrx)
-                    let uncomment = 0
-                    " TLogVAR 2, uncomment
+    if a:comment_mode =~# 'G'
+        if uncomment
+            while n <= end
+                if getline(n) =~ '\S'
+                    if !(getline(n) =~ mdrx)
+                        let uncomment = 0
+                        " TLogVAR 2, uncomment
+                        break
+                    endif
                 endif
-            endif
+                let n = n + 1
+            endwh
         endif
-        let n = n + 1
-    endwh
-    if a:comment_mode =~# 'B'
+    elseif a:comment_mode =~# 'B'
         let t = @t
         try
             silent exec 'norm! '. beg.'G1|v'.end.'G$"ty'
@@ -1324,7 +1314,6 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cstart, cend)
                 if @t =~ mdrx1
                     let uncomment = 1
                     " TLogVAR 4, uncomment
-                    " let end -= 1
                 endif
             endif
         finally
@@ -1332,7 +1321,7 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cstart, cend)
         endtry
     endif
     " TLogVAR 5, uncomment
-    return [beg, end, indentStr, uncomment]
+    return [beg, end, uncomment]
 endf
 
 
@@ -1448,8 +1437,9 @@ function! s:InlineReplacement(text, rx, tokens, replacements) "{{{3
 endf
 
 
-function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, indentStr)
-    " TLogVAR a:beg, a:end, a:uncomment, a:checkRx, a:cdef, a:indentStr
+function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, uncomment, checkRx, cdef)
+    " TLogVAR a:beg, a:end, a:cbeg, a:cend, a:uncomment, a:checkRx, a:cdef
+    let indentStr = repeat(' ', a:cbeg)
     let t = @t
     let sel_save = &selection
     set selection=exclusive
@@ -1464,11 +1454,15 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
         " TLogVAR ms, mx, cs, prefix, postfix
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
-            " TLogVAR 1, @t
-            if ms != ''
-                let @t = substitute(@t, '\V\n'. a:indentStr . mx, '\n'. a:indentStr, 'g')
-                " TLogVAR 2, @t
-            endif
+            let tt = []
+            let rx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) . '\zs\s\*'. mx
+            " TLogVAR rx
+            for line in split(@t, '\n')
+                let line1 = substitute(line, rx, '', 'g')
+                call add(tt, line1)
+            endfor
+            let @t = join(tt, "\n")
+            " TLogVAR @t
             let @t = substitute(@t, '^\n', '', '')
             let @t = substitute(@t, '\n\s*$', '', '')
             if a:comment_mode =~ '#'
@@ -1493,16 +1487,16 @@ function! s:CommentBlock(beg, end, comment_mode, uncomment, checkRx, cdef, inden
                 endif
             endif
         else
-            let cs = a:indentStr . substitute(cs, '%\@<!%s', '%s'. a:indentStr, '')
+            let cs = indentStr . substitute(cs, '%\@<!%s', '%s'. indentStr, '')
             " TLogVAR cs, ms
             if ms != ''
                 let lines = []
                 let lnum = 0
-                let indentlen = s:Strdisplaywidth(a:indentStr)
+                let indentlen = a:cbeg
                 let rx = '^.\{-}\%>'. indentlen .'v\zs'
-                " TLogVAR a:indentStr, indentlen, rx, @t, empty(@t)
+                " TLogVAR indentStr, indentlen, rx, @t, empty(@t)
                 if @t =~ '^\n\?$'
-                    let lines = [a:indentStr . ms]
+                    let lines = [indentStr . ms]
                     let cs .= "\n"
                     " TLogVAR 1, lines
                 else

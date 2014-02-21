@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-02-05.
-" @Revision:    807
+" @Revision:    808
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -125,7 +125,7 @@ vnoremap <Plug>TComment-<c-_>i :TCommentInline<cr>
 noremap <Plug>TComment-<c-_>i v:TCommentInline mode=I#<cr>
 inoremap <Plug>TComment-<c-_>i <c-\><c-o>v:TCommentInline mode=#<cr>
 noremap <Plug>TComment-<c-_>b :TCommentBlock<cr>
-inoremap <Plug>TComment-<c-_>b <c-o>:TCommentBlock mode=#<cr>
+inoremap <Plug>TComment-<c-_>b <c-\><c-o>:TCommentBlock mode=#<cr>
 noremap <Plug>TComment-<c-_>a :TCommentAs 
 inoremap <Plug>TComment-<c-_>a <c-o>:TCommentAs 
 noremap <Plug>TComment-<c-_>n :TCommentAs <c-r>=&ft<cr> 
