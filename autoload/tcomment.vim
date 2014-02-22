@@ -315,18 +315,6 @@ function! tcomment#TypeExists(name, ...)
     return has_key(s:definitions, name) ? name : ''
 endf
 
-" :doc:
-" A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
-" that can be set in vimrc to override tcomment's default comment 
-" styles.
-" :read: let g:tcomment_types = {} "{{{2
-if exists('g:tcomment_types')
-    for [s:name, s:def] in items(g:tcomment_types)
-        call tcomment#DefineType(s:name, s:def)
-    endfor
-    unlet! s:name s:def
-endif
-
 call tcomment#DefineType('aap',              '# %s'             )
 call tcomment#DefineType('ada',              '-- %s'            )
 call tcomment#DefineType('apache',           '# %s'             )
@@ -520,6 +508,18 @@ call tcomment#DefineType('xslt',             g:tcommentInlineXML)
 call tcomment#DefineType('xslt_block',       g:tcommentBlockXML )
 call tcomment#DefineType('xslt_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('yaml',             '# %s'             )
+
+" :doc:
+" A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
+" that can be set in vimrc to override tcomment's default comment 
+" styles.
+" :read: let g:tcomment_types = {} "{{{2
+if exists('g:tcomment_types')
+    for [s:name, s:def] in items(g:tcomment_types)
+        call tcomment#DefineType(s:name, s:def)
+    endfor
+    unlet! s:name s:def
+endif
 
 
 function! s:DefaultValue(option)
