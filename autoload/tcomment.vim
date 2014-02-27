@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1547
+" @Revision:    1551
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -89,6 +89,10 @@ if !exists("g:tcommentGuessFileType_php")
     " thus assume that the buffers default comment style isn't php but 
     " html.
     let g:tcommentGuessFileType_php = 'html'   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_blade")
+    " See |g:tcommentGuessFileType_php|.
+    let g:tcommentGuessFileType_blade = 'html'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_html")
     let g:tcommentGuessFileType_html = 1   "{{{2
@@ -320,8 +324,9 @@ call tcomment#DefineType('ada',              '-- %s'            )
 call tcomment#DefineType('apache',           '# %s'             )
 call tcomment#DefineType('asciidoc',         '// %s'            )
 call tcomment#DefineType('asm',              '; %s'             )
-call tcomment#DefineType('autoit',           '; %s'             )
-call tcomment#DefineType('awk',              '# %s'             )
+call tcomment#DefineType('blade',            '{{-- %s --}}'     )
+call tcomment#DefineType('blade_block',      '{{-- %s --}}'     )
+call tcomment#DefineType('blade_inline',     '{{-- %s --}}'     )
 call tcomment#DefineType('c',                g:tcommentLineC    )
 call tcomment#DefineType('c_block',          g:tcommentBlockC   )
 call tcomment#DefineType('c_inline',         g:tcommentInlineC  )
