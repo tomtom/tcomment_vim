@@ -308,3 +308,33 @@ version: "3.00"
   MD5 checksum: 10b548c1bfc946206ec46fca58ae5a62
 version: "3.01"
 
+  - Support for vimwiki (closes #80)
+  - Better handling of commentstrings like "%%%s"
+  - Support for verilog & verilog_systemverilog (closes #81)
+  - verlog inline comments
+  - Improved support for constructing comments from the &comments option
+  - Typo (fixes #82)
+  - Misc improvements to handling &comment, &commentstring; count for c-style comments only changes the first part of the comment; enable counts for gcb
+  - Ignore count for xmaps
+  - Re-enable custom verilog definitions (after debugging)
+  - Use strdisplaywidth() only with vim >= 7.3 (fixes #83)
+  - Disallow unsupported comment types (e.g. insert comments when only linewise comments are allowed)
+  - Remove custom javaScript comment definitions (use javascript)
+  - Misc changes to operator maps; gc$ maps to R-type comments (fixes #84)
+  - x/v op map: Use R type comment if cend ~~ col('$') (fixes #85)
+  - Maps are not <silent> any more (display error/warning message if any)
+  - If comment_mode == 'i', also check if it should rather be 'G'
+  - Make op maps silent again
+  - Improve configurability of mappings.
+  - Consistently use virtcol(); block comments properly support mixedindent
+  - Removed some superfluous :exec commands from map definitions
+  - Fix regression with text objects.
+  - <c-_>NUMBER maps always set the count argument for the subsequent map (makes it easier to insert /** */ type of comments)
+  - Misc changes (fixes #88)
+  - Let g:tcomment_types override default settings
+  - Support for blade.php (closes #90)
+  - Support for QML files (Qt Meta Language)
+  - FIX #92: GuessFileType(): avoid "E706: Variable type mismatch"
+  MD5 checksum: 10b548c1bfc946206ec46fca58ae5a62
+version: "3.01"
+
