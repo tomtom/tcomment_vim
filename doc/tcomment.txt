@@ -189,6 +189,7 @@ Contents~
         g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
         g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
         g:tcommentGuessFileType_php ......... |g:tcommentGuessFileType_php|
+        g:tcommentGuessFileType_blade ....... |g:tcommentGuessFileType_blade|
         g:tcommentGuessFileType_html ........ |g:tcommentGuessFileType_html|
         g:tcommentGuessFileType_tskeleton ... |g:tcommentGuessFileType_tskeleton|
         g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
@@ -344,7 +345,7 @@ i_<Plug>TComment-<c-_>i ... <c-\><c-o>v:TCommentInline mode=#<cr>
 <Plug>TComment-<c-_>b ... :TCommentBlock<cr>
 
                                                     *i_<Plug>TComment-<c-_>b*
-i_<Plug>TComment-<c-_>b ... <c-o>:TCommentBlock mode=#<cr>
+i_<Plug>TComment-<c-_>b ... <c-\><c-o>:TCommentBlock mode=#<cr>
 
                                                     *<Plug>TComment-<c-_>a*
 <Plug>TComment-<c-_>a ... :TCommentAs
@@ -509,6 +510,10 @@ g:tcommentGuessFileType_php    (default: 'html')
     In php documents, the php part is usually marked as phpRegion. We 
     thus assume that the buffers default comment style isn't php but 
     html.
+
+                                                    *g:tcommentGuessFileType_blade*
+g:tcommentGuessFileType_blade  (default: 'html')
+    See |g:tcommentGuessFileType_php|.
 
                                                     *g:tcommentGuessFileType_html*
 g:tcommentGuessFileType_html   (default: 1)
