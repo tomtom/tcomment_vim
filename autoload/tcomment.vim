@@ -611,7 +611,17 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR cursor_pos
     let s:cursor_pos = []
     if comment_mode =~# 'i'
-        let comment_mode = substitute(comment_mode, '\Ci', line("'<") == line("'>") ? 'I' : 'G', 'g')
+        let blnum = line("'<")
+        if blnum == line("'>")
+            if virtcol('.') <= indent(blnum)
+                let i_mode = 'G'
+            else
+                let i_mode = 'I'
+            endif
+        else
+            let i_mode = 'G'
+        endif
+        let comment_mode = substitute(comment_mode, '\Ci', i_mode, 'g')
         " TLogVAR 1, comment_mode
     endif
     let [lbeg, cbeg, lend, cend] = s:GetStartEnd(a:beg, a:end, comment_mode)
