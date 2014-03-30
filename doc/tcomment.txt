@@ -207,6 +207,7 @@ Contents~
         g:tcommentInlineXML ................. |g:tcommentInlineXML|
         g:tcomment#ignore_comment_def ....... |g:tcomment#ignore_comment_def|
         tcomment#DefineType ................. |tcomment#DefineType()|
+        tcomment#GetCommentDef .............. |tcomment#GetCommentDef()|
         g:tcomment_types .................... |g:tcomment_types|
         tcomment#Comment .................... |tcomment#Comment()|
         tcomment#SetOption .................. |tcomment#SetOption()|
@@ -610,6 +611,13 @@ tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
     See the help on the args argument of |tcomment#Comment| (see item 1, 
     args is a list of key=value pairs) to find out which fields can be 
     used.
+
+                                                    *tcomment#GetCommentDef()*
+tcomment#GetCommentDef(name, ...)
+    Return the comment definition for NAME.
+                                                          *b:tcomment_def_{NAME}*
+    Return b:tcomment_def_{NAME} if the variable exists. Otherwise return 
+    the comment definition as set with |tcomment#DefineType|.
 
                                                     *g:tcomment_types*
 g:tcomment_types               (default: {})
