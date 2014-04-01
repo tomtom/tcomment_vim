@@ -338,3 +338,9 @@ version: "3.01"
   MD5 checksum: 10b548c1bfc946206ec46fca58ae5a62
 version: "3.01"
 
+  - b:tcomment_def_{NAME}: Buffer-local configuration (closes #93)
+  - FIX #94: if line("'<") == line("'>") and col('.') is before the first character, use G mode
+  - FIX 95: GetStartEnd(): Don't set cbeg to 0 on empty lines
+  MD5 checksum: 5bca91c102f1192cccb75708659f825c
+version: "3.02"
+
