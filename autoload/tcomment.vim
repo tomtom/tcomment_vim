@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1565
+" @Revision:    1572
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -836,7 +836,7 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
             let cbeg = virtcol('.')
             let cend = virtcol('$')
             let comment_mode = substitute(comment_mode, '\CR', 'G', 'g')
-            " TLogVAR "R", cbeg, cend, comment_mode
+            " TLogVAR 'R', cbeg, cend, comment_mode
         elseif comment_mode =~# 'I'
             let cbeg = virtcol("'<")
             if cbeg == 0
@@ -847,15 +847,17 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
                 let cend += 1
                 " TLogVAR cend, virtcol('$')
             endif
-            " TLogVAR "I", cbeg, cend, comment_mode
+            " TLogVAR 'I', cbeg, cend, comment_mode
         else
             let cbeg = -1
             let cend = 0
             for lnum in range(a:beg, a:end)
                 let indentwidth = indent(lnum)
-                " TLogVAR lnum, indentwidth, getline(lnum)
+                " TLogVAR cbeg, lnum, indentwidth, getline(lnum)
                 if cbeg == -1 || indentwidth < cbeg
-                    let cbeg = indentwidth
+                    if indentwidth != 0 || getline(lnum) =~ '\S'
+                        let cbeg = indentwidth
+                    endif
                 endif
             endfor
             if cbeg == -1
