@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1572
+" @Revision:    1573
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -852,10 +852,10 @@ function! s:GetStartEnd(beg, end, comment_mode) "{{{3
             let cbeg = -1
             let cend = 0
             for lnum in range(a:beg, a:end)
-                let indentwidth = indent(lnum)
-                " TLogVAR cbeg, lnum, indentwidth, getline(lnum)
-                if cbeg == -1 || indentwidth < cbeg
-                    if indentwidth != 0 || getline(lnum) =~ '\S'
+                if getline(lnum) =~ '\S'
+                    let indentwidth = indent(lnum)
+                    " TLogVAR cbeg, lnum, indentwidth, getline(lnum)
+                    if cbeg == -1 || indentwidth < cbeg
                         let cbeg = indentwidth
                     endif
                 endif
