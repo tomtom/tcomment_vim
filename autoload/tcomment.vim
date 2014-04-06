@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1583
+" @Revision:    1587
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1260,11 +1260,13 @@ function! s:StartColRx(comment_mode, col, ...)
     " TLogVAR a:comment_mode, a:col, mixedindent
     if a:comment_mode =~# '[IR]'
         let col = mixedindent ? a:col - 1 : a:col
+        let c0 = 1
     else
         let col = a:col
+        let c0 = 2
     endif
-    " TLogVAR col, mixedindent
-    if col < 1
+    " TLogVAR col, c0, mixedindent
+    if col < c0
         return '\^'
     elseif mixedindent
         return '\%>'. col .'v'
