@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1573
+" @Revision:    1583
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -740,7 +740,7 @@ function! tcomment#Comment(beg, end, ...)
                     \ . end_rx
                     \ .'\)'
                     \ .'\(' . postfix_rx . '\)'
-        " TLogVAR comment_rx
+        " TLogVAR comment_rx, prefix_rx, end_rx, postfix_rx
         " let @x = comment_rx " DBG
         for lnum in range(lbeg, lend)
             let line0 = getline(lnum)
@@ -753,7 +753,7 @@ function! tcomment#Comment(beg, end, ...)
                 if lline0 < cbeg
                     let line0 = line0 . repeat(' ', cbeg - lline0)
                     let lmatch = [line0, line0, '', '', '']
-                    " TLogVAR "padded", line0, lmatch
+                    " TLogVAR 'padded', line0, lmatch
                 endif
             endif
             if !empty(lmatch)
@@ -1263,7 +1263,8 @@ function! s:StartColRx(comment_mode, col, ...)
     else
         let col = a:col
     endif
-    if col <= 1
+    " TLogVAR col, mixedindent
+    if col < 1
         return '\^'
     elseif mixedindent
         return '\%>'. col .'v'
