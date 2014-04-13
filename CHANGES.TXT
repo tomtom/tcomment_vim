@@ -344,3 +344,9 @@ version: "3.01"
   MD5 checksum: 5bca91c102f1192cccb75708659f825c
 version: "3.02"
 
+version: "3.03"
+  - GetStartEnd: ignore empty lines when determining the indentation level
+  - FIX #96: StartColRx(): Use "^" only for col < 1 (not <= 1)
+  - FIX #97: Set startcol depending on comment_mode
+  MD5 checksum: c6a7ac7e915d5cf7a710aa8f118b50de
+
