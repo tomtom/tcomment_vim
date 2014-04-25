@@ -588,6 +588,7 @@ let s:null_comment_string    = '%s'
 " comment_mode (see also ¦g:tcommentModeExtra¦):
 "   G ... guess the value of comment_mode
 "   B ... block (use extra lines for the comment markers)
+"   L ... lines
 "   i ... maybe inline, guess
 "   I ... inline
 "   R ... right (comment the line right of the cursor)
@@ -1063,7 +1064,7 @@ endf
 
 function! tcomment#OperatorLine(type) "{{{3
     " TLogVAR a:type
-    call tcomment#Operator('line', 'G')
+    call tcomment#Operator('line', 'L')
 endf
 
 
@@ -1075,7 +1076,7 @@ endf
 
 function! tcomment#OperatorLineAnyway(type) "{{{3
     " TLogVAR a:type
-    call tcomment#Operator('line', 'G', '!')
+    call tcomment#Operator('line', 'L', '!')
 endf
 
 
@@ -1907,7 +1908,7 @@ function! s:GuessCustomCommentString(ft, comment_mode, ...)
     let default_cdef = a:0 >= 2 ? a:2 : {}
     let default_supports_comment_mode = get(default_cdef, 'comment_mode', custom_comment_mode)
     " TLogVAR default, default_supports_comment_mode
-    if comment_mode =~# '[IB]' && !empty(custom_comment_mode)
+    if comment_mode =~# '[ILB]' && !empty(custom_comment_mode)
         let def = tcomment#GetCommentDef(custom_comment_mode)
         " TLogVAR 1, def
     elseif !empty(custom_comment)
