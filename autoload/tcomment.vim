@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1598
+" @Revision:    1615
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1280,7 +1280,7 @@ endf
 function! s:EndColRx(comment_mode, lnum, pos)
     " TLogVAR a:comment_mode, a:lnum, a:pos
     let line = getline(a:lnum)
-    let cend = strdisplaywidth(line)
+    let cend = s:Strdisplaywidth(line)
     " TLogVAR cend
     if a:pos == 0 || a:pos >= cend
         return '\$'
@@ -1486,8 +1486,10 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, uncomment, checkRx,
         if a:uncomment
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
             let tt = []
-            let rx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) . '\zs\s\*'. mx
-            " TLogVAR rx
+            " TODO: Correctly handle foreign comments with inconsistent 
+            " whitespace around mx markers
+            let rx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) . '\zs'. mx
+            " TLogVAR mx1, rx
             for line in split(@t, '\n')
                 let line1 = substitute(line, rx, '', 'g')
                 call add(tt, line1)
