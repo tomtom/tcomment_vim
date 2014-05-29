@@ -124,100 +124,101 @@ please make sure, you have the current version of vimball (vimscript
 ========================================================================
 Contents~
 
-        g:tcommentMaps ...................... |g:tcommentMaps|
-        g:tcommentMapLeader1 ................ |g:tcommentMapLeader1|
-        g:tcommentMapLeader2 ................ |g:tcommentMapLeader2|
-        g:tcommentMapLeaderOp1 .............. |g:tcommentMapLeaderOp1|
-        g:tcommentMapLeaderOp2 .............. |g:tcommentMapLeaderOp2|
-        g:tcommentTextObjectInlineComment ... |g:tcommentTextObjectInlineComment|
-        :TComment ........................... |:TComment|
-        :TCommentAs ......................... |:TCommentAs|
-        :TCommentRight ...................... |:TCommentRight|
-        :TCommentBlock ...................... |:TCommentBlock|
-        :TCommentInline ..................... |:TCommentInline|
-        :TCommentMaybeInline ................ |:TCommentMaybeInline|
-        <Plug>TComment-<c-_><c-_> ........... |<Plug>TComment-<c-_><c-_>|
-        v_<Plug>TComment-<c-_><c-_> ......... |v_<Plug>TComment-<c-_><c-_>|
-        i_<Plug>TComment-<c-_><c-_> ......... |i_<Plug>TComment-<c-_><c-_>|
-        <Plug>TComment-<c-_>p ............... |<Plug>TComment-<c-_>p|
-        i_<Plug>TComment-<c-_>p ............. |i_<Plug>TComment-<c-_>p|
-        <Plug>TComment-<c-_><space> ......... |<Plug>TComment-<c-_><space>|
-        i_<Plug>TComment-<c-_><space> ....... |i_<Plug>TComment-<c-_><space>|
-        i_<Plug>TComment-<c-_>r ............. |i_<Plug>TComment-<c-_>r|
-        <Plug>TComment-<c-_>r ............... |<Plug>TComment-<c-_>r|
-        v_<Plug>TComment-<c-_>i ............. |v_<Plug>TComment-<c-_>i|
-        <Plug>TComment-<c-_>i ............... |<Plug>TComment-<c-_>i|
-        i_<Plug>TComment-<c-_>i ............. |i_<Plug>TComment-<c-_>i|
-        <Plug>TComment-<c-_>b ............... |<Plug>TComment-<c-_>b|
-        i_<Plug>TComment-<c-_>b ............. |i_<Plug>TComment-<c-_>b|
-        <Plug>TComment-<c-_>a ............... |<Plug>TComment-<c-_>a|
-        i_<Plug>TComment-<c-_>a ............. |i_<Plug>TComment-<c-_>a|
-        <Plug>TComment-<c-_>n ............... |<Plug>TComment-<c-_>n|
-        i_<Plug>TComment-<c-_>n ............. |i_<Plug>TComment-<c-_>n|
-        <Plug>TComment-<c-_>s ............... |<Plug>TComment-<c-_>s|
-        i_<Plug>TComment-<c-_>s ............. |i_<Plug>TComment-<c-_>s|
-        <Plug>TComment-<c-_>cc .............. |<Plug>TComment-<c-_>cc|
-        <Plug>TComment-<c-_>ca .............. |<Plug>TComment-<c-_>ca|
-        <Plug>TComment-<Leader>__ ........... |<Plug>TComment-<Leader>__|
-        x_<Plug>TComment-<Leader>__ ......... |x_<Plug>TComment-<Leader>__|
-        <Plug>TComment-<Leader>_p ........... |<Plug>TComment-<Leader>_p|
-        <Plug>TComment-<Leader>_<space> ..... |<Plug>TComment-<Leader>_<space>|
-        x_<Plug>TComment-<Leader>_i ......... |x_<Plug>TComment-<Leader>_i|
-        <Plug>TComment-<Leader>_r ........... |<Plug>TComment-<Leader>_r|
-        <Plug>TComment-<Leader>_b ........... |<Plug>TComment-<Leader>_b|
-        <Plug>TComment-<Leader>_a ........... |<Plug>TComment-<Leader>_a|
-        <Plug>TComment-<Leader>_n ........... |<Plug>TComment-<Leader>_n|
-        <Plug>TComment-<Leader>_s ........... |<Plug>TComment-<Leader>_s|
-        n_<Plug>TComment-gC ................. |n_<Plug>TComment-gC|
-        n_<Plug>TComment-gCc ................ |n_<Plug>TComment-gCc|
-        n_<Plug>TComment-gCb ................ |n_<Plug>TComment-gCb|
-        x_<Plug>TComment-gC ................. |x_<Plug>TComment-gC|
-        v_<Plug>TComment-ic ................. |v_<Plug>TComment-ic|
-        <Plug>TComment-ic ................... |<Plug>TComment-ic|
-        n_<Plug>TComment-gcc ................ |n_<Plug>TComment-gcc|
-        n_<Plug>TComment-gcb ................ |n_<Plug>TComment-gcb|
-        x_<Plug>TComment-gc ................. |x_<Plug>TComment-gc|
-        n_<Plug>TComment-gc ................. |n_<Plug>TComment-gc|
-        g:tcomment#blank_lines .............. |g:tcomment#blank_lines|
-        g:tcomment#rstrip_on_uncomment ...... |g:tcomment#rstrip_on_uncomment|
-        g:tcommentModeExtra ................. |g:tcommentModeExtra|
-        g:tcommentOpModeExtra ............... |g:tcommentOpModeExtra|
-        g:tcommentOptions ................... |g:tcommentOptions|
-        g:tcomment#options_comments ......... |g:tcomment#options_comments|
-        g:tcomment#options_commentstring .... |g:tcomment#options_commentstring|
-        g:tcomment#ignore_char_type ......... |g:tcomment#ignore_char_type|
-        g:tcommentGuessFileType ............. |g:tcommentGuessFileType|
-        g:tcommentGuessFileType_dsl ......... |g:tcommentGuessFileType_dsl|
-        g:tcommentGuessFileType_php ......... |g:tcommentGuessFileType_php|
-        g:tcommentGuessFileType_blade ....... |g:tcommentGuessFileType_blade|
-        g:tcommentGuessFileType_html ........ |g:tcommentGuessFileType_html|
-        g:tcommentGuessFileType_tskeleton ... |g:tcommentGuessFileType_tskeleton|
-        g:tcommentGuessFileType_vim ......... |g:tcommentGuessFileType_vim|
-        g:tcommentGuessFileType_django ...... |g:tcommentGuessFileType_django|
-        g:tcommentGuessFileType_eruby ....... |g:tcommentGuessFileType_eruby|
-        g:tcommentGuessFileType_smarty ...... |g:tcommentGuessFileType_smarty|
-        g:tcommentIgnoreTypes_php ........... |g:tcommentIgnoreTypes_php|
-        g:tcomment#syntax_substitute ........ |g:tcomment#syntax_substitute|
-        g:tcommentSyntaxMap ................. |g:tcommentSyntaxMap|
-        g:tcomment#replacements_c ........... |g:tcomment#replacements_c|
-        g:tcommentInlineC ................... |g:tcommentInlineC|
-        g:tcommentBlockC2 ................... |g:tcommentBlockC2|
-        g:tcomment#replacements_xml ......... |g:tcomment#replacements_xml|
-        g:tcommentBlockXML .................. |g:tcommentBlockXML|
-        g:tcommentInlineXML ................. |g:tcommentInlineXML|
-        g:tcomment#ignore_comment_def ....... |g:tcomment#ignore_comment_def|
-        tcomment#DefineType ................. |tcomment#DefineType()|
-        tcomment#GetCommentDef .............. |tcomment#GetCommentDef()|
-        g:tcomment_types .................... |g:tcomment_types|
-        tcomment#Comment .................... |tcomment#Comment()|
-        tcomment#SetOption .................. |tcomment#SetOption()|
-        tcomment#Operator ................... |tcomment#Operator()|
-        tcomment#OperatorLine ............... |tcomment#OperatorLine()|
-        tcomment#OperatorAnyway ............. |tcomment#OperatorAnyway()|
-        tcomment#OperatorLineAnyway ......... |tcomment#OperatorLineAnyway()|
-        tcomment#CommentAs .................. |tcomment#CommentAs()|
-        tcomment#GuessCommentType ........... |tcomment#GuessCommentType()|
-        tcomment#TextObjectInlineComment .... |tcomment#TextObjectInlineComment()|
+        g:tcommentMaps ................................ |g:tcommentMaps|
+        g:tcommentMapLeader1 .......................... |g:tcommentMapLeader1|
+        g:tcommentMapLeader2 .......................... |g:tcommentMapLeader2|
+        g:tcommentMapLeaderOp1 ........................ |g:tcommentMapLeaderOp1|
+        g:tcommentMapLeaderOp2 ........................ |g:tcommentMapLeaderOp2|
+        g:tcommentTextObjectInlineComment ............. |g:tcommentTextObjectInlineComment|
+        :TComment ..................................... |:TComment|
+        :TCommentAs ................................... |:TCommentAs|
+        :TCommentRight ................................ |:TCommentRight|
+        :TCommentBlock ................................ |:TCommentBlock|
+        :TCommentInline ............................... |:TCommentInline|
+        :TCommentMaybeInline .......................... |:TCommentMaybeInline|
+        <Plug>TComment-<c-_><c-_> ..................... |<Plug>TComment-<c-_><c-_>|
+        v_<Plug>TComment-<c-_><c-_> ................... |v_<Plug>TComment-<c-_><c-_>|
+        i_<Plug>TComment-<c-_><c-_> ................... |i_<Plug>TComment-<c-_><c-_>|
+        <Plug>TComment-<c-_>p ......................... |<Plug>TComment-<c-_>p|
+        i_<Plug>TComment-<c-_>p ....................... |i_<Plug>TComment-<c-_>p|
+        <Plug>TComment-<c-_><space> ................... |<Plug>TComment-<c-_><space>|
+        i_<Plug>TComment-<c-_><space> ................. |i_<Plug>TComment-<c-_><space>|
+        i_<Plug>TComment-<c-_>r ....................... |i_<Plug>TComment-<c-_>r|
+        <Plug>TComment-<c-_>r ......................... |<Plug>TComment-<c-_>r|
+        v_<Plug>TComment-<c-_>i ....................... |v_<Plug>TComment-<c-_>i|
+        <Plug>TComment-<c-_>i ......................... |<Plug>TComment-<c-_>i|
+        i_<Plug>TComment-<c-_>i ....................... |i_<Plug>TComment-<c-_>i|
+        <Plug>TComment-<c-_>b ......................... |<Plug>TComment-<c-_>b|
+        i_<Plug>TComment-<c-_>b ....................... |i_<Plug>TComment-<c-_>b|
+        <Plug>TComment-<c-_>a ......................... |<Plug>TComment-<c-_>a|
+        i_<Plug>TComment-<c-_>a ....................... |i_<Plug>TComment-<c-_>a|
+        <Plug>TComment-<c-_>n ......................... |<Plug>TComment-<c-_>n|
+        i_<Plug>TComment-<c-_>n ....................... |i_<Plug>TComment-<c-_>n|
+        <Plug>TComment-<c-_>s ......................... |<Plug>TComment-<c-_>s|
+        i_<Plug>TComment-<c-_>s ....................... |i_<Plug>TComment-<c-_>s|
+        <Plug>TComment-<c-_>cc ........................ |<Plug>TComment-<c-_>cc|
+        <Plug>TComment-<c-_>ca ........................ |<Plug>TComment-<c-_>ca|
+        <Plug>TComment-<Leader>__ ..................... |<Plug>TComment-<Leader>__|
+        x_<Plug>TComment-<Leader>__ ................... |x_<Plug>TComment-<Leader>__|
+        <Plug>TComment-<Leader>_p ..................... |<Plug>TComment-<Leader>_p|
+        <Plug>TComment-<Leader>_<space> ............... |<Plug>TComment-<Leader>_<space>|
+        x_<Plug>TComment-<Leader>_i ................... |x_<Plug>TComment-<Leader>_i|
+        <Plug>TComment-<Leader>_r ..................... |<Plug>TComment-<Leader>_r|
+        <Plug>TComment-<Leader>_b ..................... |<Plug>TComment-<Leader>_b|
+        <Plug>TComment-<Leader>_a ..................... |<Plug>TComment-<Leader>_a|
+        <Plug>TComment-<Leader>_n ..................... |<Plug>TComment-<Leader>_n|
+        <Plug>TComment-<Leader>_s ..................... |<Plug>TComment-<Leader>_s|
+        n_<Plug>TComment-gC ........................... |n_<Plug>TComment-gC|
+        n_<Plug>TComment-gCc .......................... |n_<Plug>TComment-gCc|
+        n_<Plug>TComment-gCb .......................... |n_<Plug>TComment-gCb|
+        x_<Plug>TComment-gC ........................... |x_<Plug>TComment-gC|
+        v_<Plug>TComment-ic ........................... |v_<Plug>TComment-ic|
+        <Plug>TComment-ic ............................. |<Plug>TComment-ic|
+        n_<Plug>TComment-gcc .......................... |n_<Plug>TComment-gcc|
+        n_<Plug>TComment-gcb .......................... |n_<Plug>TComment-gcb|
+        x_<Plug>TComment-gc ........................... |x_<Plug>TComment-gc|
+        n_<Plug>TComment-gc ........................... |n_<Plug>TComment-gc|
+        g:tcomment#blank_lines ........................ |g:tcomment#blank_lines|
+        g:tcomment#rstrip_on_uncomment ................ |g:tcomment#rstrip_on_uncomment|
+        g:tcommentModeExtra ........................... |g:tcommentModeExtra|
+        g:tcommentOpModeExtra ......................... |g:tcommentOpModeExtra|
+        g:tcommentOptions ............................. |g:tcommentOptions|
+        g:tcomment#options_comments ................... |g:tcomment#options_comments|
+        g:tcomment#options_commentstring .............. |g:tcomment#options_commentstring|
+        g:tcomment#ignore_char_type ................... |g:tcomment#ignore_char_type|
+        g:tcommentGuessFileType ....................... |g:tcommentGuessFileType|
+        g:tcommentGuessFileType_dsl ................... |g:tcommentGuessFileType_dsl|
+        g:tcommentGuessFileType_php ................... |g:tcommentGuessFileType_php|
+        g:tcommentGuessFileType_blade ................. |g:tcommentGuessFileType_blade|
+        g:tcommentGuessFileType_html .................. |g:tcommentGuessFileType_html|
+        g:tcommentGuessFileType_tskeleton ............. |g:tcommentGuessFileType_tskeleton|
+        g:tcommentGuessFileType_vim ................... |g:tcommentGuessFileType_vim|
+        g:tcommentGuessFileType_django ................ |g:tcommentGuessFileType_django|
+        g:tcommentGuessFileType_eruby ................. |g:tcommentGuessFileType_eruby|
+        g:tcommentGuessFileType_smarty ................ |g:tcommentGuessFileType_smarty|
+        g:tcommentIgnoreTypes_php ..................... |g:tcommentIgnoreTypes_php|
+        g:tcomment#syntax_substitute .................. |g:tcomment#syntax_substitute|
+        g:tcommentSyntaxMap ........................... |g:tcommentSyntaxMap|
+        g:tcomment#replacements_c ..................... |g:tcomment#replacements_c|
+        g:tcommentInlineC ............................. |g:tcommentInlineC|
+        g:tcommentBlockC2 ............................. |g:tcommentBlockC2|
+        g:tcomment#replacements_xml ................... |g:tcomment#replacements_xml|
+        g:tcommentBlockXML ............................ |g:tcommentBlockXML|
+        g:tcommentInlineXML ........................... |g:tcommentInlineXML|
+        g:tcomment#ignore_comment_def ................. |g:tcomment#ignore_comment_def|
+        g:tcomment#must_escape_expression_backslash ... |g:tcomment#must_escape_expression_backslash|
+        tcomment#DefineType ........................... |tcomment#DefineType()|
+        tcomment#GetCommentDef ........................ |tcomment#GetCommentDef()|
+        g:tcomment_types .............................. |g:tcomment_types|
+        tcomment#Comment .............................. |tcomment#Comment()|
+        tcomment#SetOption ............................ |tcomment#SetOption()|
+        tcomment#Operator ............................. |tcomment#Operator()|
+        tcomment#OperatorLine ......................... |tcomment#OperatorLine()|
+        tcomment#OperatorAnyway ....................... |tcomment#OperatorAnyway()|
+        tcomment#OperatorLineAnyway ................... |tcomment#OperatorLineAnyway()|
+        tcomment#CommentAs ............................ |tcomment#CommentAs()|
+        tcomment#GuessCommentType ..................... |tcomment#GuessCommentType()|
+        tcomment#TextObjectInlineComment .............. |tcomment#TextObjectInlineComment()|
 
 
 ========================================================================
@@ -582,6 +583,20 @@ g:tcomment#ignore_comment_def  (default: [])
 
     This variable should be set before loading autoload/tcomment.vim.
 
+                                                    *g:tcomment#must_escape_expression_backslash*
+g:tcomment#must_escape_expression_backslash (default: 0)
+    Users of vim earlier than 7.3 might have to set this variable to 
+    true. Set this variable to 0, if you see unexpected "\r" char 
+    sequences in comments.
+
+    The reommended value was `!(v:version > 702 || (v:version == 702 && has('patch407')))`.
+    It is now assumed though, that no unpatched versions of vim are in 
+    use.
+
+    References:
+    Patch 7.2.407  when using :s with an expression backslashes are dropped
+    https://github.com/tomtom/tcomment_vim/issues/102
+
                                                     *tcomment#DefineType()*
 tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
     If you don't explicitly define a comment style, |:TComment| will use 
@@ -670,6 +685,7 @@ tcomment#Comment(beg, end, ...)
     comment_mode (see also ¦g:tcommentModeExtra¦):
       G ... guess the value of comment_mode
       B ... block (use extra lines for the comment markers)
+      L ... lines
       i ... maybe inline, guess
       I ... inline
       R ... right (comment the line right of the cursor)

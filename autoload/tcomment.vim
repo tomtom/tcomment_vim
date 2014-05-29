@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1615
+" @Revision:    1621
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -251,6 +251,22 @@ if !exists('g:tcomment#ignore_comment_def')
     " This variable should be set before loading autoload/tcomment.vim.
     let g:tcomment#ignore_comment_def = []   "{{{2
 endif
+
+if !exists('g:tcomment#must_escape_expression_backslash')
+    " Users of vim earlier than 7.3 might have to set this variable to 
+    " true. Set this variable to 0, if you see unexpected "\r" char 
+    " sequences in comments.
+    "
+    " The reommended value was `!(v:version > 702 || (v:version == 702 && has('patch407')))`.
+    " It is now assumed though, that no unpatched versions of vim are in 
+    " use.
+    "
+    " References:
+    " Patch 7.2.407  when using :s with an expression backslashes are dropped
+    " https://github.com/tomtom/tcomment_vim/issues/102
+    let g:tcomment#must_escape_expression_backslash = 0   "{{{2
+endif
+
 
 let s:types_dirty = 1
 
@@ -1400,10 +1416,10 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
             endif
         endif
         " TLogVAR rv
-        if v:version > 702 || (v:version == 702 && has('patch407'))
-            let rv = escape(rv, "\r")
-        else
+        if g:tcomment#must_escape_expression_backslash
             let rv = escape(rv, "\\r")
+        else
+            let rv = escape(rv, "\r")
         endif
         " TLogVAR rv
         " let rv = substitute(rv, '\n', '\\\n', 'g')
