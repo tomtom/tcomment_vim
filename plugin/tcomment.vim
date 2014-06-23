@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-02-05.
-" @Revision:    811
+" @Revision:    819
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -37,9 +37,14 @@ if !exists("g:tcommentMapLeaderOp1")
     let g:tcommentMapLeaderOp1 = 'gc' "{{{2
 endif
 
-if !exists("g:tcommentMapLeaderOp2")
+if !exists("g:tcommentMapLeaderUncommentAnyway")
     " See |tcomment-operator|.
-    let g:tcommentMapLeaderOp2 = 'gC' "{{{2
+    let g:tcommentMapLeaderUncommentAnyway = 'g<' "{{{2
+endif
+
+if !exists("g:tcommentMapLeaderCommentAnyway")
+    " See |tcomment-operator|.
+    let g:tcommentMapLeaderCommentAnyway = 'g>' "{{{2
 endif
 
 if !exists('g:tcommentTextObjectInlineComment')
@@ -146,10 +151,15 @@ noremap <Plug>TComment-<Leader>_a :TCommentAs
 noremap <Plug>TComment-<Leader>_n :TCommentAs <c-r>=&ft<cr> 
 noremap <Plug>TComment-<Leader>_s :TCommentAs <c-r>=&ft<cr>_
 
-nnoremap <silent> <Plug>TComment-gC :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
-nnoremap <silent> <Plug>TComment-gCc :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
-nnoremap <silent> <Plug>TComment-gCb :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
-xnoremap <Plug>TComment-gC :TCommentMaybeInline!<cr>
+nnoremap <silent> <Plug>TComment-Uncomment :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+nnoremap <silent> <Plug>TComment-Uncommentc :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+nnoremap <silent> <Plug>TComment-Uncommentb :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "UB") \| set opfunc=tcomment#OperatorLine<cr>g@
+xnoremap <Plug>TComment-Uncomment :TCommentMaybeInline! mode=U<cr>
+
+nnoremap <silent> <Plug>TComment-Comment :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+nnoremap <silent> <Plug>TComment-Commentc :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+nnoremap <silent> <Plug>TComment-Commentb :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
+xnoremap <Plug>TComment-Comment :TCommentMaybeInline!<cr>
 
 vnoremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
 noremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
@@ -224,11 +234,17 @@ if g:tcommentMaps
         exec 'nmap <silent> '. g:tcommentMapLeaderOp1 .'b <Plug>TComment-gcb'
         exec 'xmap '. g:tcommentMapLeaderOp1 .' <Plug>TComment-gc'
     endif
-   if g:tcommentMapLeaderOp2 != ''
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp2 .' <Plug>TComment-gC'
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp2 .'c <Plug>TComment-gCc'
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp2 .'b <Plug>TComment-gCb'
-        exec 'xmap '. g:tcommentMapLeaderOp2 .' <Plug>TComment-gC'
+   if g:tcommentMapLeaderUncommentAnyway != ''
+        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .' <Plug>TComment-Uncomment'
+        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .'c <Plug>TComment-Uncommentc'
+        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .'b <Plug>TComment-Uncommentb'
+        exec 'xmap '. g:tcommentMapLeaderUncommentAnyway .' <Plug>TComment-Uncomment'
+    endif
+   if g:tcommentMapLeaderCommentAnyway != ''
+        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .' <Plug>TComment-Comment'
+        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .'c <Plug>TComment-Commentc'
+        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .'b <Plug>TComment-Commentb'
+        exec 'xmap '. g:tcommentMapLeaderCommentAnyway .' <Plug>TComment-Comment'
     endif
     if g:tcommentTextObjectInlineComment != ''
         exec 'vmap' g:tcommentTextObjectInlineComment ' <Plug>TComment-ic'

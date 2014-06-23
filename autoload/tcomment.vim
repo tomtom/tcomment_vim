@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-02-05.
-" @Revision:    1621
+" @Revision:    1647
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -612,6 +612,8 @@ let s:null_comment_string    = '%s'
 "   R ... right (comment the line right of the cursor)
 "   v ... visual
 "   o ... operator
+"   C ... force comment
+"   U ... force uncomment (if U and C are present, U wins)
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...)
@@ -653,9 +655,10 @@ function! tcomment#Comment(beg, end, ...)
         endif
         " TLogVAR comment_mode
     endif
-    if exists('s:temp_options') && has_key(s:temp_options, 'mode_extra')
-        let comment_mode = s:AddModeExtra(comment_mode, s:temp_options.mode_extra, lbeg, lend)
-        " TLogVAR comment_mode
+    let mode_extra = s:GetTempOption('mode_extra', '')
+    if !empty(mode_extra)
+        let comment_mode = s:AddModeExtra(comment_mode, mode_extra, lbeg, lend)
+        " TLogVAR "mode_extra", comment_mode
         unlet s:temp_options.mode_extra
     endif
     " get the correct commentstring
@@ -731,8 +734,11 @@ function! tcomment#Comment(beg, end, ...)
     " echom "DBG" string(s:cdef)
     let cbeg = get(s:cdef, 'col', cbeg)
     " TLogVAR cbeg
-    if comment_anyway
+    if mode_extra =~# 'U'
+        let uncomment = 1
+    elseif mode_extra =~# 'C' || comment_anyway
         let uncomment = 0
+        " TLogVAR comment_anyway, uncomment
     endif
     " go
     " TLogVAR comment_mode
@@ -822,6 +828,15 @@ else
         return strlen(substitute(a:string, ".", "x", "g"))
     endf
 endif
+
+
+function! s:GetTempOption(name, default) "{{{3
+    if exists('s:temp_options') && has_key(s:temp_options, a:name)
+        return s:temp_options[a:name]
+    else
+        return a:default
+    endif
+endf
 
 
 function! tcomment#SetOption(name, arg) "{{{3
