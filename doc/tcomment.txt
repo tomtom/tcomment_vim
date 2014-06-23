@@ -40,8 +40,16 @@ and |g:tcommentMapLeaderOp2|):
     gc<Count>c{motion} :: Toggle comment text with count argument 
                     (see |tcomment#Comment()|)
     gcc          :: Toggle comment for the current line
-    gC{motion}   :: Comment region
-    gCc          :: Comment the current line
+
+Explicit commenting/uncommenting:
+
+    g<{motion}   :: Uncomment region
+    g<c          :: Uncomment the current line
+    g<b          :: Uncomment the current region as block
+
+    g>{motion}   :: Comment region
+    g>c          :: Comment the current line
+    g>b          :: Comment the current region as block
 
 In visual mode:
 
@@ -128,7 +136,8 @@ Contents~
         g:tcommentMapLeader1 .......................... |g:tcommentMapLeader1|
         g:tcommentMapLeader2 .......................... |g:tcommentMapLeader2|
         g:tcommentMapLeaderOp1 ........................ |g:tcommentMapLeaderOp1|
-        g:tcommentMapLeaderOp2 ........................ |g:tcommentMapLeaderOp2|
+        g:tcommentMapLeaderUncommentAnyway ............ |g:tcommentMapLeaderUncommentAnyway|
+        g:tcommentMapLeaderCommentAnyway .............. |g:tcommentMapLeaderCommentAnyway|
         g:tcommentTextObjectInlineComment ............. |g:tcommentTextObjectInlineComment|
         :TComment ..................................... |:TComment|
         :TCommentAs ................................... |:TCommentAs|
@@ -168,10 +177,14 @@ Contents~
         <Plug>TComment-<Leader>_a ..................... |<Plug>TComment-<Leader>_a|
         <Plug>TComment-<Leader>_n ..................... |<Plug>TComment-<Leader>_n|
         <Plug>TComment-<Leader>_s ..................... |<Plug>TComment-<Leader>_s|
-        n_<Plug>TComment-gC ........................... |n_<Plug>TComment-gC|
-        n_<Plug>TComment-gCc .......................... |n_<Plug>TComment-gCc|
-        n_<Plug>TComment-gCb .......................... |n_<Plug>TComment-gCb|
-        x_<Plug>TComment-gC ........................... |x_<Plug>TComment-gC|
+        n_<Plug>TComment-Uncomment .................... |n_<Plug>TComment-Uncomment|
+        n_<Plug>TComment-Uncommentc ................... |n_<Plug>TComment-Uncommentc|
+        n_<Plug>TComment-Uncommentb ................... |n_<Plug>TComment-Uncommentb|
+        x_<Plug>TComment-Uncomment .................... |x_<Plug>TComment-Uncomment|
+        n_<Plug>TComment-Comment ...................... |n_<Plug>TComment-Comment|
+        n_<Plug>TComment-Commentc ..................... |n_<Plug>TComment-Commentc|
+        n_<Plug>TComment-Commentb ..................... |n_<Plug>TComment-Commentb|
+        x_<Plug>TComment-Comment ...................... |x_<Plug>TComment-Comment|
         v_<Plug>TComment-ic ........................... |v_<Plug>TComment-ic|
         <Plug>TComment-ic ............................. |<Plug>TComment-ic|
         n_<Plug>TComment-gcc .......................... |n_<Plug>TComment-gcc|
@@ -242,8 +255,12 @@ g:tcommentMapLeader2           (default: '<Leader>_')
 g:tcommentMapLeaderOp1         (default: 'gc')
     See |tcomment-operator|.
 
-                                                    *g:tcommentMapLeaderOp2*
-g:tcommentMapLeaderOp2         (default: 'gC')
+                                                    *g:tcommentMapLeaderUncommentAnyway*
+g:tcommentMapLeaderUncommentAnyway (default: 'g<')
+    See |tcomment-operator|.
+
+                                                    *g:tcommentMapLeaderCommentAnyway*
+g:tcommentMapLeaderCommentAnyway (default: 'g>')
     See |tcomment-operator|.
 
                                                     *g:tcommentTextObjectInlineComment*
@@ -403,17 +420,29 @@ x_<Plug>TComment-<Leader>_i ... :TCommentInline<cr>
                                                     *<Plug>TComment-<Leader>_s*
 <Plug>TComment-<Leader>_s ... :TCommentAs <c-r>=&ft<cr>_
 
-                                                    *n_<Plug>TComment-gC*
-n_<Plug>TComment-gC ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+                                                    *n_<Plug>TComment-Uncomment*
+n_<Plug>TComment-Uncomment ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorAnyway<cr>g@
 
-                                                    *n_<Plug>TComment-gCc*
-n_<Plug>TComment-gCc ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+                                                    *n_<Plug>TComment-Uncommentc*
+n_<Plug>TComment-Uncommentc ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
 
-                                                    *n_<Plug>TComment-gCb*
-n_<Plug>TComment-gCb ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
+                                                    *n_<Plug>TComment-Uncommentb*
+n_<Plug>TComment-Uncommentb ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "UB") \| set opfunc=tcomment#OperatorLine<cr>g@
 
-                                                    *x_<Plug>TComment-gC*
-x_<Plug>TComment-gC ... :TCommentMaybeInline!<cr>
+                                                    *x_<Plug>TComment-Uncomment*
+x_<Plug>TComment-Uncomment ... :TCommentMaybeInline! mode=U<cr>
+
+                                                    *n_<Plug>TComment-Comment*
+n_<Plug>TComment-Comment ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+
+                                                    *n_<Plug>TComment-Commentc*
+n_<Plug>TComment-Commentc ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+
+                                                    *n_<Plug>TComment-Commentb*
+n_<Plug>TComment-Commentb ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
+
+                                                    *x_<Plug>TComment-Comment*
+x_<Plug>TComment-Comment ... :TCommentMaybeInline!<cr>
 
                                                     *v_<Plug>TComment-ic*
 v_<Plug>TComment-ic ... :<c-U>call tcomment#TextObjectInlineComment()<cr>
@@ -691,6 +720,8 @@ tcomment#Comment(beg, end, ...)
       R ... right (comment the line right of the cursor)
       v ... visual
       o ... operator
+      C ... force comment
+      U ... force uncomment (if U and C are present, U wins)
     By default, each line in range will be commented by adding the comment 
     prefix and postfix.
 
