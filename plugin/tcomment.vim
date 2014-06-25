@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-06-25.
-" @Revision:    836
+" @Revision:    837
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -154,12 +154,12 @@ noremap <Plug>TComment-<Leader>_s :TCommentAs <c-r>=&ft<cr>_
 nnoremap <silent> <Plug>TComment-Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
 nnoremap <silent> <Plug>TComment-Uncommentc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
 nnoremap <silent> <Plug>TComment-Uncommentb :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "UB") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
-xnoremap <Plug>TComment-Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
+xnoremap <silent> <Plug>TComment-Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
 nnoremap <silent> <Plug>TComment-Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
 nnoremap <silent> <Plug>TComment-Commentc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
 nnoremap <silent> <Plug>TComment-Commentb :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "B") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
-xnoremap <Plug>TComment-Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
+xnoremap <silent> <Plug>TComment-Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
 
 vnoremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
 noremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
