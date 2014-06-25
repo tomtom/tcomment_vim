@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2014-02-05.
-" @Revision:    1647
+" @Last Change: 2014-06-25.
+" @Revision:    1651
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -656,6 +656,7 @@ function! tcomment#Comment(beg, end, ...)
         " TLogVAR comment_mode
     endif
     let mode_extra = s:GetTempOption('mode_extra', '')
+    " TLogVAR mode_extra
     if !empty(mode_extra)
         let comment_mode = s:AddModeExtra(comment_mode, mode_extra, lbeg, lend)
         " TLogVAR "mode_extra", comment_mode
@@ -738,8 +739,8 @@ function! tcomment#Comment(beg, end, ...)
         let uncomment = 1
     elseif mode_extra =~# 'C' || comment_anyway
         let uncomment = 0
-        " TLogVAR comment_anyway, uncomment
     endif
+    " TLogVAR comment_anyway, mode_extra, uncomment
     " go
     " TLogVAR comment_mode
     if comment_mode =~# 'B'

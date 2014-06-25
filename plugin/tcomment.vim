@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2014-02-05.
-" @Revision:    819
+" @Last Change: 2014-06-25.
+" @Revision:    836
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -61,7 +61,7 @@ endif
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComment
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComment
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
 
 " :display: :[range]TCommentAs[!] commenttype ?ARGS...
@@ -71,7 +71,7 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
+command! -bar -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
             \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
 
 " :display: :[range]TCommentRight[!] ?ARGS...
@@ -83,7 +83,7 @@ command! -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentRight
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentRight
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
 " :display: :[range]TCommentBlock[!] ?ARGS...
@@ -94,7 +94,7 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentBlock
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentBlock
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
 
 " :display: :[range]TCommentInline[!] ?ARGS...
@@ -104,7 +104,7 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentInline
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentInline
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
 
 " :display: :[range]TCommentMaybeInline[!] ?ARGS...
@@ -113,7 +113,7 @@ command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComme
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentMaybeInline
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentMaybeInline
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'i', "<bang>", <f-args>)
 
 
@@ -151,15 +151,15 @@ noremap <Plug>TComment-<Leader>_a :TCommentAs
 noremap <Plug>TComment-<Leader>_n :TCommentAs <c-r>=&ft<cr> 
 noremap <Plug>TComment-<Leader>_s :TCommentAs <c-r>=&ft<cr>_
 
-nnoremap <silent> <Plug>TComment-Uncomment :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorAnyway<cr>g@
-nnoremap <silent> <Plug>TComment-Uncommentc :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
-nnoremap <silent> <Plug>TComment-Uncommentb :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "UB") \| set opfunc=tcomment#OperatorLine<cr>g@
-xnoremap <Plug>TComment-Uncomment :TCommentMaybeInline! mode=U<cr>
+nnoremap <silent> <Plug>TComment-Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+nnoremap <silent> <Plug>TComment-Uncommentc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+nnoremap <silent> <Plug>TComment-Uncommentb :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "UB") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
+xnoremap <Plug>TComment-Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
-nnoremap <silent> <Plug>TComment-Comment :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
-nnoremap <silent> <Plug>TComment-Commentc :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
-nnoremap <silent> <Plug>TComment-Commentb :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
-xnoremap <Plug>TComment-Comment :TCommentMaybeInline!<cr>
+nnoremap <silent> <Plug>TComment-Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+nnoremap <silent> <Plug>TComment-Commentc :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+nnoremap <silent> <Plug>TComment-Commentb :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "B") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
+xnoremap <Plug>TComment-Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
 
 vnoremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
 noremap <Plug>TComment-ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
