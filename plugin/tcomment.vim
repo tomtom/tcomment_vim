@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2014-06-25.
-" @Revision:    837
+" @Last Change: 2014-06-30.
+" @Revision:    839
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
