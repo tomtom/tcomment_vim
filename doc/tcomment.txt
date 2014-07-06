@@ -421,28 +421,28 @@ x_<Plug>TComment-<Leader>_i ... :TCommentInline<cr>
 <Plug>TComment-<Leader>_s ... :TCommentAs <c-r>=&ft<cr>_
 
                                                     *n_<Plug>TComment-Uncomment*
-n_<Plug>TComment-Uncomment ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+n_<Plug>TComment-Uncomment ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
 
                                                     *n_<Plug>TComment-Uncommentc*
-n_<Plug>TComment-Uncommentc ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "U") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+n_<Plug>TComment-Uncommentc ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
 
                                                     *n_<Plug>TComment-Uncommentb*
-n_<Plug>TComment-Uncommentb ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "UB") \| set opfunc=tcomment#OperatorLine<cr>g@
+n_<Plug>TComment-Uncommentb ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "UB") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
 
                                                     *x_<Plug>TComment-Uncomment*
-x_<Plug>TComment-Uncomment ... :TCommentMaybeInline! mode=U<cr>
+x_<Plug>TComment-Uncomment ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
                                                     *n_<Plug>TComment-Comment*
-n_<Plug>TComment-Comment ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
+n_<Plug>TComment-Comment ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorAnyway<cr>g@
 
                                                     *n_<Plug>TComment-Commentc*
-n_<Plug>TComment-Commentc ... :let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
+n_<Plug>TComment-Commentc ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLineAnyway<cr>g@$
 
                                                     *n_<Plug>TComment-Commentb*
-n_<Plug>TComment-Commentb ... :let w:tcommentPos = getpos(".") \| call tcomment#SetOption("mode_extra", "B") \| set opfunc=tcomment#OperatorLine<cr>g@
+n_<Plug>TComment-Commentb ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "B") \| let w:tcommentPos = getpos(".") \| set opfunc=tcomment#OperatorLine<cr>g@
 
                                                     *x_<Plug>TComment-Comment*
-x_<Plug>TComment-Comment ... :TCommentMaybeInline!<cr>
+x_<Plug>TComment-Comment ... :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
 
                                                     *v_<Plug>TComment-ic*
 v_<Plug>TComment-ic ... :<c-U>call tcomment#TextObjectInlineComment()<cr>
@@ -504,11 +504,13 @@ g:tcommentOptions              (default: {})
 
                                                     *g:tcomment#options_comments*
 g:tcomment#options_comments    (default: {'whitespace': 'both'})
-    Options when using a the 'comments' option.
+    Additional args for |tcomment#Comment()| when using the 'comments' 
+    option.
 
                                                     *g:tcomment#options_commentstring*
 g:tcomment#options_commentstring (default: {'whitespace': 'both'})
-    Options when using a the 'commentstring' option.
+    Additional args for |tcomment#Comment()| when using the 
+    'commentstring' option.
 
                                                     *g:tcomment#ignore_char_type*
 g:tcomment#ignore_char_type    (default: 1)
@@ -771,4 +773,4 @@ tcomment#TextObjectInlineComment()
 
 
 
-vim:tw=78:fo=tcq2:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
+vim:tw=78:fo=w2croql:isk=!-~,^*,^|,^":ts=8:ft=help:norl:
