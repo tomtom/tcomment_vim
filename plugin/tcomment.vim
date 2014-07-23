@@ -3,13 +3,13 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-06-30.
-" @Revision:    839
+" @Revision:    840
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
-let loaded_tcomment = 303
+let loaded_tcomment = 304
 
 let s:save_cpo = &cpo
 set cpo&vim
