@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-06-25.
-" @Revision:    1654
+" @Revision:    1655
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -366,6 +366,7 @@ call tcomment#DefineType('clojurescript_inline', '; %s'         )
 call tcomment#DefineType('cmake',            '# %s'             )
 call tcomment#DefineType('coffee',           '# %s'             )
 call tcomment#DefineType('conf',             '# %s'             )
+call tcomment#DefineType('context',          '%% %s'            )
 call tcomment#DefineType('conkyrc',          '# %s'             )
 call tcomment#DefineType('cpp',              '// %s'            )
 call tcomment#DefineType('cpp_block',        g:tcommentBlockC   )
