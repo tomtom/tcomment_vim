@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-06-25.
-" @Revision:    1655
+" @Revision:    1656
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -50,13 +50,13 @@ endif
 if !exists('g:tcomment#options_comments')
     " Additional args for |tcomment#Comment()| when using the 'comments' 
     " option.
-    let g:tcomment#options_comments = {'whitespace': 'both'}   "{{{2
+    let g:tcomment#options_comments = {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')}   "{{{2
 endif
 
 if !exists('g:tcomment#options_commentstring')
     " Additional args for |tcomment#Comment()| when using the 
     " 'commentstring' option.
-    let g:tcomment#options_commentstring = {'whitespace': 'both'}   "{{{2
+    let g:tcomment#options_commentstring = {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')}   "{{{2
 endif
 
 if !exists('g:tcomment#ignore_char_type')
