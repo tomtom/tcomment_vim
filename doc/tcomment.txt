@@ -503,12 +503,12 @@ g:tcommentOptions              (default: {})
 <
 
                                                     *g:tcomment#options_comments*
-g:tcomment#options_comments    (default: {'whitespace': 'both'})
+g:tcomment#options_comments    (default: {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')})
     Additional args for |tcomment#Comment()| when using the 'comments' 
     option.
 
                                                     *g:tcomment#options_commentstring*
-g:tcomment#options_commentstring (default: {'whitespace': 'both'})
+g:tcomment#options_commentstring (default: {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')})
     Additional args for |tcomment#Comment()| when using the 
     'commentstring' option.
 
