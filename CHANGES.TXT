@@ -350,3 +350,21 @@ version: "3.03"
   - FIX #97: Set startcol depending on comment_mode
   MD5 checksum: c6a7ac7e915d5cf7a710aa8f118b50de
 
+  - tcomment#OperatorLine*: Use L as comment_type
+  - EndColRx: Use $ if pos >= strdisplaywidth of line (fix gc$ for certain filetypes)
+  - FIX #101: CommentBlock: Don't remove leading whitespace This caused problems when uncommenting block comments with blank/empty middle comment markers
+  - FIX #102: g:tcomment#must_escape_expression_backslash: Allow customization of pre-7.2-407 special case
+  - add noweb filetype
+  - Add support for asterisk
+  - CLOSE #105: Use g< and g> for explicit uncommenting and commenting - Rename g:tcommentMapLeaderOp2 to g:tcommentMapLeaderCommentAnyway - g:tcommentMapLeaderUncommentAnyway - C, U comment modes - s:GetTempOption()
+  - FIX #105: Allow count for visual g<, g>; fix g<; add -bar to command definitions
+  - Make <Plug>TComment-Comment, <Plug>TComment-Uncomment <silent>
+  - Add support for elixir file type
+  - CLOSE #107: Fix help on g:tcomment#options_comments and g:tcomment#options_commentstring
+  - jade support (http://jade-lang.com/)
+  - Support for context
+  - added comment definition for purescript
+  - FIX #112: g:tcomment#options_comments, g:tcomment#options_commentstring: check g:tcommentOptions for whitespace preference
+  MD5 checksum: 839a0aa6e7f5d6ef85a7d787609a323b
+version: "3.04"
+
