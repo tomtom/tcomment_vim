@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-06-25.
-" @Revision:    1656
+" @Revision:    1672
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -629,7 +629,7 @@ function! tcomment#Comment(beg, end, ...)
     let comment_mode0  = s:AddModeExtra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
     let comment_mode   = comment_mode0
     let comment_anyway = a:0 >= 2 ? (a:2 == '!') : 0
-    " TLogVAR a:beg, a:end, comment_mode, comment_anyway
+    " TLogVAR a:beg, a:end, comment_mode, comment_anyway, a:000
     " save the cursor position
     if exists('w:tcomment_pos')
         let s:current_pos = copy(w:tcomment_pos)
@@ -849,6 +849,11 @@ function! s:GetTempOption(name, default) "{{{3
 endf
 
 
+function! tcomment#ResetOption() "{{{3
+    unlet! s:temp_options
+endf
+
+
 function! tcomment#SetOption(name, arg) "{{{3
     " TLogVAR a:name, a:arg
     if !exists('s:temp_options')
@@ -1016,7 +1021,8 @@ function! s:ExtendCDef(beg, end, comment_mode, cdef, args)
         if key == 'as'
             call extend(a:cdef, s:GetCommentDefinitionForType(a:beg, a:end, a:comment_mode, value))
         elseif key == 'mode'
-            let a:cdef[key] = a:comment_mode . value
+            " let a:cdef[key] = a:comment_mode . value
+            let a:cdef[key] = s:AddModeExtra(a:comment_mode, value, a:beg, a:end)
         elseif key == 'count'
             let a:cdef[key] = str2nr(value)
         else
@@ -1343,56 +1349,60 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
     " TLogVAR a:beg, a:end, a:checkRx, a:comment_mode, a:cbeg, a:cend
     let beg = a:beg
     let end = a:end
-    if get(s:cdef, 'mixedindent', 1)
-        let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
-        let mdrx .= s:StartColRx(a:comment_mode, a:cbeg + 1, 0) .'\s\*'
+    if a:comment_mode =~# 'U'
+        let uncomment = 1
     else
-        let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
-    endif
-    let mdrx .= a:checkRx .'\s\*'. s:EndColRx(a:comment_mode, a:end, 0)
-    " let mdrx = '\V'. s:StartPosRx(a:comment_mode, beg, a:cbeg) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:comment_mode, end, 0)
-    " TLogVAR mdrx
-    let line = getline(beg)
-    if a:cbeg != 0 && a:cend != 0
-        let line = strpart(line, 0, a:cend - 1)
-    endif
-    let uncomment = (line =~ mdrx)
-    " TLogVAR 1, uncomment, line
-    let n  = beg + 1
-    if a:comment_mode =~# 'G'
-        if uncomment
-            while n <= end
-                if getline(n) =~ '\S'
-                    if !(getline(n) =~ mdrx)
-                        let uncomment = 0
-                        " TLogVAR 2, uncomment
-                        break
+        if get(s:cdef, 'mixedindent', 1)
+            let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
+            let mdrx .= s:StartColRx(a:comment_mode, a:cbeg + 1, 0) .'\s\*'
+        else
+            let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
+        endif
+        let mdrx .= a:checkRx .'\s\*'. s:EndColRx(a:comment_mode, a:end, 0)
+        " let mdrx = '\V'. s:StartPosRx(a:comment_mode, beg, a:cbeg) .'\s\*'. a:checkRx .'\s\*'. s:EndPosRx(a:comment_mode, end, 0)
+        " TLogVAR mdrx
+        let line = getline(beg)
+        if a:cbeg != 0 && a:cend != 0
+            let line = strpart(line, 0, a:cend - 1)
+        endif
+        let uncomment = (line =~ mdrx)
+        " TLogVAR 1, uncomment, line
+        let n  = beg + 1
+        if a:comment_mode =~# 'G'
+            if uncomment
+                while n <= end
+                    if getline(n) =~ '\S'
+                        if !(getline(n) =~ mdrx)
+                            let uncomment = 0
+                            " TLogVAR 2, uncomment
+                            break
+                        endif
+                    endif
+                    let n = n + 1
+                endwh
+            endif
+        elseif a:comment_mode =~# 'B'
+            let t = @t
+            try
+                silent exec 'norm! '. beg.'G1|v'.end.'G$"ty'
+                if &selection == 'inclusive' && @t =~ '\n$' && len(@t) > 1
+                    let @t = @t[0 : -2]
+                endif
+                " TLogVAR @t, mdrx
+                let uncomment = (@t =~ mdrx)
+                " TLogVAR 3, uncomment
+                if !uncomment && a:comment_mode =~ 'o'
+                    let mdrx1 = substitute(mdrx, '\\$$', '\\n\\$', '')
+                    " TLogVAR mdrx1
+                    if @t =~ mdrx1
+                        let uncomment = 1
+                        " TLogVAR 4, uncomment
                     endif
                 endif
-                let n = n + 1
-            endwh
+            finally
+                let @t = t
+            endtry
         endif
-    elseif a:comment_mode =~# 'B'
-        let t = @t
-        try
-            silent exec 'norm! '. beg.'G1|v'.end.'G$"ty'
-            if &selection == 'inclusive' && @t =~ '\n$' && len(@t) > 1
-                let @t = @t[0 : -2]
-            endif
-            " TLogVAR @t, mdrx
-            let uncomment = (@t =~ mdrx)
-            " TLogVAR 3, uncomment
-            if !uncomment && a:comment_mode =~ 'o'
-                let mdrx1 = substitute(mdrx, '\\$$', '\\n\\$', '')
-                " TLogVAR mdrx1
-                if @t =~ mdrx1
-                    let uncomment = 1
-                    " TLogVAR 4, uncomment
-                endif
-            endif
-        finally
-            let @t = t
-        endtry
     endif
     " TLogVAR 5, uncomment
     return [beg, end, uncomment]
@@ -1817,6 +1827,11 @@ function! s:AddModeExtra(comment_mode, extra, beg, end) "{{{3
     endif
     if extra =~# '[IR]'
         let comment_mode = substitute(comment_mode, '\c[gb]', '', 'g')
+    endif
+    " If extra contains an uppercase letter, it overrides any 'G' in 
+    " comment_mode
+    if extra =~# '\u' && comment_mode =~# 'G'
+        let comment_mode = substitute(comment_mode, '\c[G]', '', 'g')
     endif
     let rv = comment_mode . extra
     " TLogVAR a:comment_mode, a:extra, comment_mode, extra, rv
