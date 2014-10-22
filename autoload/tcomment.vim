@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-10-13.
-" @Revision:    1680
+" @Revision:    1681
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -438,6 +438,9 @@ call tcomment#DefineType('javascript_inline', g:tcommentInlineC )
 call tcomment#DefineType('jproperties',      '# %s'             )
 call tcomment#DefineType('lilypond',         '%% %s'            )
 call tcomment#DefineType('lisp',             '; %s'             )
+call tcomment#DefineType('liquid',           g:tcommentInlineXML)
+call tcomment#DefineType('liquid_block',     g:tcommentBlockXML )
+call tcomment#DefineType('liquid_inline',    g:tcommentInlineXML)
 call tcomment#DefineType('lua',              '-- %s'            )
 call tcomment#DefineType('lua_block',        "--[[%s--]]\n"     )
 call tcomment#DefineType('lua_inline',       '--[[%s --]]'      )
