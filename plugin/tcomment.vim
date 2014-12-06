@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
 " @Last Change: 2014-06-30.
-" @Revision:    919
+" @Revision:    963
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -163,23 +163,28 @@ noremap <Plug>TComment_<Leader>_s :TCommentAs <c-r>=&ft<cr>_
 " endf
 
 function! s:MapOp(name, count, extra, op, invoke) "{{{3
+    let opfunc = 'TCommentOpFunc_'. substitute(a:name, '[^a-zA-Z0-9_]', '_', 'G')
+    let fn = [
+                \ 'function! '. opfunc .'(...)',
+                \ 'call tcomment#MaybeReuseOptions('. string(opfunc) .')',
+                \ a:extra,
+                \ 'return call('. string(a:op) .', a:000)',
+                \ 'endf'
+                \ ]
+    let t = @t
+    try
+        let @t = join(fn, "\n")
+        @t
+    finally
+        let @t = t
+    endtry
     let extra = empty(a:extra) ? '' : ' \| '. a:extra
     exec printf('nnoremap <silent> <Plug>TComment_%s '.
-                \ ':<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".")%s \| '.
+                \ ':<c-u>call tcomment#ResetOption() \| if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \|'.
                 \ 'set opfunc=%s<cr>%s',
-                \ a:name, extra, a:op, a:invoke)
-    " let n = empty(a:count) ? 'v:count' : a:count
-    " " let invoke = empty(a:count) ? '<cr>'. a:invoke : ' \| exec "norm ". (v:count > 1 ? v:count : "") ."g@"<cr>'
-    " let invoke = '<cr>'. a:invoke
-    " exec printf('nnoremap <Plug>TComment_%s '.
-    "             \ ':<c-u>let g:tcomment_ex = '':if %s > 0 \| call tcomment#SetOption("count", %s) \| endif \| let w:tcommentPos = getpos(".")%s'' \| '.
-    "             \ 'let g:tcomment_op = ''%s'' \| '.
-    "             \ 'set opfunc=TCommentOp%s',
-    "             \ a:name,
-    "             \ n, n, extra,
-    "             \ a:op,
-    "             \ invoke)
+                \ a:name, opfunc, a:invoke)
 endf
+
 
 call s:MapOp('Uncomment',  '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorAnyway', 'g@')
 call s:MapOp('Uncommentc', '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorLineAnyway', 'g@$')

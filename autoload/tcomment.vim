@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-10-13.
-" @Revision:    1681
+" @Revision:    1704
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -844,6 +844,20 @@ else
 endif
 
 
+function! tcomment#MaybeReuseOptions(name) "{{{3
+    if exists('s:options_cache') && get(s:options_cache, 'name', '') == a:name
+        if exists('s:temp_options')
+            let s:temp_options = extend(deepcopy(s:options_cache.options), s:temp_options)
+            let s:options_cache = {'name': a:name, 'options': s:temp_options}
+        else
+            let s:temp_options = deepcopy(s:options_cache.options)
+        endif
+    elseif exists('s:temp_options')
+        let s:options_cache = {'name': a:name, 'options': s:temp_options}
+    endif
+endf
+
+
 function! s:GetTempOption(name, default) "{{{3
     if exists('s:temp_options') && has_key(s:temp_options, a:name)
         return s:temp_options[a:name]
@@ -854,7 +868,7 @@ endf
 
 
 function! tcomment#ResetOption() "{{{3
-    unlet! s:temp_options
+    unlet! s:temp_options s:options_cache
 endf
 
 
