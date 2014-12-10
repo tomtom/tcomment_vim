@@ -345,6 +345,7 @@ endf
 
 call tcomment#DefineType('aap',              '# %s'             )
 call tcomment#DefineType('ada',              '-- %s'            )
+call tcomment#DefineType('autohotkey',       '; %s'             )
 call tcomment#DefineType('apache',           '# %s'             )
 call tcomment#DefineType('applescript',      '(* %s *)'         )
 call tcomment#DefineType('applescript_block',"(*%s*)\n"         )
