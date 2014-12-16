@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2014-10-13.
-" @Revision:    1704
+" @Last Change: 2014-12-16.
+" @Revision:    1705
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -113,6 +113,9 @@ if !exists("g:tcommentGuessFileType_eruby")
 endif
 if !exists("g:tcommentGuessFileType_smarty")
     let g:tcommentGuessFileType_smarty = 1   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_rnoweb")
+    let g:tcommentGuessFileType_rnoweb = 'r'   "{{{2
 endif
 
 if !exists("g:tcommentIgnoreTypes_php")
