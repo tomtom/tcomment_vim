@@ -200,6 +200,7 @@ Contents~
         g:tcommentGuessFileType_django ................ |g:tcommentGuessFileType_django|
         g:tcommentGuessFileType_eruby ................. |g:tcommentGuessFileType_eruby|
         g:tcommentGuessFileType_smarty ................ |g:tcommentGuessFileType_smarty|
+        g:tcommentGuessFileType_rnoweb ................ |g:tcommentGuessFileType_rnoweb|
         g:tcommentIgnoreTypes_php ..................... |g:tcommentIgnoreTypes_php|
         g:tcomment#syntax_substitute .................. |g:tcomment#syntax_substitute|
         g:tcommentSyntaxMap ........................... |g:tcommentSyntaxMap|
@@ -215,6 +216,7 @@ Contents~
         tcomment#GetCommentDef ........................ |tcomment#GetCommentDef()|
         g:tcomment_types .............................. |g:tcomment_types|
         tcomment#Comment .............................. |tcomment#Comment()|
+        tcomment#MaybeReuseOptions .................... |tcomment#MaybeReuseOptions()|
         tcomment#ResetOption .......................... |tcomment#ResetOption()|
         tcomment#SetOption ............................ |tcomment#SetOption()|
         tcomment#Operator ............................. |tcomment#Operator()|
@@ -531,6 +533,9 @@ g:tcommentGuessFileType_eruby  (default: 1)
                                                     *g:tcommentGuessFileType_smarty*
 g:tcommentGuessFileType_smarty (default: 1)
 
+                                                    *g:tcommentGuessFileType_rnoweb*
+g:tcommentGuessFileType_rnoweb (default: 'r')
+
                                                     *g:tcommentIgnoreTypes_php*
 g:tcommentIgnoreTypes_php      (default: 'sql')
     In php files, some syntax regions are wrongly highlighted as sql 
@@ -688,9 +693,13 @@ tcomment#Comment(beg, end, ...)
       v ... visual
       o ... operator
       C ... force comment
+      K ... comment only uncommented lines
       U ... force uncomment (if U and C are present, U wins)
     By default, each line in range will be commented by adding the comment 
     prefix and postfix.
+
+                                                    *tcomment#MaybeReuseOptions()*
+tcomment#MaybeReuseOptions(name)
 
                                                     *tcomment#ResetOption()*
 tcomment#ResetOption()

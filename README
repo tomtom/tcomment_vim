@@ -37,8 +37,16 @@ and |g:tcommentMapLeaderOp2|):
     gc<Count>c{motion} :: Toggle comment text with count argument 
                     (see |tcomment#Comment()|)
     gcc          :: Toggle comment for the current line
-    gC{motion}   :: Comment region
-    gCc          :: Comment the current line
+
+Explicit commenting/uncommenting:
+
+    g<{motion}   :: Uncomment region
+    g<c          :: Uncomment the current line
+    g<b          :: Uncomment the current region as block
+
+    g>{motion}   :: Comment region
+    g>c          :: Comment the current line
+    g>b          :: Comment the current region as block
 
 In visual mode:
 
