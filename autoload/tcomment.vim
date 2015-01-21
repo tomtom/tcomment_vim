@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-12-16.
-" @Revision:    1705
+" @Revision:    1729
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -635,6 +635,7 @@ let s:null_comment_string    = '%s'
 "   v ... visual
 "   o ... operator
 "   C ... force comment
+"   K ... comment only uncommented lines
 "   U ... force uncomment (if U and C are present, U wins)
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
@@ -706,7 +707,8 @@ function! tcomment#Comment(beg, end, ...)
         endif
         " TLogVAR ax, a:0, a:000
         if a:0 >= ax
-            let cdef = extend(cdef, s:ParseArgs(lbeg, lend, comment_mode, a:000[ax - 1 : -1]))
+            " let cdef = extend(cdef, s:ParseArgs(lbeg, lend, comment_mode, a:000[ax - 1 : -1]))
+            let cdef = s:ExtendCDef(lbeg, lend, comment_mode, cdef, s:ParseArgs(lbeg, lend, comment_mode, a:000[ax - 1 : -1]))
             " TLogVAR 5, cdef
         endif
         if !empty(get(cdef, 'begin', '')) || !empty(get(cdef, 'end', ''))
@@ -749,21 +751,31 @@ function! tcomment#Comment(beg, end, ...)
     let s:cdef = cdef
     " set comment_mode
     let [lbeg, lend, uncomment] = s:CommentDef(lbeg, lend, cmt_check, comment_mode, cbeg, cend)
-    " TLogVAR lbeg, lend, cbeg, cend, uncomment
-    if mode_extra =~# 'U'
-        let uncomment = 1
-    elseif mode_extra =~# 'C' || comment_anyway
-        let uncomment = 0
+    " TLogVAR lbeg, lend, cbeg, cend, uncomment, comment_mode
+    if uncomment
+        if comment_mode =~# 'C' || comment_anyway
+            let comment_do = 'c'
+        else
+            let comment_do = 'u'
+        endif
+    else
+        if comment_mode =~# 'U'
+            let comment_do = 'u'
+        elseif comment_mode =~# 'K'
+            let comment_do = 'k'
+        else
+            let comment_do = 'c'
+        endif
     endif
-    " TLogVAR comment_anyway, mode_extra, uncomment
-    " echom "DBG" string(s:cdef)
-    let cbeg = get(s:cdef, 'col', cbeg)
+    " TLogVAR comment_anyway, comment_mode, mode_extra, comment_do
+    " " echom "DBG" string(s:cdef)
+    " let cbeg = get(s:cdef, 'col', cbeg)
     " TLogVAR cbeg
     " go
     " TLogVAR comment_mode
     if comment_mode =~# 'B'
         " We want a comment block
-        call s:CommentBlock(lbeg, lend, cbeg, cend, comment_mode, uncomment, cmt_check, s:cdef)
+        call s:CommentBlock(lbeg, lend, cbeg, cend, comment_mode, comment_do, cmt_check, s:cdef)
     else
         " We want commented lines
         " final search pattern for uncommenting
@@ -801,16 +813,18 @@ function! tcomment#Comment(beg, end, ...)
                 endif
             endif
             if !empty(lmatch)
-                let part1 = s:ProcessLine(uncomment, lmatch[2], cmt_check, cmt_replace)
-                " TLogVAR part1
-                let line1 = lmatch[1] . part1 . lmatch[4]
-                if uncomment && g:tcomment#rstrip_on_uncomment > 0
-                    if g:tcomment#rstrip_on_uncomment == 2 || line1 !~ '\S'
-                        let line1 = substitute(line1, '\s\+$', '', '')
+                let [part1, ok] = s:ProcessLine(comment_do, lmatch[2], cmt_check, cmt_replace)
+                " TLogVAR part1, ok
+                if ok
+                    let line1 = lmatch[1] . part1 . lmatch[4]
+                    if comment_do ==# 'u' && g:tcomment#rstrip_on_uncomment > 0
+                        if g:tcomment#rstrip_on_uncomment == 2 || line1 !~ '\S'
+                            let line1 = substitute(line1, '\s\+$', '', '')
+                        endif
                     endif
+                    " TLogVAR line1
+                    call setline(lnum, line1)
                 endif
-                " TLogVAR line1
-                call setline(lnum, line1)
             endif
         endfor
     endif
@@ -1046,6 +1060,13 @@ function! s:ExtendCDef(beg, end, comment_mode, cdef, args)
         elseif key == 'mode'
             " let a:cdef[key] = a:comment_mode . value
             let a:cdef[key] = s:AddModeExtra(a:comment_mode, value, a:beg, a:end)
+        elseif key == 'mode_extra'
+            if has_key(a:cdef, 'mode')
+                let mode = s:AddModeExtra(a:comment_mode, a:cdef.mode, a:beg, a:end)
+            else
+                let mode = a:comment_mode
+            endif
+            let a:cdef.mode = s:AddModeExtra(mode, value, a:beg, a:end)
         elseif key == 'count'
             let a:cdef[key] = str2nr(value)
         else
@@ -1434,13 +1455,18 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
 endf
 
 
-function! s:ProcessLine(uncomment, match, checkRx, replace)
-    " TLogVAR a:uncomment, a:match, a:checkRx, a:replace
+function! s:ProcessLine(comment_do, match, checkRx, replace)
+    " TLogVAR a:comment_do, a:match, a:checkRx, a:replace
     try
         if !(g:tcomment#blank_lines > 0 || a:match =~ '\S')
             return a:match
         endif
-        if a:uncomment
+        if a:comment_do ==# 'k'
+            if a:match =~ a:checkRx
+                return ['', 0]
+            endif
+        endif
+        if a:comment_do ==# 'u'
             let rv = substitute(a:match, a:checkRx, '\1\2', '')
             let rv = s:UnreplaceInLine(rv)
         else
@@ -1465,7 +1491,7 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
                 " TLogVAR a:replace, prefix_len
                 if prefix_len != -1
                     let s:cursor_pos = copy(s:current_pos)
-                    if a:uncomment
+                    if a:comment_do ==# 'u'
                         let s:cursor_pos[2] -= prefix_len
                         if s:cursor_pos[2] < 1
                             let s:cursor_pos[2] = 1
@@ -1486,7 +1512,7 @@ function! s:ProcessLine(uncomment, match, checkRx, replace)
         " TLogVAR rv
         " let rv = substitute(rv, '\n', '\\\n', 'g')
         " TLogVAR rv
-        return rv
+        return [rv, 1]
     finally
         let s:processline_lnum += 1
     endtry
@@ -1546,8 +1572,8 @@ function! s:InlineReplacement(text, rx, tokens, replacements) "{{{3
 endf
 
 
-function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, uncomment, checkRx, cdef)
-    " TLogVAR a:beg, a:end, a:cbeg, a:cend, a:uncomment, a:checkRx, a:cdef
+function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx, cdef)
+    " TLogVAR a:beg, a:end, a:cbeg, a:cend, a:comment_do, a:checkRx, a:cdef
     let indentStr = repeat(' ', a:cbeg)
     let t = @t
     let sel_save = &selection
@@ -1561,7 +1587,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, uncomment, checkRx,
         let prefix = substitute(matchstr(cs, '^.*%\@<!\ze%s'), '%\(.\)', '\1', 'g')
         let postfix = substitute(matchstr(cs, '%\@<!%s\zs.*$'), '%\(.\)', '\1', 'g')
         " TLogVAR ms, mx, cs, prefix, postfix
-        if a:uncomment
+        if a:comment_do == 'u'
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
             let tt = []
             " TODO: Correctly handle foreign comments with inconsistent 
