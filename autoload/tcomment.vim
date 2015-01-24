@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2014-12-16.
-" @Revision:    1729
+" @Revision:    1734
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1395,7 +1395,7 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
     let end = a:end
     if a:comment_mode =~# 'U'
         let uncomment = 1
-    elseif a:comment_mode =~# 'C'
+    elseif a:comment_mode =~# '[CK]'
         let uncomment = 0
     else
         if get(s:cdef, 'mixedindent', 1)
@@ -1879,7 +1879,7 @@ function! s:AddModeExtra(comment_mode, extra, beg, end) "{{{3
     if extra =~# '[IR]'
         let comment_mode = substitute(comment_mode, '\c[gb]', '', 'g')
     endif
-    if extra =~# '[BLIR]' && comment_mode =~# 'G'
+    if extra =~# '[BLIRK]' && comment_mode =~# 'G'
         let comment_mode = substitute(comment_mode, '\c[G]', '', 'g')
     endif
     let rv = comment_mode . extra
