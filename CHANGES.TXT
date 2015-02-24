@@ -404,3 +404,21 @@ version: '3.05'
   MD5 checksum: a63f84ff30a8d9e5dfa7f43b800c05bf
 version: "3.05"
 
+  - add lilypond support
+  - Make sure to uncomment if mode = U
+  - Rename some <Plug> maps (replace "-" with "_")
+  - Make handling of the mode argument more correct
+  - FIX #117: Add support for liquid
+  - Add AppleScript support
+  - Add definition for Vader [1]
+  - Add definition for "cram"
+  - FIX #122: s:MapOp(): Define specialiced opfunc when necessary (this should also FIX #114)
+  - Use '# %s' for gitconfig files, as with the others (ft=git*)
+  - add autohotkey comment format
+  - Improved support for Rnw files (g:tcommentGuessFileType_rnoweb = "r")
+  - CLOSE #128: K comment mode
+  - Actually CLOSE #128: s:CommentDef(), s:AddModeExtra(): check for mode==K
+  - FIX #132: Handle mixed "//" % "/* ... */" C-like linewise comments   - tcomment#GetLineC(...), g:tcommentLineC_fmt   - use for more filetypes   - s:Count(), s:Printf1()
+  MD5 checksum: a63f84ff30a8d9e5dfa7f43b800c05bf
+version: "3.05"
+
