@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2014-12-16.
+" @Last Change: 2015-03-06.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -601,9 +601,9 @@ endf
 
 
 function! s:Printf1(fmt, expr)
-    let n = s:Count(a:fmt, '%\@<!%s')
+    let n = s:Count(a:fmt, '%\@<!\%(%%\)*%s')
     let exprs = repeat([a:expr], n)
-    " TLogVAR a:fmt, a:expr, exprs
+    "TLogVAR a:fmt, a:expr, exprs
     let rv = call(function('printf'), [a:fmt] + exprs)
     " TLogVAR rv
     return rv
