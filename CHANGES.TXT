@@ -440,3 +440,9 @@ version: "3.05"
   MD5 checksum: a63f84ff30a8d9e5dfa7f43b800c05bf
 version: "3.05"
 
+version: "3.06"
+  - Define toml type
+  - Merge pull request #133 from moorereason/toml
+  - FIX #134: s:Printf1() fix regexp
+  MD5 checksum: 279fcee28dcde33c347fa2ffa48da054
+
