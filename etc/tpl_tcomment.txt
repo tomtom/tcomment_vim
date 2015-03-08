@@ -54,7 +54,7 @@ Explicit commenting/uncommenting:
 In visual mode:
 
     gc           :: Toggle comments
-    gC           :: Comment selected text
+    g>           :: Comment selected text
 
 CAVEAT: If you visually select text within a line, the visual mode map will 
 comment out the selected text. If you selected text across several lines, the 

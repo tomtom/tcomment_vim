@@ -603,7 +603,7 @@ endf
 function! s:Printf1(fmt, expr)
     let n = s:Count(a:fmt, '%\@<!\%(%%\)*%s')
     let exprs = repeat([a:expr], n)
-    "TLogVAR a:fmt, a:expr, exprs
+    " TLogVAR a:fmt, a:expr, exprs
     let rv = call(function('printf'), [a:fmt] + exprs)
     " TLogVAR rv
     return rv
