@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-03-06.
+" @Last Change: 2015-03-13.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -777,8 +777,9 @@ function! tcomment#Comment(beg, end, ...)
     " TLogVAR cdef, cmt_check
     let s:cdef = cdef
     " set comment_mode
+    " TLogVAR comment_mode
     let [lbeg, lend, uncomment] = s:CommentDef(lbeg, lend, cmt_check, comment_mode, cbeg, cend)
-    " TLogVAR lbeg, lend, cbeg, cend, uncomment, comment_mode
+    " TLogVAR lbeg, lend, cbeg, cend, uncomment, comment_mode, comment_anyway
     if uncomment
         if comment_mode =~# 'C' || comment_anyway
             let comment_do = 'c'
@@ -1082,16 +1083,19 @@ endf
 
 function! s:ExtendCDef(beg, end, comment_mode, cdef, args)
     for [key, value] in items(a:args)
+        " TLogVAR key, value
         if key == 'as'
             call extend(a:cdef, s:GetCommentDefinitionForType(a:beg, a:end, a:comment_mode, value))
         elseif key == 'mode'
             " let a:cdef[key] = a:comment_mode . value
-            let a:cdef[key] = s:AddModeExtra(a:comment_mode, value, a:beg, a:end)
+            let a:cdef.mode = s:AddModeExtra(a:comment_mode, value, a:beg, a:end)
         elseif key == 'mode_extra'
             if has_key(a:cdef, 'mode')
                 let mode = s:AddModeExtra(a:comment_mode, a:cdef.mode, a:beg, a:end)
+                " TLogVAR 'mode', mode
             else
                 let mode = a:comment_mode
+                " TLogVAR 'mode == comment_mode', mode
             endif
             let a:cdef.mode = s:AddModeExtra(mode, value, a:beg, a:end)
         elseif key == 'count'
@@ -1099,6 +1103,7 @@ function! s:ExtendCDef(beg, end, comment_mode, cdef, args)
         else
             let a:cdef[key] = value
         endif
+        " TLogVAR get(a:cdef, 'comment_mode', '')
     endfor
     return a:cdef
 endf
@@ -1306,7 +1311,7 @@ endf
 " s:GetCommentDefinition(beg, end, comment_mode, ?filetype="")
 function! s:GetCommentDefinition(beg, end, comment_mode, ...)
     let ft = a:0 >= 1 ? a:1 : ''
-    " TLogVAR ft
+    " TLogVAR a:comment_mode, ft
     if ft != ''
         let cdef = s:GuessCustomCommentString(ft, a:comment_mode)
     else
@@ -1477,7 +1482,7 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
             endtry
         endif
     endif
-    " TLogVAR 5, uncomment
+    " TLogVAR 5, beg, end, uncomment
     return [beg, end, uncomment]
 endf
 
@@ -1905,6 +1910,7 @@ endf
 
 
 function! s:AddModeExtra(comment_mode, extra, beg, end) "{{{3
+    " TLogVAR a:comment_mode, a:extra
     if a:beg == a:end
         let extra = substitute(a:extra, '\C[B]', '', 'g')
     else
@@ -1928,20 +1934,20 @@ endf
 
 function! s:GuessCommentMode(comment_mode, supported_comment_modes) "{{{3
     " TLogVAR a:comment_mode, a:supported_comment_modes
+    let special = substitute(a:comment_mode, '\c[^ukc]', '', 'g')
     let cmode = tolower(a:comment_mode)
     let ccmodes = split(tolower(a:supported_comment_modes), '\zs')
     let ccmodes = filter(ccmodes, 'stridx(cmode, v:val) != -1')
     let guess = substitute(a:comment_mode, '\w\+', 'G', 'g')
     " TLogVAR ccmodes, guess
     if a:comment_mode =~# '[BR]'
-        return !empty(ccmodes) ? a:comment_mode : guess
+        let rv = !empty(ccmodes) ? a:comment_mode : guess
     elseif a:comment_mode =~# '[I]'
-        return !empty(ccmodes) ? a:comment_mode : ''
-    " elseif a:comment_mode =~# '[R]' && !empty(ccmodes)
-    "     return a:comment_mode
+        let rv = !empty(ccmodes) ? a:comment_mode : ''
     else
-        return guess
+        let rv = guess
     endif
+    return s:AddModeExtra(rv, special, 0, 1)
 endf
 
 

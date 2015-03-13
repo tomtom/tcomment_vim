@@ -2,7 +2,7 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2015-03-06.
+" @Last Change: 2015-03-13.
 " @Revision:    964
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
@@ -186,8 +186,8 @@ function! s:MapOp(name, count, extra, op, invoke) "{{{3
 endf
 
 
-call s:MapOp('Uncomment',  '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorAnyway', 'g@')
-call s:MapOp('Uncommentc', '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorLineAnyway', 'g@$')
+call s:MapOp('Uncomment',  '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#Operator', 'g@')
+call s:MapOp('Uncommentc', '', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorLine', 'g@$')
 call s:MapOp('Uncommentb', '', 'call tcomment#SetOption("mode_extra", "UB")', 'tcomment#OperatorLine', 'g@')
 xnoremap <silent> <Plug>TComment_Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
