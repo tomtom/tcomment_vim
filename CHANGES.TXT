@@ -446,3 +446,8 @@ version: "3.06"
   - FIX #134: s:Printf1() fix regexp
   MD5 checksum: 279fcee28dcde33c347fa2ffa48da054
 
+  - FIX #135: Old map in help docs
+  - FIX #136: Uncomment omaps must not call *Anyway; fix handling of U in s:GuessCommentMode()
+  MD5 checksum: 1c9d1e9f1de51c7ddcd049839eb686aa
+version: "3.07"
+
