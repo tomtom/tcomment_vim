@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-03-13.
+" @Last Change: 2015-03-22.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -509,6 +509,8 @@ call tcomment#DefineType('readline',         '# %s'             )
 call tcomment#DefineType('remind',           {'commentstring_rx': '\[;#] %s', 'commentstring': '# %s'})
 call tcomment#DefineType('resolv',           '# %s'             )
 call tcomment#DefineType('robots',           '# %s'             )
+call tcomment#DefineType('rust',             tcomment#GetLineC('// %s'))
+call tcomment#DefineType('rust_block',       g:tcommentBlockC   )
 call tcomment#DefineType('ruby',             '# %s'             )
 call tcomment#DefineType('ruby_3',           '### %s'           )
 call tcomment#DefineType('ruby_block',       "=begin rdoc%s=end")
