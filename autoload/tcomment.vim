@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-03-22.
+" @Last Change: 2015-03-31.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -110,6 +110,9 @@ if !exists("g:tcommentGuessFileType_django")
 endif
 if !exists("g:tcommentGuessFileType_eruby")
     let g:tcommentGuessFileType_eruby = 1   "{{{2
+endif
+if !exists("g:tcommentGuessFileType_jinja")
+    let g:tcommentGuessFileType_jinja = 'html'   "{{{2
 endif
 if !exists("g:tcommentGuessFileType_smarty")
     let g:tcommentGuessFileType_smarty = 1   "{{{2
@@ -455,6 +458,8 @@ call tcomment#DefineType('java_inline',      g:tcommentInlineC  )
 call tcomment#DefineType('javascript',       tcomment#GetLineC('// %s'))
 call tcomment#DefineType('javascript_block', g:tcommentBlockC   )
 call tcomment#DefineType('javascript_inline', g:tcommentInlineC )
+call tcomment#DefineType('jinja',           '{# %s #}'     )
+call tcomment#DefineType('jinja_block',     "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#DefineType('jproperties',      '# %s'             )
 call tcomment#DefineType('lilypond',         '%% %s'            )
 call tcomment#DefineType('lisp',             '; %s'             )
