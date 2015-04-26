@@ -2,7 +2,7 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2015-03-14.
+" @Last Change: 2015-04-26.
 " @Revision:    964
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
@@ -171,14 +171,7 @@ function! s:MapOp(name, count, extra, op, invoke) "{{{3
                 \ 'return call('. string(a:op) .', a:000)',
                 \ 'endf'
                 \ ]
-    let t = @t
-    try
-        let @t = join(fn, "\n")
-        @t
-    finally
-        let @t = t
-    endtry
-    let extra = empty(a:extra) ? '' : ' \| '. a:extra
+    exec join(fn, "\n")
     exec printf('nnoremap <silent> <Plug>TComment_%s '.
                 \ ':<c-u>call tcomment#ResetOption() \| if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| let w:tcommentPos = getpos(".") \|'.
                 \ 'set opfunc=%s<cr>%s',
