@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-03-31.
+" @Last Change: 2015-06-08.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1808,7 +1808,6 @@ endf
 " s:GuessFileType(beg, end, comment_mode, filetype, ?fallbackFiletype)
 function! s:GuessFileType(beg, end, comment_mode, filetype, ...)
     " TLogVAR a:beg, a:end, a:comment_mode, a:filetype, a:000
-    " TLogVAR cdef
     let cdef0 = s:GuessCustomCommentString(a:filetype, a:comment_mode)
     if a:0 >= 1 && a:1 != ''
         let cdef = s:GuessCustomCommentString(a:1, a:comment_mode)
@@ -1840,10 +1839,12 @@ function! s:GuessFileType(beg, end, comment_mode, filetype, ...)
     let n  = beg
     " TLogVAR n, beg, end
     while n <= end
-        let m  = indent(n) + 1
         let text = getline(n)
+        let indentstring = matchstr(text, '^\s*')
+        let m = len(indentstring)
+        " let m  = indent(n) + 1
         let le = len(text)
-        " TLogVAR m, le
+        " TLogVAR n, m, le
         while m <= le
             let syntax_name = s:GetSyntaxName(n, m)
             " TLogVAR syntax_name, n, m
