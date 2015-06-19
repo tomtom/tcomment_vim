@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-06-08.
+" @Last Change: 2015-06-19.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -1841,9 +1841,9 @@ function! s:GuessFileType(beg, end, comment_mode, filetype, ...)
     while n <= end
         let text = getline(n)
         let indentstring = matchstr(text, '^\s*')
-        let m = len(indentstring)
+        let m = strwidth(indentstring)
         " let m  = indent(n) + 1
-        let le = len(text)
+        let le = strwidth(text)
         " TLogVAR n, m, le
         while m <= le
             let syntax_name = s:GetSyntaxName(n, m)
