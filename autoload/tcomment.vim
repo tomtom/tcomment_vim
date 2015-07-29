@@ -2,7 +2,7 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-06-19.
+" @Last Change: 2015-07-29.
 " @Revision:    1760
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
@@ -514,6 +514,7 @@ call tcomment#DefineType('rc',               '// %s'            )
 call tcomment#DefineType('readline',         '# %s'             )
 call tcomment#DefineType('remind',           {'commentstring_rx': '\[;#] %s', 'commentstring': '# %s'})
 call tcomment#DefineType('resolv',           '# %s'             )
+call tcomment#DefineType('robot', {'col': 1, 'commentstring': '# %s'})
 call tcomment#DefineType('robots',           '# %s'             )
 call tcomment#DefineType('rust',             tcomment#GetLineC('// %s'))
 call tcomment#DefineType('rust_block',       g:tcommentBlockC   )
@@ -806,7 +807,9 @@ function! tcomment#Comment(beg, end, ...)
     endif
     " TLogVAR comment_anyway, comment_mode, mode_extra, comment_do
     " " echom "DBG" string(s:cdef)
-    " let cbeg = get(s:cdef, 'col', cbeg)
+    if comment_do ==# 'c'
+        let cbeg = get(s:cdef, 'col', cbeg)
+    endif
     " TLogVAR cbeg
     " go
     " TLogVAR comment_mode
