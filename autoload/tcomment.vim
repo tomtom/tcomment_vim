@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-08-11.
-" @Revision:    1760
+" @Last Change: 2015-09-20.
+" @Revision:    1777
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -40,10 +40,14 @@ endif
 if !exists('g:tcommentOptions')
     " Other key-value options used by |tcomment#Comment()|.
     "
-    " Example: If you want to put the opening comment marker always in 
-    " the first column regardless of the block's indentation, put this 
-    " into your |vimrc| file: >
+    " Examples:
+    " Put the opening comment marker always in the first column 
+    " regardless of the block's indentation, put this into your |vimrc| 
+    " file: >
     "   let g:tcommentOptions = {'col': 1}
+    "
+    " Indent uncommented lines: >
+    "   let g:tcommentOptions = {'postprocess_uncomment': 'norm! %sgg=%sgg'}
     let g:tcommentOptions = {}   "{{{2
 endif
 
@@ -663,6 +667,9 @@ let s:null_comment_string    = '%s'
 "                              (default), strip from empty lines only, 
 "                              if 2, always strip whitespace; if 0, 
 "                              don't strip any whitespace
+"         postprocess_uncomment .. Run a |printf()| expression with 2 
+"                              placeholders on uncommented lines, e.g. 
+"                              'norm! %sgg=%sgg'.
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "
@@ -861,9 +868,11 @@ function! tcomment#Comment(beg, end, ...)
                 " TLogVAR part1, ok
                 if ok
                     let line1 = lmatch[1] . part1 . lmatch[4]
-                    if comment_do ==# 'u' && g:tcomment#rstrip_on_uncomment > 0
+                    if comment_do ==# 'u'
+                        if g:tcomment#rstrip_on_uncomment > 0
                         if g:tcomment#rstrip_on_uncomment == 2 || line1 !~ '\S'
                             let line1 = substitute(line1, '\s\+$', '', '')
+                        endif
                         endif
                     endif
                     " TLogVAR line1
@@ -871,6 +880,12 @@ function! tcomment#Comment(beg, end, ...)
                 endif
             endif
         endfor
+        if comment_do ==# 'u'
+            let postprocess_uncomment = get(cdef, 'postprocess_uncomment', '')
+            if !empty(postprocess_uncomment)
+                exec printf(postprocess_uncomment, lbeg, lend)
+            endif
+        endif
     endif
     " reposition cursor
     " TLogVAR 3, comment_mode
