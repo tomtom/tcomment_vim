@@ -465,10 +465,14 @@ g:tcommentOpModeExtra          (default: '')
 g:tcommentOptions              (default: {})
     Other key-value options used by |tcomment#Comment()|.
 
-    Example: If you want to put the opening comment marker always in 
-    the first column regardless of the block's indentation, put this 
-    into your |vimrc| file: >
+    Examples:
+    Put the opening comment marker always in the first column 
+    regardless of the block's indentation, put this into your |vimrc| 
+    file: >
       let g:tcommentOptions = {'col': 1}
+
+<   Indent uncommented lines: >
+      let g:tcommentOptions = {'postprocess_uncomment': 'norm! %sgg=%sgg'}
 <
 
                                                     *g:tcomment#options_comments*
@@ -688,6 +692,9 @@ tcomment#Comment(beg, end, ...)
                                  (default), strip from empty lines only, 
                                  if 2, always strip whitespace; if 0, 
                                  don't strip any whitespace
+            postprocess_uncomment .. Run a |printf()| expression with 2 
+                                 placeholders on uncommented lines, e.g. 
+                                 'norm! %sgg=%sgg'.
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
