@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-09-20.
-" @Revision:    1777
+" @Last Change: 2015-09-30.
+" @Revision:    1781
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -481,6 +481,9 @@ call tcomment#DefineType('lynx',             '# %s'             )
 call tcomment#DefineType('m4',               'dnl %s'           )
 call tcomment#DefineType('mail',             '> %s'             )
 call tcomment#DefineType('make',             '# %s'             )
+call tcomment#DefineType('markdown_block',   "<!---%s--->\n  "  )
+call tcomment#DefineType('markdown.pandoc',  '<!--- %s --->'    )
+call tcomment#DefineType('markdown.pandoc_block', "<!---%s--->\n  ")
 call tcomment#DefineType('matlab',           '%% %s'            )
 call tcomment#DefineType('monkey',           ''' %s'            )
 call tcomment#DefineType('msidl',            '// %s'            )
