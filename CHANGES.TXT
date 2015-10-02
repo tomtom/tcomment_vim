@@ -451,3 +451,25 @@ version: "3.06"
   MD5 checksum: 1c9d1e9f1de51c7ddcd049839eb686aa
 version: "3.07"
 
+  - FIX #137: Prefer // for rust comments
+  - FIX #138: Support for jinja filetype (see https://github.com/Glench/Vim-Jinja2-Syntax)
+  - FIX #140: s:MapOp(): Don't evaluate registers to define op functions
+  - s:MapOp: Remove count argument
+  - support Tupfile comments
+  - Merge pull request #141 from cfillion/tup-comments
+  - FIX #123: GuessFileType(): don't use indent(); properly handle tabs
+  - GuessFileType(): Use strwidth() (FIX #144)
+  - autoload: Add Makefile support
+  - Merge pull request #146 from JIghtuse/master
+  - FIX #147: Add definition for robot file; re-enable col attribute (comment mode only)
+  - FIX #148: Prefer // for java comments
+  - Merge pull request #149 from phphong/change-java-default
+  - support commenting for the fish shell
+  - Merge pull request #150 from philolo1/support_fish
+  - Add support for Facebook JSX
+  - Merge pull request #151 from epeli/jsx
+  - CLOSE #152: postprocess_uncomment option
+  - Support for markdown
+  MD5 checksum: 4d11779a42c22ea2dbb5f1309b29bce3
+version: "3.07"
+
