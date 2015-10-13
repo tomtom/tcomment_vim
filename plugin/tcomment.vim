@@ -2,14 +2,14 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2015-04-26.
-" @Revision:    964
+" @Last Change: 2015-10-02.
+" @Revision:    965
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
     finish
 endif
-let loaded_tcomment = 307
+let loaded_tcomment = 308
 
 let s:save_cpo = &cpo
 set cpo&vim
