@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-10-13.
-" @Revision:    1784
+" @Last Change: 2015-11-10.
+" @Revision:    1791
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -146,8 +146,9 @@ if !exists('g:tcomment#filetype_map')
     " regexp modifiers (like |\V|) are allowed.
     " let g:tcomment#filetype_map = {...}   "{{{2
     let g:tcomment#filetype_map = {
-                \ 'rails-views': 'html',
                 \ 'mkd': 'html',
+                \ 'rails-views': 'html',
+                \ 'tblgen': 'cpp',
                 \ }
 endif
 
@@ -1759,9 +1760,9 @@ function! s:Filetype(...) "{{{3
     let rv = get(fts, pos, ft)
     " TLogVAR fts, rv
     if !exists('s:filetype_map_rx')
-        let fts_rx = '^'. join(map(keys(g:tcomment#filetype_map), 'escape(v:val, ''\'')'), '\|') .'$'
+        let fts_rx = '^\%('. join(map(keys(g:tcomment#filetype_map), 'escape(v:val, ''\'')'), '\|') .'\)$'
     endif
-    " TLogVAR fts_rx
+    " TLogVAR rv, fts_rx
     if rv =~ fts_rx
         for [ft_rx, ftrv] in items(g:tcomment#filetype_map)
             " TLogVAR ft_rx, ftrv
