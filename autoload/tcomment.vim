@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-11-10.
-" @Revision:    1791
+" @Last Change: 2015-11-12.
+" @Revision:    1792
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -595,6 +595,8 @@ call tcomment#DefineType('xslt',             g:tcommentInlineXML)
 call tcomment#DefineType('xslt_block',       g:tcommentBlockXML )
 call tcomment#DefineType('xslt_inline',      g:tcommentInlineXML)
 call tcomment#DefineType('yaml',             '# %s'             )
+
+runtime! autoload/tcomment/types/*.vim
 
 " :doc:
 " A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
