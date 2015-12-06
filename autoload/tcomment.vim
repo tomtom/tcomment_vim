@@ -1470,7 +1470,8 @@ function! s:CommentDef(beg, end, checkRx, comment_mode, cbeg, cend)
     else
         if get(s:cdef, 'mixedindent', 1)
             let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
-            let mdrx .= s:StartColRx(a:comment_mode, a:cbeg + 1, 0) .'\s\*'
+            let cbeg1 = a:comment_mode =~? 'i' ? a:cbeg : a:cbeg + 1
+            let mdrx .= s:StartColRx(a:comment_mode, cbeg1, 0) .'\s\*'
         else
             let mdrx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) .'\s\*'
         endif
