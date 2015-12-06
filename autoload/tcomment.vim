@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-11-12.
-" @Revision:    1792
+" @Last Change: 2015-12-06.
+" @Revision:    1810
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1956,19 +1956,23 @@ function! s:AddModeExtra(comment_mode, extra, beg, end) "{{{3
     else
         let extra = substitute(a:extra, '\C[IR]', '', 'g')
     endif
-    let comment_mode = a:comment_mode
-    if extra =~# 'B'
-        let comment_mode = substitute(comment_mode, '\c[gir]', '', 'g')
+    if empty(extra)
+        return a:comment_mode
+    else
+        let comment_mode = a:comment_mode
+        if extra =~# 'B'
+            let comment_mode = substitute(comment_mode, '\c[gir]', '', 'g')
+        endif
+        if extra =~# '[IR]'
+            let comment_mode = substitute(comment_mode, '\c[gb]', '', 'g')
+        endif
+        if extra =~# '[BLIRK]' && comment_mode =~# 'G'
+            let comment_mode = substitute(comment_mode, '\c[G]', '', 'g')
+        endif
+        let rv = substitute(comment_mode, '\c['. extra .']', '', 'g') . extra
+        " TLogVAR a:comment_mode, a:extra, comment_mode, extra, rv
+        return rv
     endif
-    if extra =~# '[IR]'
-        let comment_mode = substitute(comment_mode, '\c[gb]', '', 'g')
-    endif
-    if extra =~# '[BLIRK]' && comment_mode =~# 'G'
-        let comment_mode = substitute(comment_mode, '\c[G]', '', 'g')
-    endif
-    let rv = comment_mode . extra
-    " TLogVAR a:comment_mode, a:extra, comment_mode, extra, rv
-    return rv
 endf
 
 
