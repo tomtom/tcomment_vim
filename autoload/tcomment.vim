@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2015-12-06.
-" @Revision:    1810
+" @Last Change: 2015-12-15.
+" @Revision:    1817
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 
@@ -1372,7 +1372,7 @@ function! s:GetCommentDefinition(beg, end, comment_mode, ...)
             endif
             return s:GuessCustomCommentString(filetype, a:comment_mode, cms)
         else
-            let [use_guess_ft, altFiletype] = s:AltFiletype(ft)
+            let [use_guess_ft, altFiletype] = s:AltFiletype(ft, cdef)
             " TLogVAR use_guess_ft, altFiletype
             if use_guess_ft
                 return s:GuessFileType(a:beg, a:end, a:comment_mode, filetype, altFiletype)
@@ -1781,7 +1781,7 @@ function! s:Filetype(...) "{{{3
 endf
 
 
-function! s:AltFiletype(filetype) "{{{3
+function! s:AltFiletype(filetype, cdef) "{{{3
     let filetype = empty(a:filetype) ? &filetype : a:filetype
     " TLogVAR a:filetype, filetype
     if g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
@@ -1798,7 +1798,12 @@ function! s:AltFiletype(filetype) "{{{3
         " TLogVAR 1, altFiletype
         return [1, altFiletype]
     elseif filetype =~ '^.\{-}\..\+$'
+        " Unfortunately the handling of "sub-filetypes" isn't 
+        " consistent. Some use MAJOR.MINOR, others use MINOR.MAJOR.
         let altFiletype = s:Filetype(filetype, 1)
+        if altFiletype == a:filetype
+            let altFiletype = s:Filetype(filetype, 0)
+        endif
         " TLogVAR 2, altFiletype
         return [1, altFiletype]
     else
