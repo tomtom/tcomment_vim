@@ -116,7 +116,7 @@ A secondary set of key maps is defined for normal and insert mode:
 
 -----------------------------------------------------------------------
 
-Status:  Works for me (there may be some minor quirks)
+
 Install: See http://github.com/tomtom/vimtlib/blob/master/INSTALL.TXT
 See http://github.com/tomtom for related plugins.
 
