@@ -2,10 +2,19 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-02-22.
-" @Revision:    1820
+" @Last Change: 2016-02-27.
+" @Revision:    1848
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
+if !exists('g:loaded_tlib')
+    " :nodoc:
+    command! -nargs=+ -bang Tlibtrace :
+    " :nodoc:
+    command! -nargs=+ -bang Tlibassert :
+    " :nodoc:
+    command! -nargs=+ Tlibtype :
+endif
+
 
 if !exists("g:tcomment#blank_lines")
     " If 1, comment blank lines too.
