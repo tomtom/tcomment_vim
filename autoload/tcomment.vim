@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-02-27.
-" @Revision:    1848
+" @Last Change: 2016-02-29.
+" @Revision:    1850
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if !exists('g:loaded_tlib')
@@ -1546,7 +1546,7 @@ function! s:ProcessLine(comment_do, match, checkRx, replace)
     " TLogVAR a:comment_do, a:match, a:checkRx, a:replace
     try
         if !(g:tcomment#blank_lines > 0 || a:match =~ '\S')
-            return a:match
+            return [a:match, 0]
         endif
         if a:comment_do ==# 'k'
             if a:match =~ a:checkRx
