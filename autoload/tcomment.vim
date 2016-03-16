@@ -2,15 +2,19 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-02-29.
-" @Revision:    1850
+" @Last Change: 2016-03-16.
+" @Revision:    1853
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
-if !exists('g:loaded_tlib')
+if exists(':Tlibtrace') != 2
     " :nodoc:
     command! -nargs=+ -bang Tlibtrace :
+endif
+if exists(':Tlibassert') != 2
     " :nodoc:
     command! -nargs=+ -bang Tlibassert :
+endif
+if exists(':Tlibtype') != 2
     " :nodoc:
     command! -nargs=+ Tlibtype :
 endif
