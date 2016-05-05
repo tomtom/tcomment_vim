@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-03-16.
-" @Revision:    1853
+" @Last Change: 2016-05-05.
+" @Revision:    1854
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -503,6 +503,7 @@ call tcomment#DefineType('markdown_block',   "<!---%s--->\n  "  )
 call tcomment#DefineType('markdown.pandoc',  '<!--- %s --->'    )
 call tcomment#DefineType('markdown.pandoc_block', "<!---%s--->\n  ")
 call tcomment#DefineType('matlab',           '%% %s'            )
+call tcomment#DefineType('matlab_block',     '%%{%s%%}'         )
 call tcomment#DefineType('monkey',           ''' %s'            )
 call tcomment#DefineType('msidl',            '// %s'            )
 call tcomment#DefineType('msidl_block',      g:tcommentBlockC   )
@@ -517,6 +518,8 @@ call tcomment#DefineType('objcpp',           '// %s'            )
 call tcomment#DefineType('ocaml',            '(* %s *)'         )
 call tcomment#DefineType('ocaml_block',      "(*%s*)\n   "      )
 call tcomment#DefineType('ocaml_inline',     '(* %s *)'         )
+call tcomment#DefineType('octave',           '%% %s'            )
+call tcomment#DefineType('octave_block',     '%%{%s%%}'         )
 call tcomment#DefineType('pac',              '// %s'            )
 call tcomment#DefineType('pascal',           '(* %s *)'         )
 call tcomment#DefineType('pascal_block',     "(*%s*)\n   "      )
