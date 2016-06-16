@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-05-05.
-" @Revision:    1854
+" @Last Change: 2016-06-16.
+" @Revision:    1855
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -393,7 +393,7 @@ call tcomment#DefineType('asciidoc',         '// %s'            )
 call tcomment#DefineType('asm',              '; %s'             )
 call tcomment#DefineType('asterisk',         '; %s'             )
 call tcomment#DefineType('blade',            '{{-- %s --}}'     )
-call tcomment#DefineType('blade_block',      '{{-- %s --}}'     )
+call tcomment#DefineType('blade_block',      '{{--%s--}}'       )
 call tcomment#DefineType('blade_inline',     '{{-- %s --}}'     )
 call tcomment#DefineType('c',                tcomment#GetLineC())
 call tcomment#DefineType('c_block',          g:tcommentBlockC   )
