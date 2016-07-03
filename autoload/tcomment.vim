@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-06-16.
-" @Revision:    1855
+" @Last Change: 2016-07-02.
+" @Revision:    1856
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -173,12 +173,14 @@ if !exists('g:tcommentSyntaxMap')
     " mapped onto the corresponding filetype.
     " :read: let g:tcommentSyntaxMap = {...}   "{{{2
     let g:tcommentSyntaxMap = {
-            \ 'erubyExpression':   'ruby',
-            \ 'vimMzSchemeRegion': 'scheme',
-            \ 'vimPerlRegion':     'perl',
-            \ 'vimPythonRegion':   'python',
-            \ 'vimRubyRegion':     'ruby',
-            \ 'vimTclRegion':      'tcl',
+            \ 'bladeEcho':          'php',
+            \ 'bladePhpParenBlock': 'php',
+            \ 'erubyExpression':    'ruby',
+            \ 'vimMzSchemeRegion':  'scheme',
+            \ 'vimPerlRegion':      'perl',
+            \ 'vimPythonRegion':    'python',
+            \ 'vimRubyRegion':      'ruby',
+            \ 'vimTclRegion':       'tcl',
             \ 'Delimiter': {
             \     'filetype': {
             \         'php': 'php',
