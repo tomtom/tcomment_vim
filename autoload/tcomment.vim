@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-07-03.
-" @Revision:    1857
+" @Last Change: 2016-12-02.
+" @Revision:    1858
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -424,6 +424,7 @@ call tcomment#DefineType('cs_inline',        g:tcommentInlineC  )
 call tcomment#DefineType('css',              '/* %s */'         )
 call tcomment#DefineType('css_block',        g:tcommentBlockC   )
 call tcomment#DefineType('css_inline',       g:tcommentInlineC  )
+call tcomment#DefineType('cypher',           '// %s'            )
 call tcomment#DefineType('debcontrol',       '# %s'             )
 call tcomment#DefineType('debsources',       '# %s'             )
 call tcomment#DefineType('desktop',          '# %s'             )
