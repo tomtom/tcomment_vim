@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2016-12-02.
-" @Revision:    1858
+" @Last Change: 2017-01-24.
+" @Revision:    1859
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -1708,7 +1708,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
             let rx = '\V'. s:StartColRx(a:comment_mode, a:cbeg) . '\zs'. mx
             " TLogVAR mx1, rx
             for line in split(@t, '\n')
-                let line1 = substitute(line, rx, '', 'g')
+                let line1 = substitute(line, rx, '', '')
                 call add(tt, line1)
             endfor
             let @t = join(tt, "\n")
