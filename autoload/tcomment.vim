@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2017-01-24.
-" @Revision:    1859
+" @Last Change: 2017-02-03.
+" @Revision:    1861
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -2043,18 +2043,22 @@ endf
 
 function! s:GuessVimOptionsCommentString(comment_mode)
     " TLogVAR a:comment_mode
-    let valid_cms = (match(&commentstring, '%\@<!\(%%\)*%s') != -1)
+    let commentstring = &commentstring
+    if commentstring ==# '% %s'
+        let commentstring = '%% %s'
+    endif
+    let valid_cms = (match(commentstring, '%\@<!\(%%\)*%s') != -1)
     let ccmodes = 'r'
-    if &commentstring =~ '\S\s*%s\s*\S'
+    if commentstring =~ '\S\s*%s\s*\S'
         let ccmodes .= 'bi'
     endif
     let guess_comment_mode = s:GuessCommentMode(a:comment_mode, ccmodes)
     " TLogVAR guess_comment_mode
-    if &commentstring != s:default_comment_string && valid_cms
+    if commentstring != s:default_comment_string && valid_cms
         " The &commentstring appears to have been set and to be valid
         let cdef = copy(g:tcomment#options_commentstring)
         let cdef.mode = guess_comment_mode
-        let cdef.commentstring = &commentstring
+        let cdef.commentstring = commentstring
         return cdef
     endif
     if &comments != s:default_comments
@@ -2072,7 +2076,7 @@ function! s:GuessVimOptionsCommentString(comment_mode)
         " better we return it anyway if it is valid
         let cdef = copy(g:tcomment#options_commentstring)
         let cdef.mode = guess_comment_mode
-        let cdef.commentstring = &commentstring
+        let cdef.commentstring = commentstring
         return cdef
     else
         " &commentstring is invalid. So we return the identity string.
