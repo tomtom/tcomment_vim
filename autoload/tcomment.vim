@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2017-02-03.
-" @Revision:    1861
+" @Last Change: 2017-02-09.
+" @Revision:    1863
 
 " call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
@@ -806,7 +806,7 @@ function! tcomment#Comment(beg, end, ...)
     endif
     if empty(comment_mode)
         echohl WarningMsg
-        echo "TComment: Comment mode is not supported for the current filetype"
+        echom 'TComment: Comment mode is not supported for the current filetype:' string(comment_mode)
         echohl NONE
         return
     endif
