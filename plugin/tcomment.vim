@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2015-10-02.
-" @Revision:    965
+" @Last Change: 2017-02-09.
+" @Revision:    975
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -36,6 +36,11 @@ if !exists("g:tcommentMapLeaderOp1")
     " See |tcomment-operator|.
     let g:tcommentMapLeaderOp1 = 'gc' "{{{2
 endif
+
+" if !exists("g:tcommentMapLeaderOpLinewise")
+"     " See |tcomment-operator|.
+"     let g:tcommentMapLeaderOpLinewise = 'gC' "{{{2
+" endif
 
 if !exists("g:tcommentMapLeaderUncommentAnyway")
     " See |tcomment-operator|.
@@ -185,6 +190,7 @@ call s:MapOp('Uncommentb', 'call tcomment#SetOption("mode_extra", "UB")', 'tcomm
 xnoremap <silent> <Plug>TComment_Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
 call s:MapOp('Comment',  '', 'tcomment#OperatorAnyway', 'g@')
+call s:MapOp('Commentl', '', 'tcomment#OperatorLine', 'g@$')
 call s:MapOp('Commentc', '', 'tcomment#OperatorLineAnyway', 'g@$')
 call s:MapOp('Commentb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#OperatorLine', 'g@')
 xnoremap <silent> <Plug>TComment_Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
@@ -197,6 +203,7 @@ call s:MapOp('gcb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#Oper
 xnoremap <Plug>TComment_gc :TCommentMaybeInline<cr>
 
 call s:MapOp('gc', '', 'tcomment#Operator', 'g@')
+call s:MapOp('gC', '', 'tcomment#OperatorLine', 'g@')
 
 for s:i in range(1, 9)
     exec 'noremap <Plug>TComment_<c-_>' . s:i . ' :call tcomment#SetOption("count", '. s:i .')<cr>'
@@ -265,6 +272,9 @@ if g:tcommentMaps
         exec 'nmap <silent> '. g:tcommentMapLeaderOp1 .'b <Plug>TComment_gcb'
         exec 'xmap '. g:tcommentMapLeaderOp1 .' <Plug>TComment_gc'
     endif
+    " if g:tcommentMapLeaderOpLinewise != ''
+    "     exec 'nmap <silent> '. g:tcommentMapLeaderOpLinewise .' <Plug>TComment_gC'
+    " endif
    if g:tcommentMapLeaderUncommentAnyway != ''
         exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .' <Plug>TComment_Uncomment'
         exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .'c <Plug>TComment_Uncommentc'
