@@ -34,7 +34,7 @@ and |g:tcommentMapLeaderOp2|):
     gc{motion}   :: Toggle comments (for small comments within one line 
                     the &filetype_inline style will be used, if 
                     defined)
-    gc<Count>c{motion} :: Toggle comment text with count argument 
+    gc<Count>{motion} :: Toggle comment text with count argument
                     (see |tcomment#Comment()|)
     gcc          :: Toggle comment for the current line
 
