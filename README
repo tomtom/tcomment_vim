@@ -34,9 +34,14 @@ and |g:tcommentMapLeaderOp2|):
     gc{motion}   :: Toggle comments (for small comments within one line 
                     the &filetype_inline style will be used, if 
                     defined)
-    gc<Count>c{motion} :: Toggle comment text with count argument 
+    gc<Count>c{motion} :: Toggle comment with count argument 
                     (see |tcomment#Comment()|)
     gcc          :: Toggle comment for the current line
+
+Force line-wise operation:
+    gC{motion}   :: Toggle comments by line
+    gC<Count>c{motion} :: Toggle comment by line with count argument 
+                    (see |tcomment#Comment()|)
 
 Explicit commenting/uncommenting:
 
@@ -115,6 +120,18 @@ A secondary set of key maps is defined for normal and insert mode:
 
 
 -----------------------------------------------------------------------
+Install~
+
+Edit the vba file and type: >
+
+    :so %
+
+See :help vimball for details. If you have difficulties or use vim 7.0, 
+please make sure, you have the current version of vimball (vimscript 
+#1502) installed or update your runtime.
+
+
+
 
 
 License: GPLv3 or later
