@@ -137,6 +137,9 @@ endif
 if !exists("g:tcommentGuessFileType_rnoweb")
     let g:tcommentGuessFileType_rnoweb = 'r'   "{{{2
 endif
+if !exists("g:tcommentGuessFileType_vue")
+    let g:tcommentGuessFileType_vue = 'html'   "{{{2
+endif
 
 if !exists("g:tcommentIgnoreTypes_php")
     " In php files, some syntax regions are wrongly highlighted as sql 
