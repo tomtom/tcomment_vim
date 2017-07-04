@@ -473,3 +473,67 @@ version: "3.07"
   MD5 checksum: 4d11779a42c22ea2dbb5f1309b29bce3
 version: "3.07"
 
+  - FIX #137: Prefer // for rust comments
+  - FIX #138: Support for jinja filetype (see https://github.com/Glench/Vim-Jinja2-Syntax)
+  - FIX #140: s:MapOp(): Don't evaluate registers to define op functions
+  - s:MapOp: Remove count argument
+  - support Tupfile comments
+  - Merge pull request #141 from cfillion/tup-comments
+  - FIX #123: GuessFileType(): don't use indent(); properly handle tabs
+  - GuessFileType(): Use strwidth() (FIX #144)
+  - autoload: Add Makefile support
+  - Merge pull request #146 from JIghtuse/master
+  - FIX #147: Add definition for robot file; re-enable col attribute (comment mode only)
+  - FIX #148: Prefer // for java comments
+  - Merge pull request #149 from phphong/change-java-default
+  - support commenting for the fish shell
+  - Merge pull request #150 from philolo1/support_fish
+  - Add support for Facebook JSX
+  - Merge pull request #151 from epeli/jsx
+  - CLOSE #152: postprocess_uncomment option
+  - Support for markdown
+  - Set markdown comment to <!--- ... --->
+  - FIX #153: map tblgen -> cpp
+  - runtime! autoload/tcomment/types/*.vim
+  - s:CommentDef(): If mixedindent is true, add 1 to cbeg only if not in inline comment-mode (experimental)
+  - s:AddModeExtra(): Make sure not to include duplicates
+  - Add Elm Comment Definition
+  - Merge pull request #156 from bradurani/patch-1
+  - Properly handle MAJOR.MINOR sub-filetypes
+  - FIX #160: Add license
+  - [jq] adding jq support
+  - Merge pull request #161 from vito-c/vito
+  - FIX #162: Ignore col option for inline comments
+  - notlib stub
+  - g:tcomment#filetype_map may match MAJ.MIN-style filetypes (FIX #162)
+  - adding support for solidiy
+  - merge
+  - Merge pull request #163 from mhhf/master
+  - FIX #164: s:ProcessLine() returns a list when g:tcomment#blank_lines == 0
+  - FIX #167: Define :Tlibtrace etc. also if an older version of tlib is installed
+  - Support for octave, matlab block comments (Malte Neuss)
+  - Fix blade block comment
+  - markdown: use <!-- ... --> (FIX #171)
+  - Merge pull request #170 from adriaanzon/patch-1
+  - add support for proto
+  - Merge pull request #172 from timfeirg/master
+  - Detect PHP regions in Blade
+  - Merge pull request #173 from adriaanzon/blade
+  - Add comment style for TypeScript (same as JavaScript)
+  - Merge pull request #175 from johngrimes/typescript
+  - Support for cypher (CLOSE #178)
+  - Support for the nix filetype
+  - AppleScript
+  - Merge pull request #181 from squm/master
+  - Merge pull request #180 from Hinidu/patch-1
+  - FIX #183: Remove the comment string only once
+  - FIX #184: Special handling of &cms=% %s
+  - <Plug>TCommen_gC map: force line-wise operation
+  - Added nim.
+  - Merge pull request #185 from rosshadden/master
+  - s:GuessVimOptionsCommentString(): Don't expect cms to be a proper format string
+  - Add basic Vue support
+  - Merge pull request #187 from adriaanzon/vue
+  SHA256 checksum: e38384a93873d91dd4ab811535d616aad14f0789d7e84e7da1a479357788bf1d
+version: "3.08"
+
