@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2017-04-28.
-" @Revision:    1890
+" @Last Change: 2017-08-02.
+" @Revision:    1894
 
 scriptencoding utf-8
 
@@ -1888,6 +1888,17 @@ function! tcomment#GuessCommentType(...) abort "{{{3
 endf
 
 
+if exists('*strdisplaywidth')
+    function! s:Strwidth(text) abort "{{{3
+        return strdisplaywidth(a:text)
+    endf
+else
+    function! s:Strwidth(text) abort "{{{3
+        return len(a:text)
+    endf
+endif
+
+
 " inspired by Meikel Brandmeyer's EnhancedCommentify.vim
 " this requires that a syntax names are prefixed by the filetype name 
 " s:GuessFileType(beg, end, comment_mode, filetype, ?fallbackFiletype)
@@ -1926,9 +1937,9 @@ function! s:GuessFileType(beg, end, comment_mode, filetype, ...) abort
     while n <= end
         let text = getline(n)
         let indentstring = matchstr(text, '^\s*')
-        let m = strwidth(indentstring)
+        let m = s:Strwidth(indentstring)
         " let m  = indent(n) + 1
-        let le = strwidth(text)
+        let le = s:Strwidth(text)
         " TLogVAR n, m, le
         while m <= le
             let syntax_name = s:GetSyntaxName(n, m)
