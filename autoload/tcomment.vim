@@ -150,6 +150,10 @@ if !exists('g:tcommentIgnoreTypes_php')
     let g:tcommentIgnoreTypes_php = 'sql'   "{{{2
 endif
 
+if !exists('g:tcommentIgnoreTypes_blade')
+    let g:tcommentIgnoreTypes_blade = 'html'   "{{{2
+endif
+
 if !exists('g:tcomment#syntax_substitute')
     " :read: let g:tcomment#syntax_substitute = {...}   "{{{2
     " Perform replacements on the syntax name.
