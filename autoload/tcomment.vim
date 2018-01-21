@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2017-08-02.
-" @Revision:    1894
+" @Last Change: 2018-01-21.
+" @Revision:    1898
 
 scriptencoding utf-8
 
@@ -101,9 +101,25 @@ if !exists('g:tcommentGuessFileType')
     "   FILETYPE ... assume this filetype
     let g:tcommentGuessFileType = 0   "{{{2
 endif
+if !exists('g:tcommentGuessFileType_blade')
+    " See |g:tcommentGuessFileType_php|.
+    let g:tcommentGuessFileType_blade = 'html'   "{{{2
+endif
+if !exists('g:tcommentGuessFileType_django')
+    let g:tcommentGuessFileType_django = 1   "{{{2
+endif
 if !exists('g:tcommentGuessFileType_dsl')
     " For dsl documents, assume filetype = xml.
     let g:tcommentGuessFileType_dsl = 'xml'   "{{{2
+endif
+if !exists('g:tcommentGuessFileType_eruby')
+    let g:tcommentGuessFileType_eruby = 1   "{{{2
+endif
+if !exists('g:tcommentGuessFileType_html')
+    let g:tcommentGuessFileType_html = 1   "{{{2
+endif
+if !exists('g:tcommentGuessFileType_jinja')
+    let g:tcommentGuessFileType_jinja = 'html'   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_php')
     " In php documents, the php part is usually marked as phpRegion. We 
@@ -111,33 +127,20 @@ if !exists('g:tcommentGuessFileType_php')
     " html.
     let g:tcommentGuessFileType_php = 'html'   "{{{2
 endif
-if !exists('g:tcommentGuessFileType_blade')
-    " See |g:tcommentGuessFileType_php|.
-    let g:tcommentGuessFileType_blade = 'html'   "{{{2
+if !exists('g:tcommentGuessFileType_rmd')
+    let g:tcommentGuessFileType_rmd = 'r'   "{{{2
 endif
-if !exists('g:tcommentGuessFileType_html')
-    let g:tcommentGuessFileType_html = 1   "{{{2
+if !exists('g:tcommentGuessFileType_rnoweb')
+    let g:tcommentGuessFileType_rnoweb = 'r'   "{{{2
+endif
+if !exists('g:tcommentGuessFileType_smarty')
+    let g:tcommentGuessFileType_smarty = 1   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_tskeleton')
     let g:tcommentGuessFileType_tskeleton = 1   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_vim')
     let g:tcommentGuessFileType_vim = 1   "{{{2
-endif
-if !exists('g:tcommentGuessFileType_django')
-    let g:tcommentGuessFileType_django = 1   "{{{2
-endif
-if !exists('g:tcommentGuessFileType_eruby')
-    let g:tcommentGuessFileType_eruby = 1   "{{{2
-endif
-if !exists('g:tcommentGuessFileType_jinja')
-    let g:tcommentGuessFileType_jinja = 'html'   "{{{2
-endif
-if !exists('g:tcommentGuessFileType_smarty')
-    let g:tcommentGuessFileType_smarty = 1   "{{{2
-endif
-if !exists('g:tcommentGuessFileType_rnoweb')
-    let g:tcommentGuessFileType_rnoweb = 'r'   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_vue')
     let g:tcommentGuessFileType_vue = 'html'   "{{{2
@@ -185,7 +188,7 @@ if !exists('g:tcommentSyntaxMap')
                 \ 'bladeEcho':          'php',
                 \ 'bladePhpParenBlock': 'php',
                 \ 'erubyExpression':    'ruby',
-                \ 'rmdChung':           'r',
+                \ 'rmdRChunk':          'r',
                 \ 'vimMzSchemeRegion':  'scheme',
                 \ 'vimPerlRegion':      'perl',
                 \ 'vimPythonRegion':    'python',
