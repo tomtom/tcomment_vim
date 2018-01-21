@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-01-21.
-" @Revision:    1898
+" @Revision:    1900
 
 scriptencoding utf-8
 
@@ -128,7 +128,7 @@ if !exists('g:tcommentGuessFileType_php')
     let g:tcommentGuessFileType_php = 'html'   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_rmd')
-    let g:tcommentGuessFileType_rmd = 'r'   "{{{2
+    let g:tcommentGuessFileType_rmd = 'markdown'   "{{{2
 endif
 if !exists('g:tcommentGuessFileType_rnoweb')
     let g:tcommentGuessFileType_rnoweb = 'r'   "{{{2
