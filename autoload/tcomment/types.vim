@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-03-18.
-" @Revision:    4
+" @Revision:    5
 
 
 call tcomment#DefineType('aap',              '# %s'             )
@@ -22,6 +22,7 @@ call tcomment#DefineType('blade_inline',     '{{-- %s --}}'     )
 call tcomment#DefineType('c',                tcomment#GetLineC())
 call tcomment#DefineType('c_block',          g:tcommentBlockC   )
 call tcomment#DefineType('c_inline',         g:tcommentInlineC  )
+call tcomment#DefineType('cabal',            '-- %s'            )
 call tcomment#DefineType('catalog',          '-- %s --'         )
 call tcomment#DefineType('catalog_block',    "--%s--\n  "       )
 call tcomment#DefineType('cfg',              '# %s'             )
