@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-03-18.
-" @Revision:    1907
+" @Revision:    1908
 
 scriptencoding utf-8
 
@@ -220,11 +220,15 @@ if !exists('g:tcomment#replacements_c')
                 \ }
 endif
 
+if !exists('g:tcomment#commentstring_c')
+    let g:tcomment#commentstring_c = '/* %s */'   "{{{2
+endif
+
 if !exists('g:tcommentLineC_fmt')
     " Generic c-like block comments.
     let g:tcommentLineC_fmt = {
                 \ 'commentstring_rx': '\%%(// %s\|/* %s */\)',
-                \ 'commentstring': '/* %s */',
+                \ 'commentstring': g:tcomment#commentstring_c,
                 \ 'rxbeg': '\*\+',
                 \ 'rxend': '',
                 \ 'rxmid': '',
