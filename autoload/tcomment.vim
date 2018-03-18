@@ -652,7 +652,12 @@ function! tcomment#Comment(beg, end, ...) abort
                         endif
                     endif
                     " TLogVAR line1
-                    call setline(lnum, line1)
+                    if line1 !=# getline(lnum)
+                        " Only set the line if it is different, to not 
+                        " add an empty undo step.
+                        " Ref: https://github.com/vim/vim/issues/2700
+                        call setline(lnum, line1)
+                    endif
                 endif
             endif
         endfor
