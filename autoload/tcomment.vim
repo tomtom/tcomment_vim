@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-03-18.
-" @Revision:    1908
+" @Revision:    1910
 
 scriptencoding utf-8
 
@@ -37,7 +37,8 @@ endif
 if !exists('g:tcommentModeExtra')
     " Modifies how commenting works.
     "   >  ... Move the cursor to the end of the comment
-    "   >> ... Like above but move the cursor to the next line
+    "   >> ... Like above but move the cursor to the beginning of the next line
+    "   >| ... Like above but move the cursor to the next line
     "   #  ... Move the cursor to the position of the commented text 
     "          (NOTE: this only works when creating empty comments using 
     "          |:TCommentInline| from normal or insert mode and should 
@@ -680,8 +681,12 @@ function! tcomment#Comment(beg, end, ...) abort
     endif
     if comment_mode =~# '>'
         call setpos('.', cursor_pos)
-        if comment_mode !~? 'i' && comment_mode =~# '>>'
-            norm! l^
+        if comment_mode !~? 'i
+            if comment_mode =~# '>>'
+                norm! j^
+            elseif comment_mode =~# '>|'
+                norm! j
+            endif
         endif
     elseif comment_mode =~# '#'
         call setpos('.', cursor_pos)
