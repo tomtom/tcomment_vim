@@ -1,3 +1,10 @@
+" @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
+" @Website:     http://www.vim.org/account/profile.php?user_id=4037
+" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
+" @Created:     2007-09-17.
+" @Last Change: 2018-03-18.
+" @Revision:    3
+
 
 function! tcomment#replace#DoReplacements(text, tokens, replacements) abort "{{{3
     if empty(a:tokens)

@@ -1,3 +1,11 @@
+" @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
+" @Website:     http://www.vim.org/account/profile.php?user_id=4037
+" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
+" @Created:     2007-09-17.
+" @Last Change: 2018-03-18.
+" @Revision:    5
+
+
 function! s:DefaultValue(option) abort
     exec 'let '. a:option .' = &'. a:option
     exec 'set '. a:option .'&'
@@ -11,26 +19,8 @@ let s:default_comments       = s:DefaultValue('comments')
 let s:default_comment_string = s:DefaultValue('commentstring')
 let s:null_comment_string    = '%s'
 
-function! tcomment#commentstring#guess_comment_mode(comment_mode, supported_comment_modes) abort "{{{3
-    " TLogVAR a:comment_mode, a:supported_comment_modes
-    let special = substitute(a:comment_mode, '\c[^ukc]', '', 'g')
-    let cmode = tolower(a:comment_mode)
-    let ccmodes = split(tolower(a:supported_comment_modes), '\zs')
-    let ccmodes = filter(ccmodes, 'stridx(cmode, v:val) != -1')
-    let guess = substitute(a:comment_mode, '\w\+', 'G', 'g')
-    " TLogVAR ccmodes, guess
-    if a:comment_mode =~# '[BR]'
-        let rv = !empty(ccmodes) ? a:comment_mode : guess
-    elseif a:comment_mode =~# '[I]'
-        let rv = !empty(ccmodes) ? a:comment_mode : ''
-    else
-        let rv = guess
-    endif
-    return tcomment#comment_mode#add_extra(rv, special, 0, 1)
-endf
 
-
-function! tcomment#commentstring#guess_vim_options(comment_mode) abort
+function! tcomment#commentstring#GuessVimOptions(comment_mode) abort
     " TLogVAR a:comment_mode
     let commentstring = &commentstring
     " let valid_f = (match(substitute(commentstring, '%\@<!\(%%\)*%s', '', 'g'), '%\@<!%[^%]') == -1)
@@ -43,7 +33,7 @@ function! tcomment#commentstring#guess_vim_options(comment_mode) abort
     if commentstring =~# '\S\s*%s\s*\S'
         let ccmodes .= 'bi'
     endif
-    let guess_comment_mode = tcomment#commentstring#guess_comment_mode(a:comment_mode, ccmodes)
+    let guess_comment_mode = tcomment#commentmode#GuessCommentMode(a:comment_mode, ccmodes)
     " TLogVAR guess_comment_mode
     if commentstring != s:default_comment_string && valid_cms
         " The &commentstring appears to have been set and to be valid
@@ -77,8 +67,8 @@ function! tcomment#commentstring#guess_vim_options(comment_mode) abort
         return cdef
     endif
 endf
-" tcomment#commentstring#get_custom(ft, comment_mode, ?default="", ?default_cdef={})
-function! tcomment#commentstring#get_custom(ft, comment_mode, ...) abort
+" tcomment#commentstring#GetCustom(ft, comment_mode, ?default="", ?default_cdef={})
+function! tcomment#commentstring#GetCustom(ft, comment_mode, ...) abort
     " TLogVAR a:ft, a:comment_mode, a:000
     let comment_mode   = a:comment_mode
     let custom_comment = tcomment#TypeExists(a:ft)
@@ -94,7 +84,7 @@ function! tcomment#commentstring#get_custom(ft, comment_mode, ...) abort
         " TLogVAR 1, def
     elseif !empty(custom_comment)
         let def = tcomment#GetCommentDef(custom_comment)
-        let comment_mode = tcomment#commentstring#guess_comment_mode(comment_mode, supported_comment_mode)
+        let comment_mode = tcomment#commentmode#GuessCommentMode(comment_mode, supported_comment_mode)
         " TLogVAR 3, def, comment_mode
     elseif !empty(default)
         if empty(default_cdef)
@@ -102,11 +92,11 @@ function! tcomment#commentstring#get_custom(ft, comment_mode, ...) abort
         else
             let def = default_cdef
         endif
-        let comment_mode = tcomment#commentstring#guess_comment_mode(comment_mode, default_supports_comment_mode)
+        let comment_mode = tcomment#commentmode#GuessCommentMode(comment_mode, default_supports_comment_mode)
         " TLogVAR 4, def, comment_mode
     else
         let def = {}
-        let comment_mode = tcomment#commentstring#guess_comment_mode(comment_mode, '')
+        let comment_mode = tcomment#commentmode#GuessCommentMode(comment_mode, '')
         " TLogVAR 5, def, comment_mode
     endif
     let cdef = copy(def)
@@ -165,7 +155,7 @@ function! s:ConstructFromCommentsOption(comment_mode) abort
     if !empty(comments.e.string)
         let ccmodes .= 'bi'
     endif
-    let comment_mode = tcomment#commentstring#guess_comment_mode(a:comment_mode, ccmodes)
+    let comment_mode = tcomment#commentmode#GuessCommentMode(a:comment_mode, ccmodes)
     if !empty(comments.line.string)
         let cdef.mode = comment_mode
         let cdef.commentstring = comments.line.string .' %s'

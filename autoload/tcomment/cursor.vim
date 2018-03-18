@@ -1,5 +1,12 @@
+" @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
+" @Website:     http://www.vim.org/account/profile.php?user_id=4037
+" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
+" @Created:     2007-09-17.
+" @Last Change: 2018-03-18.
+" @Revision:    3
 
-function! tcomment#cursor#getStartEnd(beg, end, comment_mode) abort "{{{3
+
+function! tcomment#cursor#GetStartEnd(beg, end, comment_mode) abort "{{{3
     " TLogVAR a:beg, a:end, a:comment_mode
     if type(a:beg) == 3
         let [lbeg, cbeg] = a:beg

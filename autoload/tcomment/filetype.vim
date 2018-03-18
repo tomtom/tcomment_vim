@@ -1,5 +1,12 @@
+" @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
+" @Website:     http://www.vim.org/account/profile.php?user_id=4037
+" @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
+" @Created:     2007-09-17.
+" @Last Change: 2018-03-18.
+" @Revision:    3
 
-function! tcomment#filetype#get(...) abort "{{{3
+
+function! tcomment#filetype#Get(...) abort "{{{3
     let ft = a:0 >= 1 && !empty(a:1) ? a:1 : &filetype
     let poss = a:0 >= 2 ? a:2 : [-1, 1, 0]
     for pos in poss
@@ -33,14 +40,14 @@ endf
 
 
 " Handle sub-filetypes etc.
-function! tcomment#filetype#get_alt(filetype, cdef) abort "{{{3
-    let filetype = empty(a:filetype) ? tcomment#filetype#get(&filetype, [-1]) : a:filetype
+function! tcomment#filetype#GetAlt(filetype, cdef) abort "{{{3
+    let filetype = empty(a:filetype) ? tcomment#filetype#Get(&filetype, [-1]) : a:filetype
     Tlibtrace 'tcomment', a:filetype, filetype
     if g:tcommentGuessFileType || (exists('g:tcommentGuessFileType_'. filetype) 
                 \ && g:tcommentGuessFileType_{filetype} =~# '[^0]')
         if g:tcommentGuessFileType_{filetype} == 1
             if filetype =~# '^.\{-}\..\+$'
-                let alt_filetype = tcomment#filetype#get(filetype)
+                let alt_filetype = tcomment#filetype#Get(filetype)
             else
                 let alt_filetype = ''
             endif
@@ -52,11 +59,11 @@ function! tcomment#filetype#get_alt(filetype, cdef) abort "{{{3
     elseif filetype =~# '^.\{-}\..\+$'
         " Unfortunately the handling of "sub-filetypes" isn't 
         " consistent. Some use MAJOR.MINOR, others use MINOR.MAJOR.
-        let alt_filetype = tcomment#filetype#get(filetype)
+        let alt_filetype = tcomment#filetype#Get(filetype)
         " if alt_filetype == filetype
-        "     let alt_filetype = tcomment#filetype#get(filetype, 1)
+        "     let alt_filetype = tcomment#filetype#Get(filetype, 1)
         "     if alt_filetype == a:filetype
-        "         let alt_filetype = tcomment#filetype#get(filetype, 0)
+        "         let alt_filetype = tcomment#filetype#Get(filetype, 0)
         "     endif
         " endif
         Tlibtrace 'tcomment', 2, alt_filetype

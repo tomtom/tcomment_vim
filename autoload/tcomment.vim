@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-01-21.
-" @Revision:    1900
+" @Last Change: 2018-03-18.
+" @Revision:    1907
 
 scriptencoding utf-8
 
@@ -464,7 +464,7 @@ endf
 " By default, each line in range will be commented by adding the comment 
 " prefix and postfix.
 function! tcomment#Comment(beg, end, ...) abort
-    let comment_mode0  = tcomment#comment_mode#add_extra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
+    let comment_mode0  = tcomment#commentmode#AddExtra((a:0 >= 1 ? a:1 : 'G'), g:tcommentModeExtra, a:beg, a:end)
     let comment_mode   = comment_mode0
     let comment_anyway = a:0 >= 2 ? (a:2 ==# '!') : 0
     " TLogVAR a:beg, a:end, comment_mode, comment_anyway, a:000
@@ -492,7 +492,7 @@ function! tcomment#Comment(beg, end, ...) abort
         let comment_mode = substitute(comment_mode, '\Ci', i_mode, 'g')
         " TLogVAR 1, comment_mode
     endif
-    let [lbeg, cbeg, lend, cend] = tcomment#cursor#getStartEnd(a:beg, a:end, comment_mode)
+    let [lbeg, cbeg, lend, cend] = tcomment#cursor#GetStartEnd(a:beg, a:end, comment_mode)
     " TLogVAR lbeg, cbeg, lend, cend, virtcol('$')
     if comment_mode ==? 'I' && comment_mode0 =~# 'i' && lbeg == lend && cend >= virtcol('$') - 1
         let comment_mode = substitute(comment_mode, '\CI', cbeg <= 1 ? 'G' : 'R', 'g')
@@ -501,7 +501,7 @@ function! tcomment#Comment(beg, end, ...) abort
     let mode_extra = s:GetTempOption('mode_extra', '')
     " TLogVAR mode_extra
     if !empty(mode_extra)
-        let comment_mode = tcomment#comment_mode#add_extra(comment_mode, mode_extra, lbeg, lend)
+        let comment_mode = tcomment#commentmode#AddExtra(comment_mode, mode_extra, lbeg, lend)
         " TLogVAR "mode_extra", comment_mode
         unlet s:temp_options.mode_extra
     endif
@@ -765,16 +765,16 @@ function! s:ExtendCDef(beg, end, comment_mode, cdef, args) abort
             call extend(a:cdef, s:GetCommentDefinitionForType(a:beg, a:end, a:comment_mode, value))
         elseif key ==# 'mode'
             " let a:cdef[key] = a:comment_mode . value
-            let a:cdef.mode = tcomment#comment_mode#add_extra(a:comment_mode, value, a:beg, a:end)
+            let a:cdef.mode = tcomment#commentmode#AddExtra(a:comment_mode, value, a:beg, a:end)
         elseif key ==# 'mode_extra'
             if has_key(a:cdef, 'mode')
-                let mode = tcomment#comment_mode#add_extra(a:comment_mode, a:cdef.mode, a:beg, a:end)
+                let mode = tcomment#commentmode#AddExtra(a:comment_mode, a:cdef.mode, a:beg, a:end)
                 " TLogVAR 'mode', mode
             else
                 let mode = a:comment_mode
                 " TLogVAR 'mode == comment_mode', mode
             endif
-            let a:cdef.mode = tcomment#comment_mode#add_extra(mode, value, a:beg, a:end)
+            let a:cdef.mode = tcomment#commentmode#AddExtra(mode, value, a:beg, a:end)
         elseif key ==# 'count'
             let a:cdef[key] = str2nr(value)
         else
@@ -832,7 +832,7 @@ function! tcomment#Operator(type, ...) abort "{{{3
         " TLogVAR comment_mode
         " echom "DBG tcomment#Operator" lbeg virtcol("'[") virtcol("'<") lend virtcol("']") virtcol("'>")
         norm! 
-        let comment_mode = tcomment#comment_mode#add_extra(comment_mode, g:tcommentOpModeExtra, lbeg, lend)
+        let comment_mode = tcomment#commentmode#AddExtra(comment_mode, g:tcommentOpModeExtra, lbeg, lend)
         " TLogVAR comment_mode, type
         "  if type =~ 'line\|block' || g:tcomment#ignore_char_type
         " if comment_mode =~# '[R]'
@@ -932,7 +932,7 @@ call tcomment#CollectFileTypes()
 function! tcomment#Complete(ArgLead, CmdLine, CursorPos) abort "{{{3
     call tcomment#CollectFileTypes()
     let completions = copy(s:types)
-    let filetype = tcomment#filetype#get()
+    let filetype = tcomment#filetype#Get()
     if index(completions, filetype) != -1
         " TLogVAR filetype
         call insert(completions, filetype)
@@ -990,37 +990,37 @@ function! s:GetCommentDefinition(beg, end, comment_mode, ...) abort
     let ft = a:0 >= 1 ? a:1 : ''
     Tlibtrace 'tcomment', a:beg, a:end, a:comment_mode, ft
     if !empty(ft)
-        let cdef = tcomment#commentstring#get_custom(ft, a:comment_mode)
+        let cdef = tcomment#commentstring#GetCustom(ft, a:comment_mode)
     else
         let cdef = {'mode': a:comment_mode}
     endif
     " TLogVAR cdef
     let cms = get(cdef, 'commentstring', '')
     if empty(cms)
-        let filetype = tcomment#filetype#get(ft)
+        let filetype = tcomment#filetype#Get(ft)
         Tlibtrace 'tcomment', filetype
         if exists('b:commentstring')
             let cms = b:commentstring
             " TLogVAR 1, cms
-            return tcomment#commentstring#get_custom(filetype, a:comment_mode, cms)
+            return tcomment#commentstring#GetCustom(filetype, a:comment_mode, cms)
         elseif exists('b:commentStart') && !empty(b:commentStart)
             let cms = s:EncodeCommentPart(b:commentStart) .' %s'
             " TLogVAR 2, cms
             if exists('b:commentEnd') && !empty(b:commentEnd)
                 let cms = cms .' '. s:EncodeCommentPart(b:commentEnd)
             endif
-            return tcomment#commentstring#get_custom(filetype, a:comment_mode, cms)
+            return tcomment#commentstring#GetCustom(filetype, a:comment_mode, cms)
         else
-            let [use_guess_ft, alt_filetype] = tcomment#filetype#get_alt(ft, cdef)
+            let [use_guess_ft, alt_filetype] = tcomment#filetype#GetAlt(ft, cdef)
             Tlibtrace 'tcomment', use_guess_ft, alt_filetype
             if use_guess_ft
                 return s:GuessFileType(a:beg, a:end,
                       \ a:comment_mode, filetype, alt_filetype,
                       \ s:types_rx)
             else
-                let guess_cdef = tcomment#commentstring#guess_vim_options(a:comment_mode)
+                let guess_cdef = tcomment#commentstring#GuessVimOptions(a:comment_mode)
                 " TLogVAR guess_cdef
-                return tcomment#commentstring#get_custom(filetype, a:comment_mode, guess_cdef.commentstring, guess_cdef)
+                return tcomment#commentstring#GetCustom(filetype, a:comment_mode, guess_cdef.commentstring, guess_cdef)
             endif
         endif
         let cdef.commentstring = cms
@@ -1183,7 +1183,7 @@ function! s:ProcessLine(comment_do, match, checkRx, replace) abort
         if a:comment_do ==# 'u'
             let m = matchlist(a:match, a:checkRx)
             if !empty(m)
-                for irx in range(2, tcomment#regex#count(a:checkRx, '\\\@<!\\('))
+                for irx in range(2, tcomment#regex#Count(a:checkRx, '\\\@<!\\('))
                     if !empty(m[irx])
                         break
                     endif
@@ -1363,7 +1363,6 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
 endf
 
 
-
 if exists('*strdisplaywidth')
     function! s:Strwidth(text) abort "{{{3
         return strdisplaywidth(a:text)
@@ -1374,19 +1373,20 @@ else
     endf
 endif
 
+
 " inspired by Meikel Brandmeyer's EnhancedCommentify.vim
 " this requires that a syntax names are prefixed by the filetype name 
 " s:GuessFileType(beg, end, comment_mode, filetype, ?fallbackFiletype)
 function! s:GuessFileType(beg, end, comment_mode, filetype, ...) abort
     " TLogVAR a:beg, a:end, a:comment_mode, a:filetype, a:000
-    let cdef0 = tcomment#commentstring#get_custom(a:filetype, a:comment_mode)
+    let cdef0 = tcomment#commentstring#GetCustom(a:filetype, a:comment_mode)
     if a:0 >= 1 && !empty(a:1)
-        let cdef = tcomment#commentstring#get_custom(a:1, a:comment_mode)
+        let cdef = tcomment#commentstring#GetCustom(a:1, a:comment_mode)
         " TLogVAR 0, cdef
         let cdef = extend(cdef, cdef0, 'keep')
         " TLogVAR 1, cdef
         if empty(get(cdef, 'commentstring', ''))
-            let guess_cdef = tcomment#commentstring#guess_vim_options(a:comment_mode)
+            let guess_cdef = tcomment#commentstring#GuessVimOptions(a:comment_mode)
             call extend(cdef, guess_cdef)
         endif
         " TLogVAR 2, cdef
@@ -1394,7 +1394,7 @@ function! s:GuessFileType(beg, end, comment_mode, filetype, ...) abort
         let cdef = cdef0
         " TLogVAR 3, cdef
         if !has_key(cdef, 'commentstring')
-            let cdef = tcomment#commentstring#guess_vim_options(a:comment_mode)
+            let cdef = tcomment#commentstring#GuessVimOptions(a:comment_mode)
         endif
         " TLogVAR 4, cdef
     endif
@@ -1453,14 +1453,14 @@ function! s:GuessFileType(beg, end, comment_mode, filetype, ...) abort
             endif
             if !empty(ftype_map)
                 " TLogVAR ftype_map
-                return tcomment#commentstring#get_custom(ftype_map, a:comment_mode, cdef.commentstring)
+                return tcomment#commentstring#GetCustom(ftype_map, a:comment_mode, cdef.commentstring)
             elseif syntax_name =~ s:types_rx
                 let ft = substitute(syntax_name, s:types_rx, '\1', '')
                 " TLogVAR ft
                 if exists('g:tcommentIgnoreTypes_'. a:filetype) && g:tcommentIgnoreTypes_{a:filetype} =~ '\<'.ft.'\>'
                     let m += 1
                 else
-                    return tcomment#commentstring#get_custom(ft, a:comment_mode, cdef.commentstring)
+                    return tcomment#commentstring#GetCustom(ft, a:comment_mode, cdef.commentstring)
                 endif
             elseif empty(syntax_name) || syntax_name ==? 'None' || syntax_name =~# '^\u\+$' || syntax_name =~# '^\u\U*$'
                 let m += 1
