@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-18.
-" @Revision:    4
+" @Last Change: 2018-03-19.
+" @Revision:    5
 
 
 function! tcomment#commentmode#AddExtra(comment_mode, extra, beg, end) abort "{{{3
@@ -33,7 +33,7 @@ function! tcomment#commentmode#AddExtra(comment_mode, extra, beg, end) abort "{{
 endf
 
 
-function! tcomment#commentmode#GuessCommentMode(comment_mode, supported_comment_modes) abort "{{{3
+function! tcomment#commentmode#Guess(comment_mode, supported_comment_modes) abort "{{{3
     " TLogVAR a:comment_mode, a:supported_comment_modes
     let special = substitute(a:comment_mode, '\c[^ukc]', '', 'g')
     let cmode = tolower(a:comment_mode)

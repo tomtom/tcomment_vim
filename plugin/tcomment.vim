@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2017-02-09.
-" @Revision:    975
+" @Last Change: 2018-03-19.
+" @Revision:    980
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -66,7 +66,7 @@ endif
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TComment
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#complete#Args TComment
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'G', "<bang>", <f-args>)
 
 " :display: :[range]TCommentAs[!] commenttype ?ARGS...
@@ -76,7 +76,7 @@ command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs T
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -complete=customlist,tcomment#Complete -range -nargs=+ TCommentAs 
+command! -bar -bang -complete=customlist,tcomment#complete#Complete -range -nargs=+ TCommentAs 
             \ call tcomment#CommentAs(<line1>, <line2>, "<bang>", <f-args>)
 
 " :display: :[range]TCommentRight[!] ?ARGS...
@@ -88,7 +88,7 @@ command! -bar -bang -complete=customlist,tcomment#Complete -range -nargs=+ TComm
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentRight
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#complete#Args TCommentRight
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'R', "<bang>", <f-args>)
 
 " :display: :[range]TCommentBlock[!] ?ARGS...
@@ -99,7 +99,7 @@ command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs T
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentBlock
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#complete#Args TCommentBlock
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'B', "<bang>", <f-args>)
 
 " :display: :[range]TCommentInline[!] ?ARGS...
@@ -109,7 +109,7 @@ command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs T
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentInline
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#complete#Args TCommentInline
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'I', "<bang>", <f-args>)
 
 " :display: :[range]TCommentMaybeInline[!] ?ARGS...
@@ -118,7 +118,7 @@ command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs T
 " ARGS... are either (see also |tcomment#Comment()|):
 "   1. a list of key=value pairs
 "   2. 1-2 values for: ?commentBegin, ?commentEnd
-command! -bar -bang -range -nargs=* -complete=customlist,tcomment#CompleteArgs TCommentMaybeInline
+command! -bar -bang -range -nargs=* -complete=customlist,tcomment#complete#Args TCommentMaybeInline
             \ keepjumps call tcomment#Comment(<line1>, <line2>, 'i', "<bang>", <f-args>)
 
 
@@ -145,7 +145,7 @@ inoremap <Plug>TComment_<c-_>n <c-o>:TCommentAs <c-r>=&ft<cr>
 noremap <Plug>TComment_<c-_>s :TCommentAs <c-r>=&ft<cr>_
 inoremap <Plug>TComment_<c-_>s <c-o>:TCommentAs <c-r>=&ft<cr>_
 noremap <Plug>TComment_<c-_>cc :<c-u>call tcomment#SetOption("count", v:count1)<cr>
-noremap <Plug>TComment_<c-_>ca :<c-u>call tcomment#SetOption("as", input("Comment as: ", &filetype, "customlist,tcomment#Complete"))<cr>
+noremap <Plug>TComment_<c-_>ca :<c-u>call tcomment#SetOption("as", input("Comment as: ", &filetype, "customlist,tcomment#complete#Complete"))<cr>
 
 noremap <Plug>TComment_<Leader>__ :TComment<cr>
 xnoremap <Plug>TComment_<Leader>__ :TCommentMaybeInline<cr>
@@ -184,26 +184,26 @@ function! s:MapOp(name, extra, op, invoke) "{{{3
 endf
 
 
-call s:MapOp('Uncomment',  'call tcomment#SetOption("mode_extra", "U")', 'tcomment#Operator', 'g@')
-call s:MapOp('Uncommentc', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#OperatorLine', 'g@$')
-call s:MapOp('Uncommentb', 'call tcomment#SetOption("mode_extra", "UB")', 'tcomment#OperatorLine', 'g@')
+call s:MapOp('Uncomment',  'call tcomment#SetOption("mode_extra", "U")', 'tcomment#operator#Op', 'g@')
+call s:MapOp('Uncommentc', 'call tcomment#SetOption("mode_extra", "U")', 'tcomment#operator#Line', 'g@$')
+call s:MapOp('Uncommentb', 'call tcomment#SetOption("mode_extra", "UB")', 'tcomment#operator#Line', 'g@')
 xnoremap <silent> <Plug>TComment_Uncomment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| call tcomment#SetOption("mode_extra", "U") \| '<,'>TCommentMaybeInline<cr>
 
-call s:MapOp('Comment',  '', 'tcomment#OperatorAnyway', 'g@')
-call s:MapOp('Commentl', '', 'tcomment#OperatorLine', 'g@$')
-call s:MapOp('Commentc', '', 'tcomment#OperatorLineAnyway', 'g@$')
-call s:MapOp('Commentb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#OperatorLine', 'g@')
+call s:MapOp('Comment',  '', 'tcomment#operator#Anyway', 'g@')
+call s:MapOp('Commentl', '', 'tcomment#operator#Line', 'g@$')
+call s:MapOp('Commentc', '', 'tcomment#operator#LineAnyway', 'g@$')
+call s:MapOp('Commentb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#operator#Line', 'g@')
 xnoremap <silent> <Plug>TComment_Comment :<c-u>if v:count > 0 \| call tcomment#SetOption("count", v:count) \| endif \| '<,'>TCommentMaybeInline!<cr>
 
-vnoremap <Plug>TComment_ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
-noremap <Plug>TComment_ic :<c-U>call tcomment#TextObjectInlineComment()<cr>
+vnoremap <Plug>TComment_ic :<c-U>call tcomment#textobject#InlineComment()<cr>
+noremap <Plug>TComment_ic :<c-U>call tcomment#textobject#InlineComment()<cr>
 
-call s:MapOp('gcc', '', 'tcomment#OperatorLine', 'g@$')
-call s:MapOp('gcb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#OperatorLine', 'g@')
+call s:MapOp('gcc', '', 'tcomment#operator#Line', 'g@$')
+call s:MapOp('gcb', 'call tcomment#SetOption("mode_extra", "B")', 'tcomment#operator#Line', 'g@')
 xnoremap <Plug>TComment_gc :TCommentMaybeInline<cr>
 
-call s:MapOp('gc', '', 'tcomment#Operator', 'g@')
-call s:MapOp('gC', '', 'tcomment#OperatorLine', 'g@')
+call s:MapOp('gc', '', 'tcomment#operator#Op', 'g@')
+call s:MapOp('gC', '', 'tcomment#operator#Line', 'g@')
 
 for s:i in range(1, 9)
     exec 'noremap <Plug>TComment_<c-_>' . s:i . ' :call tcomment#SetOption("count", '. s:i .')<cr>'
@@ -211,7 +211,7 @@ for s:i in range(1, 9)
     exec 'vnoremap <Plug>TComment_<c-_>' . s:i . ' :call tcomment#SetOption("count", '. s:i .')<cr>'
 endfor
 for s:i in range(1, 9)
-    call s:MapOp('gc' . s:i .'c', 'call tcomment#SetOption("count", '. s:i .')', 'tcomment#Operator', 'g@')
+    call s:MapOp('gc' . s:i .'c', 'call tcomment#SetOption("count", '. s:i .')', 'tcomment#operator#Op', 'g@')
 endfor
 unlet s:i
 
