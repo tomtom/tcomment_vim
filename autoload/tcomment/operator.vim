@@ -2,7 +2,7 @@
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Last Change: 2018-03-20
-" @Revision:    8
+" @Revision:    9
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -59,8 +59,6 @@ function! tcomment#operator#Op(type, ...) abort "{{{3
         endif
         let cbeg = virtcol("'[")
         Tlibtrace 'tcomment', comment_mode, comment_mode1, lbeg, lend, cbeg, cend, virtcol('$')
-        Tlibtrace 'tcomment', comment_mode
-        " echom "DBG tcomment#operator#Op" lbeg virtcol("'[") virtcol("'<") lend virtcol("']") virtcol("'>")
         norm! 
         let comment_mode = tcomment#commentmode#AddExtra(comment_mode, g:tcomment#operator#mode_extra, lbeg, lend)
         Tlibtrace 'tcomment', comment_mode, type
