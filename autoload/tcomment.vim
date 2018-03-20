@@ -3,11 +3,10 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-03-20.
-" @Revision:    1978
+" @Revision:    1979
 
 scriptencoding utf-8
 
-" call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
 if exists(':Tlibtrace') != 2
     " :nodoc:
     command! -nargs=+ -bang Tlibtrace :
