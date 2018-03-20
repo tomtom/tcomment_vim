@@ -68,7 +68,7 @@ since this is how many vim maps work. In order to make tcomment use e.g. inline
 comments anyway, use the <c-_>i map -- see below.
 
 By default the cursor stays put. If you want the cursor to the end of 
-the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
+the commented text, set |g:tcomment#operator#mode_extra| to '>' (but this may not 
 work properly with exclusive motions).
 
 Primary key maps for normal and insert mode:

@@ -1,8 +1,13 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-03-19
-" @Revision:    2
+" @Last Change: 2018-03-20
+" @Revision:    3
+
+
+if exists(':Tlibtrace') != 2
+    command! -nargs=+ -bang Tlibtrace :
+endif
 
 
 function! tcomment#textobject#InlineComment() abort "{{{3
@@ -12,7 +17,7 @@ function! tcomment#textobject#InlineComment() abort "{{{3
     let lnum = pos[1]
     let col  = pos[2]
     let cmtf = '\V'. printf(cms, '\.\{-}\%'. lnum .'l\%'. col .'c\.\{-}')
-    " TLogVAR cmtf, search(cmtf,'cwn')
+    Tlibtrace 'tcomment', cmtf, search(cmtf,'cwn')
     if search(cmtf, 'cw') > 0
         let pos0 = getpos('.')
         if search(cmtf, 'cwe') > 0

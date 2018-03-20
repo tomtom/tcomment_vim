@@ -2,8 +2,12 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-19.
-" @Revision:    24
+" @Last Change: 2018-03-20.
+" @Revision:    25
+
+if exists(':Tlibtrace') != 2
+    command! -nargs=+ -bang Tlibtrace :
+endif
 
 
 let s:definitions = {}
@@ -57,7 +61,7 @@ endf
 function! tcomment#type#Define(name, commentdef, ...) abort
     let basename = matchstr(a:name, '^[^_]\+')
     let use = a:0 >= 2 ? a:2 : len(filter(copy(g:tcomment#ignore_comment_def), 'v:val == basename')) == 0
-    " TLogVAR a:name, use
+    Tlibtrace 'tcomment', a:name, use
     if use
         if type(a:commentdef) == 4
             let cdef = copy(a:commentdef)

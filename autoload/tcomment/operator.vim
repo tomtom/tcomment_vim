@@ -1,15 +1,26 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-03-19
-" @Revision:    3
+" @Last Change: 2018-03-20
+" @Revision:    8
+
+if exists(':Tlibtrace') != 2
+    command! -nargs=+ -bang Tlibtrace :
+endif
+
+
+if !exists('g:tcomment#operator#mode_extra')
+    " Modifies how the operator works.
+    " See |g:tcomment#mode_extra| for a list of possible values.
+    let g:tcomment#operator#mode_extra = ''   "{{{2
+endif
 
 
 function! tcomment#operator#Op(type, ...) abort "{{{3
     let type = a:type
     let comment_mode = a:0 >= 1 ? a:1 : ''
     let bang = a:0 >= 2 ? a:2 : ''
-    " TLogVAR type, comment_mode, bang
+    Tlibtrace 'tcomment', type, comment_mode, bang
     if !exists('w:tcomment_pos')
         let w:tcomment_pos = getpos('.')
     endif
@@ -47,12 +58,12 @@ function! tcomment#operator#Op(type, ...) abort "{{{3
             endif
         endif
         let cbeg = virtcol("'[")
-        " TLogVAR comment_mode, comment_mode1, lbeg, lend, cbeg, cend, virtcol('$')
-        " TLogVAR comment_mode
+        Tlibtrace 'tcomment', comment_mode, comment_mode1, lbeg, lend, cbeg, cend, virtcol('$')
+        Tlibtrace 'tcomment', comment_mode
         " echom "DBG tcomment#operator#Op" lbeg virtcol("'[") virtcol("'<") lend virtcol("']") virtcol("'>")
         norm! 
-        let comment_mode = tcomment#commentmode#AddExtra(comment_mode, g:tcommentOpModeExtra, lbeg, lend)
-        " TLogVAR comment_mode, type
+        let comment_mode = tcomment#commentmode#AddExtra(comment_mode, g:tcomment#operator#mode_extra, lbeg, lend)
+        Tlibtrace 'tcomment', comment_mode, type
         "  if type =~ 'line\|block' || g:tcomment#ignore_char_type
         " if comment_mode =~# '[R]'
         "     call tcomment#Comment([lbeg, cbeg], [lend, cend], comment_mode.'o', bang)
@@ -65,12 +76,12 @@ function! tcomment#operator#Op(type, ...) abort "{{{3
     finally
         let &selection = sel_save
         let @@ = reg_save
-        " TLogVAR g:tcommentOpModeExtra
-        if g:tcommentOpModeExtra !~# '[#>]'
+        Tlibtrace 'tcomment', g:tcomment#operator#mode_extra
+        if g:tcomment#operator#mode_extra !~# '[#>]'
             if exists('w:tcomment_pos')
-                " TLogVAR w:tcomment_pos
+                Tlibtrace 'tcomment', w:tcomment_pos
                 if w:tcomment_pos != getpos('.')
-                    call setpos('.', w:tcomment_pos)
+                    call tcomment#cursor#SetPos('.', w:tcomment_pos)
                 endif
                 unlet! w:tcomment_pos
             else
@@ -84,19 +95,19 @@ endf
 
 
 function! tcomment#operator#Line(type) abort "{{{3
-    " TLogVAR a:type
+    Tlibtrace 'tcomment', a:type
     call tcomment#operator#Op('line', 'L')
 endf
 
 
 function! tcomment#operator#Anyway(type) abort "{{{3
-    " TLogVAR a:type
+    Tlibtrace 'tcomment', a:type
     call tcomment#operator#Op(a:type, '', '!')
 endf
 
 
 function! tcomment#operator#LineAnyway(type) abort "{{{3
-    " TLogVAR a:type
+    Tlibtrace 'tcomment', a:type
     call tcomment#operator#Op('line', 'L', '!')
 endf
 

@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2018-03-19.
-" @Revision:    981
+" @Last Change: 2018-03-20.
+" @Revision:    991
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -14,27 +14,29 @@ let loaded_tcomment = 400
 let s:save_cpo = &cpo
 set cpo&vim
 
+call tcomment#deprecated#Check()
 
-if !exists('g:tcommentMaps')
+
+if !exists('g:tcomment_maps')
     " If true, set maps.
-    let g:tcommentMaps = 1   "{{{2
+    let g:tcomment_maps = 1   "{{{2
 endif
 
-if !exists("g:tcommentMapLeader1")
-    " g:tcommentMapLeader1 should be a shortcut that can be used with 
+if !exists("g:tcomment_mapleader1")
+    " g:tcomment_mapleader1 should be a shortcut that can be used with 
     " map, imap, vmap.
-    let g:tcommentMapLeader1 = '<c-_>' "{{{2
+    let g:tcomment_mapleader1 = '<c-_>' "{{{2
 endif
 
-if !exists("g:tcommentMapLeader2")
-    " g:tcommentMapLeader2 should be a shortcut that can be used with 
+if !exists("g:tcomment_mapleader2")
+    " g:tcomment_mapleader2 should be a shortcut that can be used with 
     " map, xmap.
-    let g:tcommentMapLeader2 = '<Leader>_' "{{{2
+    let g:tcomment_mapleader2 = '<Leader>_' "{{{2
 endif
 
-if !exists("g:tcommentMapLeaderOp1")
+if !exists("g:tcomment_opleader1")
     " See |tcomment-operator|.
-    let g:tcommentMapLeaderOp1 = 'gc' "{{{2
+    let g:tcomment_opleader1 = 'gc' "{{{2
 endif
 
 " if !exists("g:tcommentMapLeaderOpLinewise")
@@ -42,18 +44,18 @@ endif
 "     let g:tcommentMapLeaderOpLinewise = 'gC' "{{{2
 " endif
 
-if !exists("g:tcommentMapLeaderUncommentAnyway")
+if !exists("g:tcomment_mapleader_uncomment_anyway")
     " See |tcomment-operator|.
-    let g:tcommentMapLeaderUncommentAnyway = 'g<' "{{{2
+    let g:tcomment_mapleader_uncomment_anyway = 'g<' "{{{2
 endif
 
-if !exists("g:tcommentMapLeaderCommentAnyway")
+if !exists("g:tcomment_mapleader_comment_anyway")
     " See |tcomment-operator|.
-    let g:tcommentMapLeaderCommentAnyway = 'g>' "{{{2
+    let g:tcomment_mapleader_comment_anyway = 'g>' "{{{2
 endif
 
-if !exists('g:tcommentTextObjectInlineComment')
-    let g:tcommentTextObjectInlineComment = 'ic'   "{{{2
+if !exists('g:tcomment_textoject_inlinecomment')
+    let g:tcomment_textoject_inlinecomment = 'ic'   "{{{2
 endif
 
 
@@ -159,14 +161,6 @@ noremap <Plug>TComment_<Leader>_n :TCommentAs <c-r>=&ft<cr>
 noremap <Plug>TComment_<Leader>_s :TCommentAs <c-r>=&ft<cr>_
 
 
-" function! TCommentOp(type) "{{{3
-"     " TLogVAR a:type, v:count
-"     " echom "DBG TCommentOp" g:tcomment_ex
-"     " echom "DBG TCommentOp" g:tcomment_op
-"     exec g:tcomment_ex
-"     call call(g:tcomment_op, [a:type])
-" endf
-
 function! s:MapOp(name, extra, op, invoke) "{{{3
     let opfunc = 'TCommentOpFunc_'. substitute(a:name, '[^a-zA-Z0-9_]', '_', 'G')
     let fn = [
@@ -218,78 +212,75 @@ unlet s:i
 delfun s:MapOp
 
 
-if g:tcommentMaps
-    if g:tcommentMapLeader1 != ''
-        exec 'map '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' <Plug>TComment_<c-_><c-_>'
-        exec 'vmap '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' <Plug>TComment_<c-_><c-_>'
-        exec 'imap '. g:tcommentMapLeader1 . g:tcommentMapLeader1 .' <Plug>TComment_<c-_><c-_>'
-        exec 'map '. g:tcommentMapLeader1 .'p <Plug>TComment_<c-_>p'
-        exec 'imap '. g:tcommentMapLeader1 .'p <Plug>TComment_<c-_>p'
-        exec 'map '. g:tcommentMapLeader1 .'<space> <Plug>TComment_<c-_><space>'
-        exec 'imap '. g:tcommentMapLeader1 .'<space> <Plug>TComment_<c-_><space>'
-        exec 'imap '. g:tcommentMapLeader1 .'r <Plug>TComment_<c-_>r'
-        exec 'map '. g:tcommentMapLeader1 .'r <Plug>TComment_<c-_>r'
-        exec 'vmap '. g:tcommentMapLeader1 .'i <Plug>TComment_<c-_>i'
-        exec 'map '. g:tcommentMapLeader1 .'i <Plug>TComment_<c-_>i'
-        exec 'imap '. g:tcommentMapLeader1 .'i <Plug>TComment_<c-_>i'
-        exec 'map '. g:tcommentMapLeader1 .'b <Plug>TComment_<c-_>b'
-        exec 'imap '. g:tcommentMapLeader1 .'b <Plug>TComment_<c-_>b'
-        exec 'map '. g:tcommentMapLeader1 .'a <Plug>TComment_<c-_>a'
-        exec 'imap '. g:tcommentMapLeader1 .'a <Plug>TComment_<c-_>a'
-        exec 'map '. g:tcommentMapLeader1 .'n <Plug>TComment_<c-_>n'
-        exec 'imap '. g:tcommentMapLeader1 .'n <Plug>TComment_<c-_>n'
-        exec 'map '. g:tcommentMapLeader1 .'s <Plug>TComment_<c-_>s'
-        exec 'imap '. g:tcommentMapLeader1 .'s <Plug>TComment_<c-_>s'
-        exec 'map '. g:tcommentMapLeader1 .'cc <Plug>TComment_<c-_>cc'
-        exec 'map '. g:tcommentMapLeader1 .'ca <Plug>TComment_<c-_>ca'
+if g:tcomment_maps
+    if g:tcomment_mapleader1 != ''
+        exec 'map '. g:tcomment_mapleader1 . g:tcomment_mapleader1 .' <Plug>TComment_<c-_><c-_>'
+        exec 'vmap '. g:tcomment_mapleader1 . g:tcomment_mapleader1 .' <Plug>TComment_<c-_><c-_>'
+        exec 'imap '. g:tcomment_mapleader1 . g:tcomment_mapleader1 .' <Plug>TComment_<c-_><c-_>'
+        exec 'map '. g:tcomment_mapleader1 .'p <Plug>TComment_<c-_>p'
+        exec 'imap '. g:tcomment_mapleader1 .'p <Plug>TComment_<c-_>p'
+        exec 'map '. g:tcomment_mapleader1 .'<space> <Plug>TComment_<c-_><space>'
+        exec 'imap '. g:tcomment_mapleader1 .'<space> <Plug>TComment_<c-_><space>'
+        exec 'imap '. g:tcomment_mapleader1 .'r <Plug>TComment_<c-_>r'
+        exec 'map '. g:tcomment_mapleader1 .'r <Plug>TComment_<c-_>r'
+        exec 'vmap '. g:tcomment_mapleader1 .'i <Plug>TComment_<c-_>i'
+        exec 'map '. g:tcomment_mapleader1 .'i <Plug>TComment_<c-_>i'
+        exec 'imap '. g:tcomment_mapleader1 .'i <Plug>TComment_<c-_>i'
+        exec 'map '. g:tcomment_mapleader1 .'b <Plug>TComment_<c-_>b'
+        exec 'imap '. g:tcomment_mapleader1 .'b <Plug>TComment_<c-_>b'
+        exec 'map '. g:tcomment_mapleader1 .'a <Plug>TComment_<c-_>a'
+        exec 'imap '. g:tcomment_mapleader1 .'a <Plug>TComment_<c-_>a'
+        exec 'map '. g:tcomment_mapleader1 .'n <Plug>TComment_<c-_>n'
+        exec 'imap '. g:tcomment_mapleader1 .'n <Plug>TComment_<c-_>n'
+        exec 'map '. g:tcomment_mapleader1 .'s <Plug>TComment_<c-_>s'
+        exec 'imap '. g:tcomment_mapleader1 .'s <Plug>TComment_<c-_>s'
+        exec 'map '. g:tcomment_mapleader1 .'cc <Plug>TComment_<c-_>cc'
+        exec 'map '. g:tcomment_mapleader1 .'ca <Plug>TComment_<c-_>ca'
         for s:i in range(1, 9)
-            exec 'map '. g:tcommentMapLeader1 . s:i .' <Plug>TComment_<c-_>'.s:i
-            exec 'imap '. g:tcommentMapLeader1 . s:i .' <Plug>TComment_<c-_>'.s:i
-            exec 'vmap '. g:tcommentMapLeader1 . s:i .' <Plug>TComment_<c-_>'.s:i
+            exec 'map '. g:tcomment_mapleader1 . s:i .' <Plug>TComment_<c-_>'.s:i
+            exec 'imap '. g:tcomment_mapleader1 . s:i .' <Plug>TComment_<c-_>'.s:i
+            exec 'vmap '. g:tcomment_mapleader1 . s:i .' <Plug>TComment_<c-_>'.s:i
         endfor
         unlet s:i
     endif
-    if g:tcommentMapLeader2 != ''
-        exec 'map '. g:tcommentMapLeader2 .'_ <Plug>TComment_<Leader>__'
-        exec 'xmap '. g:tcommentMapLeader2 .'_ <Plug>TComment_<Leader>__'
-        exec 'map '. g:tcommentMapLeader2 .'p <Plug>TComment_<Leader>_p'
-        exec 'map '. g:tcommentMapLeader2 .'<space> <Plug>TComment_<Leader>_<space>'
-        exec 'xmap '. g:tcommentMapLeader2 .'i <Plug>TComment_<Leader>_i'
-        exec 'map '. g:tcommentMapLeader2 .'r <Plug>TComment_<Leader>_r'
-        exec 'map '. g:tcommentMapLeader2 .'b <Plug>TComment_<Leader>_b'
-        exec 'map '. g:tcommentMapLeader2 .'a <Plug>TComment_<Leader>_a'
-        exec 'map '. g:tcommentMapLeader2 .'n <Plug>TComment_<Leader>_n'
-        exec 'map '. g:tcommentMapLeader2 .'s <Plug>TComment_<Leader>_s'
+    if g:tcomment_mapleader2 != ''
+        exec 'map '. g:tcomment_mapleader2 .'_ <Plug>TComment_<Leader>__'
+        exec 'xmap '. g:tcomment_mapleader2 .'_ <Plug>TComment_<Leader>__'
+        exec 'map '. g:tcomment_mapleader2 .'p <Plug>TComment_<Leader>_p'
+        exec 'map '. g:tcomment_mapleader2 .'<space> <Plug>TComment_<Leader>_<space>'
+        exec 'xmap '. g:tcomment_mapleader2 .'i <Plug>TComment_<Leader>_i'
+        exec 'map '. g:tcomment_mapleader2 .'r <Plug>TComment_<Leader>_r'
+        exec 'map '. g:tcomment_mapleader2 .'b <Plug>TComment_<Leader>_b'
+        exec 'map '. g:tcomment_mapleader2 .'a <Plug>TComment_<Leader>_a'
+        exec 'map '. g:tcomment_mapleader2 .'n <Plug>TComment_<Leader>_n'
+        exec 'map '. g:tcomment_mapleader2 .'s <Plug>TComment_<Leader>_s'
     endif
-    if g:tcommentMapLeaderOp1 != ''
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp1 .' <Plug>TComment_gc'
+    if g:tcomment_opleader1 != ''
+        exec 'nmap <silent> '. g:tcomment_opleader1 .' <Plug>TComment_gc'
         for s:i in range(1, 9)
-            exec 'nmap <silent> '. g:tcommentMapLeaderOp1 . s:i .' <Plug>TComment_gc'.s:i
-            exec 'nmap <silent> '. g:tcommentMapLeaderOp1 . s:i .'c <Plug>TComment_gc'.s:i.'c'
+            exec 'nmap <silent> '. g:tcomment_opleader1 . s:i .' <Plug>TComment_gc'.s:i
+            exec 'nmap <silent> '. g:tcomment_opleader1 . s:i .'c <Plug>TComment_gc'.s:i.'c'
         endfor
         unlet s:i
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp1 .'c <Plug>TComment_gcc'
-        exec 'nmap <silent> '. g:tcommentMapLeaderOp1 .'b <Plug>TComment_gcb'
-        exec 'xmap '. g:tcommentMapLeaderOp1 .' <Plug>TComment_gc'
+        exec 'nmap <silent> '. g:tcomment_opleader1 .'c <Plug>TComment_gcc'
+        exec 'nmap <silent> '. g:tcomment_opleader1 .'b <Plug>TComment_gcb'
+        exec 'xmap '. g:tcomment_opleader1 .' <Plug>TComment_gc'
     endif
-    " if g:tcommentMapLeaderOpLinewise != ''
-    "     exec 'nmap <silent> '. g:tcommentMapLeaderOpLinewise .' <Plug>TComment_gC'
-    " endif
-   if g:tcommentMapLeaderUncommentAnyway != ''
-        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .' <Plug>TComment_Uncomment'
-        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .'c <Plug>TComment_Uncommentc'
-        exec 'nmap <silent> '. g:tcommentMapLeaderUncommentAnyway .'b <Plug>TComment_Uncommentb'
-        exec 'xmap '. g:tcommentMapLeaderUncommentAnyway .' <Plug>TComment_Uncomment'
+   if g:tcomment_mapleader_uncomment_anyway != ''
+        exec 'nmap <silent> '. g:tcomment_mapleader_uncomment_anyway .' <Plug>TComment_Uncomment'
+        exec 'nmap <silent> '. g:tcomment_mapleader_uncomment_anyway .'c <Plug>TComment_Uncommentc'
+        exec 'nmap <silent> '. g:tcomment_mapleader_uncomment_anyway .'b <Plug>TComment_Uncommentb'
+        exec 'xmap '. g:tcomment_mapleader_uncomment_anyway .' <Plug>TComment_Uncomment'
     endif
-   if g:tcommentMapLeaderCommentAnyway != ''
-        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .' <Plug>TComment_Comment'
-        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .'c <Plug>TComment_Commentc'
-        exec 'nmap <silent> '. g:tcommentMapLeaderCommentAnyway .'b <Plug>TComment_Commentb'
-        exec 'xmap '. g:tcommentMapLeaderCommentAnyway .' <Plug>TComment_Comment'
+   if g:tcomment_mapleader_comment_anyway != ''
+        exec 'nmap <silent> '. g:tcomment_mapleader_comment_anyway .' <Plug>TComment_Comment'
+        exec 'nmap <silent> '. g:tcomment_mapleader_comment_anyway .'c <Plug>TComment_Commentc'
+        exec 'nmap <silent> '. g:tcomment_mapleader_comment_anyway .'b <Plug>TComment_Commentb'
+        exec 'xmap '. g:tcomment_mapleader_comment_anyway .' <Plug>TComment_Comment'
     endif
-    if g:tcommentTextObjectInlineComment != ''
-        exec 'vmap' g:tcommentTextObjectInlineComment ' <Plug>TComment_ic'
-        exec 'omap' g:tcommentTextObjectInlineComment ' <Plug>TComment_ic'
+    if g:tcomment_textoject_inlinecomment != ''
+        exec 'vmap' g:tcomment_textoject_inlinecomment ' <Plug>TComment_ic'
+        exec 'omap' g:tcomment_textoject_inlinecomment ' <Plug>TComment_ic'
     endif
 endif
 

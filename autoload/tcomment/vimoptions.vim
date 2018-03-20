@@ -2,8 +2,13 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-19.
-" @Revision:    12
+" @Last Change: 2018-03-20.
+" @Revision:    15
+
+
+if exists(':Tlibtrace') != 2
+    command! -nargs=+ -bang Tlibtrace :
+endif
 
 
 function! s:DefaultValue(option) abort
@@ -21,9 +26,8 @@ let s:null_comment_string    = '%s'
 
 
 function! tcomment#vimoptions#MakeCommentDefinition(comment_mode) abort
-    " TLogVAR a:comment_mode
+    Tlibtrace 'tcomment', a:comment_mode
     let commentstring = &commentstring
-    " let valid_f = (match(substitute(commentstring, '%\@<!\(%%\)*%s', '', 'g'), '%\@<!%[^%]') == -1)
     let valid_f = (match(commentstring, '%\@<!%\%([^%s]\|$\)') == -1)
     if !valid_f
         let commentstring = substitute(commentstring, '%\@<!%\ze\([^%s]\|$\)', '%%', 'g')
@@ -34,7 +38,7 @@ function! tcomment#vimoptions#MakeCommentDefinition(comment_mode) abort
         let ccmodes .= 'bi'
     endif
     let guess_comment_mode = tcomment#commentmode#Guess(a:comment_mode, ccmodes)
-    " TLogVAR guess_comment_mode
+    Tlibtrace 'tcomment', guess_comment_mode
     if commentstring != s:default_comment_string && valid_cms
         " The &commentstring appears to have been set and to be valid
         let cdef = copy(g:tcomment#options_commentstring)
@@ -46,7 +50,7 @@ function! tcomment#vimoptions#MakeCommentDefinition(comment_mode) abort
         " the commentstring is the default one, so we assume that it wasn't 
         " explicitly set; we then try to reconstruct &cms from &comments
         let cdef = s:ConstructFromCommentsOption(a:comment_mode)
-        " TLogVAR comments_cdef
+        Tlibtrace 'tcomment', cdef
         if !empty(cdef)
             call extend(cdef, g:tcomment#options_comments)
             return cdef
@@ -96,10 +100,10 @@ endf
 
 
 function! s:ConstructFromCommentsOption(comment_mode) abort
-    " TLogVAR a:comment_mode
+    Tlibtrace 'tcomment', a:comment_mode
     let cdef = {}
     let comments = s:ExtractCommentsPart()
-    " TLogVAR comments
+    Tlibtrace 'tcomment', comments
     if a:comment_mode =~? '[bi]' && !empty(comments.s.string)
         let cdef.mode = a:comment_mode
         let cdef.commentstring = comments.s.string .' %s '. comments.e.string
@@ -108,7 +112,7 @@ function! s:ConstructFromCommentsOption(comment_mode) abort
             let mindent = repeat(' ', mshift)
             let cdef.middle = mindent . comments.m.string
         endif
-        " TLogVAR cdef
+        Tlibtrace 'tcomment', cdef
         return cdef
     endif
     let ccmodes = 'r'
