@@ -6,7 +6,7 @@ contains uncommented lines, and it will remove comment markup for
 already commented text (i.e. text that contains no uncommented lines).
 
 If the file-type is properly defined, TComment will figure out which 
-comment string to use. Otherwise you use |tcomment#DefineType()| to 
+comment string to use. Otherwise you use |tcomment#type#Define()| to 
 override the default choice.
 
 TComment can properly handle an embedded syntax, e.g., ruby/python/perl 
@@ -122,13 +122,22 @@ A secondary set of key maps is defined for normal and insert mode (see also
 -----------------------------------------------------------------------
 Install~
 
-Edit the vba file and type: >
+Either use the zip archive:
 
-    :so %
+- Download the zip archive
+- Extract it to `~/.vim/pack/tml/start/tcomment`
 
-See :help vimball for details. If you have difficulties or use vim 7.0, 
-please make sure, you have the current version of vimball (vimscript 
-#1502) installed or update your runtime.
+or install from github:
+
+- Start a terminal
+- Change the working directory to `~/.vim/pack/tml/start/`
+- Type: `git clone https://github.com/tomtom/tcomment_vim`
+
+NOTE: If you don't want to run this plugin on startup, use 
+`~/.vim/pack/tml/opt/`.
+
+NOTE: On Windows, ~/.vim might be ~/vimfiles. Please see 'runtimepath' for 
+details.
 
 
 
