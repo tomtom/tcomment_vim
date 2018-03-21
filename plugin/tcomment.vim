@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2018-03-20.
-" @Revision:    991
+" @Last Change: 2018-03-21.
+" @Revision:    992
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -38,11 +38,6 @@ if !exists("g:tcomment_opleader1")
     " See |tcomment-operator|.
     let g:tcomment_opleader1 = 'gc' "{{{2
 endif
-
-" if !exists("g:tcommentMapLeaderOpLinewise")
-"     " See |tcomment-operator|.
-"     let g:tcommentMapLeaderOpLinewise = 'gC' "{{{2
-" endif
 
 if !exists("g:tcomment_mapleader_uncomment_anyway")
     " See |tcomment-operator|.

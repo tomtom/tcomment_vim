@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-20.
-" @Revision:    1979
+" @Last Change: 2018-03-21.
+" @Revision:    1980
 
 scriptencoding utf-8
 
@@ -182,7 +182,7 @@ if !exists('g:tcomment#must_escape_expression_backslash')
     " true. Set this variable to 0, if you see unexpected "\r" char 
     " sequences in comments.
     "
-    " The reommended value was `!(v:version > 702 || (v:version == 702 && has('patch407')))`.
+    " The recommended value was `!(v:version > 702 || (v:version == 702 && has('patch407')))`.
     " It is now assumed though, that no unpatched versions of vim are in 
     " use.
     "
