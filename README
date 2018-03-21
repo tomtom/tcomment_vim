@@ -28,8 +28,7 @@ Most of the time the default toggle keys will do what you want (or to be
 more precise: what I think you want it to do ;-).
 
                                                     *tcomment-operator*
-As operator (the prefix can be customized via |g:tcommentMapLeaderOp1| 
-and |g:tcommentMapLeaderOp2|):
+As operator (the prefix can be customized via |g:tcomment_opleader1|):
 
     gc{motion}   :: Toggle comments (for small comments within one line 
                     the &filetype_inline style will be used, if 
@@ -65,10 +64,10 @@ since this is how many vim maps work. In order to make tcomment use e.g. inline
 comments anyway, use the <c-_>i map -- see below.
 
 By default the cursor stays put. If you want the cursor to the end of 
-the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
+the commented text, set |g:tcomment#operator#mode_extra| to '>' (but this may not 
 work properly with exclusive motions).
 
-Primary key maps for normal and insert mode:
+Primary key maps for normal and insert mode (see also |g:tcomment_mapleader1|):
 
     <c-_><c-_>   :: :TComment
     <c-_><space> :: :TComment <QUERY COMMENT-BEGIN ?COMMENT-END>
@@ -101,7 +100,8 @@ Primary key maps for normal and insert mode:
 
 Most of the above maps are also available in visual mode.
 
-A secondary set of key maps is defined for normal and insert mode:
+A secondary set of key maps is defined for normal and insert mode (see also 
+|g:tcomment_mapleader2|):
 
     <Leader>__       :: :TComment
     <Leader>_p       :: Comment the current inner paragraph

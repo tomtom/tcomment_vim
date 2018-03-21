@@ -31,8 +31,7 @@ Most of the time the default toggle keys will do what you want (or to be
 more precise: what I think you want it to do ;-).
 
                                                     *tcomment-operator*
-As operator (the prefix can be customized via |g:tcommentMapLeaderOp1| 
-and |g:tcommentMapLeaderOp2|):
+As operator (the prefix can be customized via |g:tcomment_opleader1|):
 
     gc{motion}   :: Toggle comments (for small comments within one line 
                     the &filetype_inline style will be used, if 
@@ -68,10 +67,10 @@ since this is how many vim maps work. In order to make tcomment use e.g. inline
 comments anyway, use the <c-_>i map -- see below.
 
 By default the cursor stays put. If you want the cursor to the end of 
-the commented text, set |g:tcommentOpModeExtra| to '>' (but this may not 
+the commented text, set |g:tcomment#operator#mode_extra| to '>' (but this may not 
 work properly with exclusive motions).
 
-Primary key maps for normal and insert mode:
+Primary key maps for normal and insert mode (see also |g:tcomment_mapleader1|):
 
     <c-_><c-_>   :: :TComment
     <c-_><space> :: :TComment <QUERY COMMENT-BEGIN ?COMMENT-END>
@@ -104,7 +103,8 @@ Primary key maps for normal and insert mode:
 
 Most of the above maps are also available in visual mode.
 
-A secondary set of key maps is defined for normal and insert mode:
+A secondary set of key maps is defined for normal and insert mode (see also 
+|g:tcomment_mapleader2|):
 
     <Leader>__       :: :TComment
     <Leader>_p       :: Comment the current inner paragraph
@@ -137,12 +137,12 @@ please make sure, you have the current version of vimball (vimscript
 ========================================================================
 Contents~
 
-        g:tcommentMaps ................................ |g:tcommentMaps|
-        g:tcommentMapLeader1 .......................... |g:tcommentMapLeader1|
-        g:tcommentMapLeader2 .......................... |g:tcommentMapLeader2|
-        g:tcommentMapLeaderOp1 ........................ |g:tcommentMapLeaderOp1|
-        g:tcommentMapLeaderUncommentAnyway ............ |g:tcommentMapLeaderUncommentAnyway|
-        g:tcommentMapLeaderCommentAnyway .............. |g:tcommentMapLeaderCommentAnyway|
+        g:tcomment_maps ............................... |g:tcomment_maps|
+        g:tcomment_mapleader1 ......................... |g:tcomment_mapleader1|
+        g:tcomment_mapleader2 ......................... |g:tcomment_mapleader2|
+        g:tcomment_opleader1 .......................... |g:tcomment_opleader1|
+        g:tcomment_mapleader_uncomment_anyway ......... |g:tcomment_mapleader_uncomment_anyway|
+        g:tcomment_mapleader_comment_anyway ........... |g:tcomment_mapleader_comment_anyway|
         :TComment ..................................... |:TComment|
         :TCommentAs ................................... |:TCommentAs|
         :TCommentRight ................................ |:TCommentRight|
@@ -151,60 +151,64 @@ Contents~
         :TCommentMaybeInline .......................... |:TCommentMaybeInline|
         g:tcomment#blank_lines ........................ |g:tcomment#blank_lines|
         g:tcomment#rstrip_on_uncomment ................ |g:tcomment#rstrip_on_uncomment|
-        g:tcommentModeExtra ........................... |g:tcommentModeExtra|
-        g:tcommentOpModeExtra ......................... |g:tcommentOpModeExtra|
-        g:tcommentOptions ............................. |g:tcommentOptions|
+        g:tcomment#mode_extra ......................... |g:tcomment#mode_extra|
+        g:tcomment#options ............................ |g:tcomment#options|
         g:tcomment#options_comments ................... |g:tcomment#options_comments|
         g:tcomment#options_commentstring .............. |g:tcomment#options_commentstring|
         g:tcomment#ignore_char_type ................... |g:tcomment#ignore_char_type|
-        g:tcommentGuessFileType ....................... |g:tcommentGuessFileType|
-        g:tcommentGuessFileType_dsl ................... |g:tcommentGuessFileType_dsl|
-        g:tcommentGuessFileType_php ................... |g:tcommentGuessFileType_php|
-        g:tcommentGuessFileType_blade ................. |g:tcommentGuessFileType_blade|
-        g:tcommentIgnoreTypes_php ..................... |g:tcommentIgnoreTypes_php|
-        g:tcommentSyntaxMap ........................... |g:tcommentSyntaxMap|
         g:tcomment#replacements_c ..................... |g:tcomment#replacements_c|
-        g:tcommentInlineC ............................. |g:tcommentInlineC|
-        g:tcommentBlockC2 ............................. |g:tcommentBlockC2|
+        g:tcomment#inline_fmt_c ....................... |g:tcomment#inline_fmt_c|
+        g:tcomment#block2_fmt_c ....................... |g:tcomment#block2_fmt_c|
         g:tcomment#replacements_xml ................... |g:tcomment#replacements_xml|
-        g:tcommentBlockXML ............................ |g:tcommentBlockXML|
-        g:tcommentInlineXML ........................... |g:tcommentInlineXML|
+        g:tcomment#block_fmt_xml ...................... |g:tcomment#block_fmt_xml|
+        g:tcomment#inline_fmt_xml ..................... |g:tcomment#inline_fmt_xml|
         g:tcomment#ignore_comment_def ................. |g:tcomment#ignore_comment_def|
         g:tcomment#must_escape_expression_backslash ... |g:tcomment#must_escape_expression_backslash|
-        tcomment#DefineType ........................... |tcomment#DefineType()|
-        tcomment#GetCommentDef ........................ |tcomment#GetCommentDef()|
-        g:tcomment_types .............................. |g:tcomment_types|
+        tcomment#GuessCommentType ..................... |tcomment#GuessCommentType()|
         tcomment#Comment .............................. |tcomment#Comment()|
         tcomment#CommentAs ............................ |tcomment#CommentAs()|
-        tcomment#GuessCommentType ..................... |tcomment#GuessCommentType()|
+        tcomment#commentdef#Get ....................... |tcomment#commentdef#Get()|
+        tcomment#commentdef#GetCustom ................. |tcomment#commentdef#GetCustom()|
+        g:tcomment#filetype#guess ..................... |g:tcomment#filetype#guess|
+        g:tcomment#filetype#guess_blade ............... |g:tcomment#filetype#guess_blade|
+        g:tcomment#filetype#guess_dsl ................. |g:tcomment#filetype#guess_dsl|
+        g:tcomment#filetype#guess_php ................. |g:tcomment#filetype#guess_php|
+        g:tcomment#filetype#ignore_php ................ |g:tcomment#filetype#ignore_php|
+        g:tcomment#filetype#syntax_map ................ |g:tcomment#filetype#syntax_map|
+        tcomment#filetype#Guess ....................... |tcomment#filetype#Guess()|
+        tcomment#filetype#GetAlt ...................... |tcomment#filetype#GetAlt()|
+        g:tcomment#operator#mode_extra ................ |g:tcomment#operator#mode_extra|
+        tcomment#type#Define .......................... |tcomment#type#Define()|
+        tcomment#type#GetDefinition ................... |tcomment#type#GetDefinition()|
+        g:tcomment_types .............................. |g:tcomment_types|
 
 
 ------------------------------------------------------------------------
                                                     *plugin/tcomment.vim*
-                                                    *g:tcommentMaps*
-g:tcommentMaps                 (default: 1)
+                                                    *g:tcomment_maps*
+g:tcomment_maps                (default: 1)
     If true, set maps.
 
-                                                    *g:tcommentMapLeader1*
-g:tcommentMapLeader1           (default: '<c-_>')
-    g:tcommentMapLeader1 should be a shortcut that can be used with 
+                                                    *g:tcomment_mapleader1*
+g:tcomment_mapleader1          (default: '<c-_>')
+    g:tcomment_mapleader1 should be a shortcut that can be used with 
     map, imap, vmap.
 
-                                                    *g:tcommentMapLeader2*
-g:tcommentMapLeader2           (default: '<Leader>_')
-    g:tcommentMapLeader2 should be a shortcut that can be used with 
+                                                    *g:tcomment_mapleader2*
+g:tcomment_mapleader2          (default: '<Leader>_')
+    g:tcomment_mapleader2 should be a shortcut that can be used with 
     map, xmap.
 
-                                                    *g:tcommentMapLeaderOp1*
-g:tcommentMapLeaderOp1         (default: 'gc')
+                                                    *g:tcomment_opleader1*
+g:tcomment_opleader1           (default: 'gc')
     See |tcomment-operator|.
 
-                                                    *g:tcommentMapLeaderUncommentAnyway*
-g:tcommentMapLeaderUncommentAnyway (default: 'g<')
+                                                    *g:tcomment_mapleader_uncomment_anyway*
+g:tcomment_mapleader_uncomment_anyway (default: 'g<')
     See |tcomment-operator|.
 
-                                                    *g:tcommentMapLeaderCommentAnyway*
-g:tcommentMapLeaderCommentAnyway (default: 'g>')
+                                                    *g:tcomment_mapleader_comment_anyway*
+g:tcomment_mapleader_comment_anyway (default: 'g>')
     See |tcomment-operator|.
 
                                                     *:TComment*
@@ -279,48 +283,46 @@ g:tcomment#rstrip_on_uncomment (default: 1)
     If 1, remove right-hand whitespace on uncomment from empty lines.
     If 2, remove right-hand whitespace on uncomment from all lines.
 
-                                                    *g:tcommentModeExtra*
-g:tcommentModeExtra            (default: '')
+                                                    *g:tcomment#mode_extra*
+g:tcomment#mode_extra          (default: '')
     Modifies how commenting works.
       >  ... Move the cursor to the end of the comment
-      >> ... Like above but move the cursor to the next line
+      >> ... Like above but move the cursor to the beginning of the next line
+      >| ... Like above but move the cursor to the next line
       #  ... Move the cursor to the position of the commented text 
              (NOTE: this only works when creating empty comments using 
              |:TCommentInline| from normal or insert mode and should 
              not be set here as a global option.)
 
-                                                    *g:tcommentOpModeExtra*
-g:tcommentOpModeExtra          (default: '')
-    Modifies how the operator works.
-    See |g:tcommentModeExtra| for a list of possible values.
-
-                                                    *g:tcommentOptions*
-g:tcommentOptions              (default: {})
+                                                    *g:tcomment#options*
+g:tcomment#options             (default: {})
     Other key-value options used by |tcomment#Comment()|.
+    If the buffer-local variable b:tcomment_options exists, it will be 
+    used in addition.
 
     Examples:
     Put the opening comment marker always in the first column 
     regardless of the block's indentation, put this into your |vimrc| 
     file: >
-      let g:tcommentOptions = {'col': 1}
+      let g:tcomment#options = {'col': 1}
 
 <   Indent uncommented lines: >
-      let g:tcommentOptions = {'postprocess_uncomment': 'norm! %sgg=%sgg'}
+      let g:tcomment#options = {'postprocess_uncomment': 'norm! %sgg=%sgg'}
 <
 
                                                     *g:tcomment#options_comments*
-g:tcomment#options_comments    (default: {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')})
+g:tcomment#options_comments    (default: {'whitespace': get(g:tcomment#options, 'whitespace', 'both')})
     Additional args for |tcomment#Comment()| when using the 'comments' 
     option.
 
                                                     *g:tcomment#options_commentstring*
-g:tcomment#options_commentstring (default: {'whitespace': get(g:tcommentOptions, 'whitespace', 'both')})
+g:tcomment#options_commentstring (default: {'whitespace': get(g:tcomment#options, 'whitespace', 'both')})
     Additional args for |tcomment#Comment()| when using the 
     'commentstring' option.
 
                                                     *g:tcomment#ignore_char_type*
 g:tcomment#ignore_char_type    (default: 1)
-    |text-objects| for use with |tcomment#Operator| can have different 
+    |text-objects| for use with |tcomment#operator#Op| can have different 
     types: line, block, char etc. Text objects like aB, it, at etc. 
     have type char but this may not work reliably. By default, 
     tcomment handles those text objects most often as if they were of 
@@ -328,67 +330,28 @@ g:tcomment#ignore_char_type    (default: 1)
     behaviour. Be prepared that the result may not always match your 
     intentions.
 
-                                                    *g:tcommentGuessFileType*
-g:tcommentGuessFileType        (default: 0)
-    Guess the file type based on syntax names always or for some fileformat only
-    If non-zero, try to guess filetypes.
-    tcomment also checks g:tcommentGuessFileType_{&filetype} for 
-    filetype specific values.
-
-    Values:
-      0        ... don't guess
-      1        ... guess
-      FILETYPE ... assume this filetype
-
-                                                    *g:tcommentGuessFileType_dsl*
-g:tcommentGuessFileType_dsl    (default: 'xml')
-    For dsl documents, assume filetype = xml.
-
-                                                    *g:tcommentGuessFileType_php*
-g:tcommentGuessFileType_php    (default: 'html')
-    In php documents, the php part is usually marked as phpRegion. We 
-    thus assume that the buffers default comment style isn't php but 
-    html.
-
-                                                    *g:tcommentGuessFileType_blade*
-g:tcommentGuessFileType_blade  (default: 'html')
-    See |g:tcommentGuessFileType_php|.
-
-                                                    *g:tcommentIgnoreTypes_php*
-g:tcommentIgnoreTypes_php      (default: 'sql')
-    In php files, some syntax regions are wrongly highlighted as sql 
-    markup. We thus ignore sql syntax when guessing the filetype in 
-    php files.
-
-                                                    *g:tcommentSyntaxMap*
-g:tcommentSyntaxMap            (default: {...})
-    tcomment guesses filetypes based on the name of the current syntax 
-    region. This works well if the syntax names match 
-    /filetypeSomeName/. Other syntax names have to be explicitly 
-    mapped onto the corresponding filetype.
-
                                                     *g:tcomment#replacements_c*
 g:tcomment#replacements_c      (default: {...})
     Replacements for c filetype.
 
-                                                    *g:tcommentInlineC*
-g:tcommentInlineC              (default: {...})
+                                                    *g:tcomment#inline_fmt_c*
+g:tcomment#inline_fmt_c        (default: {...})
     Generic c-like comments.
 
-                                                    *g:tcommentBlockC2*
-g:tcommentBlockC2              (default: {...})
+                                                    *g:tcomment#block2_fmt_c*
+g:tcomment#block2_fmt_c        (default: {...})
     Generic c-like block comments (alternative markup).
 
                                                     *g:tcomment#replacements_xml*
 g:tcomment#replacements_xml    (default: {...})
     Replacements for xml filetype.
 
-                                                    *g:tcommentBlockXML*
-g:tcommentBlockXML             (default: {...})
+                                                    *g:tcomment#block_fmt_xml*
+g:tcomment#block_fmt_xml       (default: {...})
     Generic xml-like block comments.
 
-                                                    *g:tcommentInlineXML*
-g:tcommentInlineXML            (default: {...})
+                                                    *g:tcomment#inline_fmt_xml*
+g:tcomment#inline_fmt_xml      (default: {...})
     Generic xml-like comments.
 
                                                     *g:tcomment#ignore_comment_def*
@@ -413,57 +376,30 @@ g:tcomment#must_escape_expression_backslash (default: 0)
     Patch 7.2.407  when using :s with an expression backslashes are dropped
     https://github.com/tomtom/tcomment_vim/issues/102
 
-                                                    *tcomment#DefineType()*
-tcomment#DefineType(name, commentdef, ?cdef={}, ?anyway=0)
-    If you don't explicitly define a comment style, |:TComment| will use 
-    'commentstring' instead. We override the default values here in order 
-    to have a blank after the comment marker. Block comments work only if 
-    we explicitly define the markup.
+                                                    *tcomment#GuessCommentType()*
+tcomment#GuessFileType(?options={})
+    A function that makes the tcomment#filetype#Guess() function usable for other 
+    library developers.
 
-    NAME usually is a 'filetype'. You can use special suffixes to define 
-    special comment types. E.g. the name "FILETYPE_block" is used for 
-    block comments for 'filetype'. The name "FILETYPE_inline" is used for 
-    inline comments. If no specialized comment definition exists, the 
-    normal one with name "FILETYPE" is used.
+    The argument is a dictionary with the following keys:
 
-    The comment definition can be either a string or a dictionary.
+      beg ................ (default = line("."))
+      end ................ (default = line("."))
+      comment_mode ........ (default = "G")
+      filetype ........... (default = &filetype)
+      fallbackFiletype ... (default = "")
 
-    If it is a string:
-    The format for block comments is similar to 'commentstrings' with the 
-    exception that the format strings for blocks can contain a second line 
-    that defines how "middle lines" (see :h format-comments) should be 
-    displayed.
-
-    Example: If the string is "--%s--\n-- ", lines will be commented as 
-    "--%s--" but the middle lines in block comments will be commented as 
-    "--%s".
-
-    If it is a dictionary:
-    See the help on the args argument of |tcomment#Comment| (see item 1, 
-    args is a list of key=value pairs) to find out which fields can be 
-    used.
-
-                                                    *tcomment#GetCommentDef()*
-tcomment#GetCommentDef(name, ...)
-    Return the comment definition for NAME.
-                                                          *b:tcomment_def_{NAME}*
-    Return b:tcomment_def_{NAME} if the variable exists. Otherwise return 
-    the comment definition as set with |tcomment#DefineType|.
-
-                                                    *g:tcomment_types*
-g:tcomment_types               (default: {})
-    A dictionary of NAME => COMMENT DEFINITION (see |tcomment#DefineType|) 
-    that can be set in vimrc to override tcomment's default comment 
-    styles.
-
-
+    This function return a dictionary that contains information about how 
+    to make comments. The information about the filetype of the text 
+    between lines "beg" and "end" is in the "filetype" key of the return 
+    value. It returns the first discernible filetype it encounters.
 
                                                     *tcomment#Comment()*
 tcomment#Comment(beg, end, ...)
     tcomment#Comment(line1, line2, ?comment_mode, ?comment_anyway, ?args...)
     args... are either:
       1. a list of key=value pairs where known keys are (see also 
-         |g:tcommentOptions|):
+         |g:tcomment#options|):
             as=STRING        ... Use a specific comment definition
             count=N          ... Repeat the comment string N times
             col=N            ... Start the comment at column N (in block 
@@ -501,7 +437,7 @@ tcomment#Comment(beg, end, ...)
       2. 1-2 values for: ?commentPrefix, ?commentPostfix
       3. a dictionary (internal use only)
 
-    comment_mode (see also ¦g:tcommentModeExtra¦):
+    comment_mode (see also ¦g:tcomment#mode_extra¦):
       G ... guess the value of comment_mode
       B ... block (use extra lines for the comment markers)
       L ... lines
@@ -524,23 +460,124 @@ tcomment#CommentAs(beg, end, comment_anyway, filetype, ?args...)
          |tcomment#Comment()|)
     comment text as if it were of a specific filetype
 
-                                                    *tcomment#GuessCommentType()*
-tcomment#GuessFileType(?options={})
-    A function that makes the s:GuessFileType() function usable for other 
-    library developers.
 
-    The argument is a dictionary with the following keys:
+------------------------------------------------------------------------
+                                                    *autoload/tcomment/commentdef.vim*
+                                                    *tcomment#commentdef#Get()*
+tcomment#commentdef#Get(beg, end, comment_mode, ...)
+    tcomment#commentdef#Get(beg, end, comment_mode, ?filetype="")
 
-      beg ................ (default = line("."))
-      end ................ (default = line("."))
-      comment_mode ........ (default = "G")
-      filetype ........... (default = &filetype)
-      fallbackFiletype ... (default = "")
+                                                    *tcomment#commentdef#GetCustom()*
+tcomment#commentdef#GetCustom(ft, comment_mode, ...)
+    tcomment#commentdef#GetCustom(ft, comment_mode, ?default="", ?default_cdef={})
 
-    This function return a dictionary that contains information about how 
-    to make comments. The information about the filetype of the text 
-    between lines "beg" and "end" is in the "filetype" key of the return 
-    value. It returns the first discernible filetype it encounters.
+
+------------------------------------------------------------------------
+                                                    *autoload/tcomment/filetype.vim*
+                                                    *g:tcomment#filetype#guess*
+g:tcomment#filetype#guess      (default: 0)
+    Guess the file type based on syntax names always or for some fileformat only
+    If non-zero, try to guess filetypes.
+    tcomment also checks g:tcomment#filetype#guess_{&filetype} for 
+    filetype specific values.
+
+    Values:
+      0        ... don't guess
+      1        ... guess
+      FILETYPE ... assume this filetype
+
+                                                    *g:tcomment#filetype#guess_blade*
+g:tcomment#filetype#guess_blade (default: 'html')
+    See |g:tcomment#filetype#guess_php|.
+
+                                                    *g:tcomment#filetype#guess_dsl*
+g:tcomment#filetype#guess_dsl  (default: 'xml')
+    For dsl documents, assume filetype = xml.
+
+                                                    *g:tcomment#filetype#guess_php*
+g:tcomment#filetype#guess_php  (default: 'html')
+    In php documents, the php part is usually marked as phpRegion. We 
+    thus assume that the buffers default comment style isn't php but 
+    html.
+
+                                                    *g:tcomment#filetype#ignore_php*
+g:tcomment#filetype#ignore_php (default: 'sql')
+    In php files, some syntax regions are wrongly highlighted as sql 
+    markup. We thus ignore sql syntax when guessing the filetype in 
+    php files.
+
+                                                    *g:tcomment#filetype#syntax_map*
+g:tcomment#filetype#syntax_map (default: {...})
+    tcomment guesses filetypes based on the name of the current syntax 
+    region. This works well if the syntax names match 
+    /filetypeSomeName/. Other syntax names have to be explicitly 
+    mapped onto the corresponding filetype.
+
+                                                    *tcomment#filetype#Guess()*
+tcomment#filetype#Guess(beg, end, comment_mode, filetype, ...)
+    inspired by Meikel Brandmeyer's EnhancedCommentify.vim
+    this requires that a syntax names are prefixed by the filetype name 
+    tcomment#filetype#Guess(beg, end, comment_mode, filetype, ?fallbackFiletype)
+
+                                                    *tcomment#filetype#GetAlt()*
+tcomment#filetype#GetAlt(filetype, cdef)
+    Handle sub-filetypes etc.
+
+
+------------------------------------------------------------------------
+                                                    *autoload/tcomment/operator.vim*
+                                                    *g:tcomment#operator#mode_extra*
+g:tcomment#operator#mode_extra (default: '')
+    Modifies how the operator works.
+    See |g:tcomment#mode_extra| for a list of possible values.
+
+
+------------------------------------------------------------------------
+                                                    *autoload/tcomment/type.vim*
+                                                    *tcomment#type#Define()*
+tcomment#type#Define(name, commentdef, ?cdef={}, ?anyway=0)
+    If you don't explicitly define a comment style, |:TComment| will use 
+    'commentstring' instead. We override the default values here in order 
+    to have a blank after the comment marker. Block comments work only if 
+    we explicitly define the markup.
+
+    NAME usually is a 'filetype'. You can use special suffixes to define 
+    special comment types. E.g. the name "FILETYPE_block" is used for 
+    block comments for 'filetype'. The name "FILETYPE_inline" is used for 
+    inline comments. If no specialized comment definition exists, the 
+    normal one with name "FILETYPE" is used.
+
+    The comment definition can be either a string or a dictionary.
+
+    If it is a string:
+    The format for block comments is similar to 'commentstrings' with the 
+    exception that the format strings for blocks can contain a second line 
+    that defines how "middle lines" (see :h format-comments) should be 
+    displayed.
+
+    Example: If the string is "--%s--\n-- ", lines will be commented as 
+    "--%s--" but the middle lines in block comments will be commented as 
+    "--%s".
+
+    If it is a dictionary:
+    See the help on the args argument of |tcomment#Comment| (see item 1, 
+    args is a list of key=value pairs) to find out which fields can be 
+    used.
+
+                                                    *tcomment#type#GetDefinition()*
+tcomment#type#GetDefinition(name, ...)
+    Return the comment definition for NAME.
+                                                          *b:tcomment_def_{NAME}*
+    Return b:tcomment_def_{NAME} if the variable exists. Otherwise return 
+    the comment definition as set with |tcomment#type#Define|.
+
+                                                    *g:tcomment_types*
+g:tcomment_types               (default: {})
+    A dictionary of NAME => COMMENT DEFINITION (see |tcomment#type#Define()|) 
+    that can be set in vimrc to override tcomment's default comment 
+    styles.
+
+
 
 
 
