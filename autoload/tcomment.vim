@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-21.
-" @Revision:    1980
+" @Last Change: 2018-04-17.
+" @Revision:    1981
 
 scriptencoding utf-8
 
@@ -11,6 +11,9 @@ if exists(':Tlibtrace') != 2
     " :nodoc:
     command! -nargs=+ -bang Tlibtrace :
 endif
+
+
+call tcomment#deprecated#Check()
 
 
 if !exists('g:tcomment#blank_lines')

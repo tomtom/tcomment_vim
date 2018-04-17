@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-03-20
-" @Revision:    32
+" @Last Change: 2018-04-17
+" @Revision:    36
 
 
 function! tcomment#deprecated#Check() abort "{{{3
@@ -40,7 +40,7 @@ function! tcomment#deprecated#Check() abort "{{{3
             else
                 throw 'tcomment#deprecated#Check: Internal error: '. string(newdef)
             endif
-            echom 'tcomment:' gold 'is deprecated; please use' gnew 'instead'
+            echom 'tcomment:' gold 'is deprecated; please use' gnew 'instead; your setting might be ignored'
             exec 'let' gnew '= g:'. gold
         endfor
     endfor

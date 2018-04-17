@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2018-03-21.
-" @Revision:    992
+" @Last Change: 2018-04-17.
+" @Revision:    993
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -13,8 +13,6 @@ let loaded_tcomment = 400
 
 let s:save_cpo = &cpo
 set cpo&vim
-
-call tcomment#deprecated#Check()
 
 
 if !exists('g:tcomment_maps')
