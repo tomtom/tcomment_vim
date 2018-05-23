@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-04-17
-" @Revision:    36
+" @Last Change: 2018-05-22
+" @Revision:    37
 
 
 function! tcomment#deprecated#Check() abort "{{{3
@@ -17,7 +17,7 @@ function! tcomment#deprecated#Check() abort "{{{3
                 \ , 'tcommentMapLeaderOp1': {'new': 'g:tcomment_opleader1'}
                 \ , 'tcommentMapLeaderUncommentAnyway': {'new': 'g:tcomment_mapleader_uncomment_anyway'}
                 \ , 'tcommentMapLeaderCommentAnyway': {'new': 'g:tcomment_mapleader_comment_anyway'}
-                \ , 'tcommentTextObjectInlineComment': {'new': 'g:tcomment_textoject_inlinecomment'}
+                \ , 'tcommentTextObjectInlineComment': {'new': 'g:tcomment_textobject_inlinecomment'}
                 \ , 'tcomment#filetype_map': {'new': 'g:tcomment#filetype#map'}
                 \ , 'tcomment#syntax_substitute': {'new': 'g:tcomment#syntax#substitute'}
                 \ , 'tcommentSyntaxMap': {'new': 'g:tcomment#filetype#syntax_map'}

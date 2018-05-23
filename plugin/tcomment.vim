@@ -2,8 +2,8 @@
 " @Author:      Tom Link (micathom AT gmail com)
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     27-Dez-2004.
-" @Last Change: 2018-04-17.
-" @Revision:    993
+" @Last Change: 2018-05-22.
+" @Revision:    994
 " GetLatestVimScripts: 1173 1 tcomment.vim
 
 if &cp || exists('loaded_tcomment')
@@ -47,8 +47,8 @@ if !exists("g:tcomment_mapleader_comment_anyway")
     let g:tcomment_mapleader_comment_anyway = 'g>' "{{{2
 endif
 
-if !exists('g:tcomment_textoject_inlinecomment')
-    let g:tcomment_textoject_inlinecomment = 'ic'   "{{{2
+if !exists('g:tcomment_textobject_inlinecomment')
+    let g:tcomment_textobject_inlinecomment = 'ic'   "{{{2
 endif
 
 
@@ -271,9 +271,9 @@ if g:tcomment_maps
         exec 'nmap <silent> '. g:tcomment_mapleader_comment_anyway .'b <Plug>TComment_Commentb'
         exec 'xmap '. g:tcomment_mapleader_comment_anyway .' <Plug>TComment_Comment'
     endif
-    if g:tcomment_textoject_inlinecomment != ''
-        exec 'vmap' g:tcomment_textoject_inlinecomment ' <Plug>TComment_ic'
-        exec 'omap' g:tcomment_textoject_inlinecomment ' <Plug>TComment_ic'
+    if g:tcomment_textobject_inlinecomment != ''
+        exec 'vmap' g:tcomment_textobject_inlinecomment ' <Plug>TComment_ic'
+        exec 'omap' g:tcomment_textobject_inlinecomment ' <Plug>TComment_ic'
     endif
 endif
 
