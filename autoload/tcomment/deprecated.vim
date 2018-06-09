@@ -31,7 +31,7 @@ function! tcomment#deprecated#Check() abort "{{{3
                 \ , 'tcommentIgnoreTypes_\(\w\+\)': {'subst': 'g:tcomment#filetype#ignore_\1'}
                 \ }
     for [old, newdef] in items(vars)
-        let g1 = filter(copy(g), 'v:key =~ ''^''. old .''$''')
+        let g1 = filter(copy(g), 'v:val =~ ''^''. old .''$''')
         for gold in g1
             if has_key(newdef, 'new')
                 let gnew = newdef.new
