@@ -14,6 +14,8 @@ let loaded_tcomment = 400
 let s:save_cpo = &cpo
 set cpo&vim
 
+call tcomment#deprecated#Check()
+
 
 if !exists('g:tcomment_maps')
     " If true, set maps.

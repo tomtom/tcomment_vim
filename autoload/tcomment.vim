@@ -13,9 +13,6 @@ if exists(':Tlibtrace') != 2
 endif
 
 
-call tcomment#deprecated#Check()
-
-
 if !exists('g:tcomment#blank_lines')
     " If 1, comment blank lines too.
     " If 2, also comment blank lines within indented code blocks 
