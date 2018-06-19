@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-04-17.
-" @Revision:    1981
+" @Last Change: 2018-06-19.
+" @Revision:    1982
 
 scriptencoding utf-8
 
@@ -490,7 +490,7 @@ function! tcomment#Comment(beg, end, ...) abort
     endif
     if comment_mode =~# '>'
         call tcomment#cursor#SetPos('.', cursor_pos)
-        if comment_mode !~? 'i
+        if comment_mode !~? 'i'
             if comment_mode =~# '>>'
                 norm! j^
             elseif comment_mode =~# '>|'
