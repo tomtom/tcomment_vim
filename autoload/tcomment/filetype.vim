@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-20.
-" @Revision:    19
+" @Last Change: 2018-06-20.
+" @Revision:    20
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -41,6 +41,9 @@ if !exists('g:tcomment#filetype#guess_html')
 endif
 if !exists('g:tcomment#filetype#guess_jinja')
     let g:tcomment#filetype#guess_jinja = 'html'   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_perl')
+    let g:tcomment#filetype#guess_perl = 1   "{{{2
 endif
 if !exists('g:tcomment#filetype#guess_php')
     " In php documents, the php part is usually marked as phpRegion. We 
