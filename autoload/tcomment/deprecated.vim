@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-06-18
-" @Revision:    54
+" @Last Change: 2018-06-22
+" @Revision:    55
 
 function! tcomment#deprecated#Check() abort "{{{3
     let vars = {
@@ -36,7 +36,7 @@ function! tcomment#deprecated#Check() abort "{{{3
     let pattern = '\C^\%(' . join(keys(patterns) + keys(vars), '\|') . '\)$'
     " let gvars = filter(keys(g:), 'v:val =~# pattern')
     " let gvars = filter(keys(g:), 'v:val =~# ''^tcomment''')
-    let gvars = filter(keys(g:), 'strcharpart(v:val, 0, '. strwidth('tcomment') .') ==# ''tcomment''')
+    let gvars = filter(keys(g:), 'strpart(v:val, 0, '. strlen('tcomment') .') ==# ''tcomment''')
 
     for gold in gvars
         let gnew = ''
