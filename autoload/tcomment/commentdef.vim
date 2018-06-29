@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-03-20
-" @Revision:    18
+" @Last Change: 2018-06-29
+" @Revision:    19
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -152,7 +152,7 @@ function! tcomment#commentdef#GetBlockCommentRx(cdef) abort
         return a:cdef.commentstring_rx
     else
         let cms0 = tcomment#commentdef#BlockGetCommentString(a:cdef)
-        let cms0 = escape(cms0, '\')
+        " let cms0 = escape(cms0, '\')
         return cms0
     endif
 endf

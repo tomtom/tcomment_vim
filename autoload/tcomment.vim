@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-06-19.
-" @Revision:    1982
+" @Last Change: 2018-06-29.
+" @Revision:    1984
 
 scriptencoding utf-8
 
@@ -385,7 +385,7 @@ function! tcomment#Comment(beg, end, ...) abort
     Tlibtrace 'tcomment', cms0
     "" make whitespace optional; this conflicts with comments that require some 
     "" whitespace
-    let cmt_check = substitute(cms0, '\([	 ]\)', '\1\\?', 'g')
+    let cmt_check = substitute(escape(cms0, '\'), '\([	 ]\)', '\1\\?', 'g')
     "" turn commentstring into a search pattern
     Tlibtrace 'tcomment', cmt_check
     let cmt_check = tcomment#format#Printf1(cmt_check, '\(\_.\{-}\)')

@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-03-20
-" @Revision:    6
+" @Last Change: 2018-06-29
+" @Revision:    8
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -68,6 +68,7 @@ call tcomment#type#Define('esmtprc',          '# %s'             )
 call tcomment#type#Define('expect',           '# %s'             )
 call tcomment#type#Define('fish',             '# %s'             )
 call tcomment#type#Define('form',             {'commentstring': '* %s', 'col': 1})
+call tcomment#type#Define('forth',            '\ %s'             )
 call tcomment#type#Define('fstab',            '# %s'             )
 call tcomment#type#Define('gitconfig',        '# %s'             )
 call tcomment#type#Define('gitcommit',        '# %s'             )
@@ -135,7 +136,7 @@ call tcomment#type#Define('msidl_block',      g:tcomment#block_fmt_c   )
 call tcomment#type#Define('nginx',            '# %s'             )
 call tcomment#type#Define('nim',              '# %s'             )
 call tcomment#type#Define('nix',              '# %s'             )
-call tcomment#type#Define('nroff',            '.\\" %s'          )
+call tcomment#type#Define('nroff',            '.\" %s'           )
 call tcomment#type#Define('noweb',            '%% %s'            )
 call tcomment#type#Define('nsis',             '# %s'             )
 call tcomment#type#Define('objc',             '/* %s */'         )
