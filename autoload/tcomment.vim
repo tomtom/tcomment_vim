@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-06-29.
-" @Revision:    1984
+" @Last Change: 2018-07-02.
+" @Revision:    1996
 
 scriptencoding utf-8
 
@@ -803,19 +803,25 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
         Tlibtrace 'tcomment', ms, mx, cs, prefix, postfix
         if a:comment_do ==? 'u'
             let @t = substitute(@t, '\V\^\s\*'. a:checkRx .'\$', '\1', '')
+            Tlibtrace 'tcomment', 0, @t
             let tt = []
             " TODO: Correctly handle foreign comments with inconsistent 
             " whitespace around mx markers
-            let rx = '\V'. tcomment#regex#StartColRx(a:cdef, a:comment_mode, a:cbeg) . '\zs'. mx
-            Tlibtrace 'tcomment', mx1, rx
+            let mx1 = substitute(mx, ' \+$', '\\s\\*', '')
+            Tlibtrace 'tcomment', mx1
+            let rx = '\V'. tcomment#regex#StartColRx(a:cdef, a:comment_mode, a:cbeg) . '\zs'. mx1
+            Tlibtrace 'tcomment', rx
             for line in split(@t, '\n')
                 let line1 = substitute(line, rx, '', '')
+                Tlibtrace 'tcomment', line, line1
                 call add(tt, line1)
             endfor
             let @t = join(tt, "\n")
-            Tlibtrace 'tcomment', @t
+            Tlibtrace 'tcomment', 1, @t
             let @t = substitute(@t, '^\n', '', '')
+            Tlibtrace 'tcomment', 2, @t
             let @t = substitute(@t, '\n\s*$', '', '')
+            Tlibtrace 'tcomment', 3, @t
             if a:comment_mode =~# '#'
                 let s:cursor_pos = copy(s:current_pos)
                 let prefix_lines = len(substitute(prefix, "[^\n]", '', 'g')) + 1
