@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-07-02.
-" @Revision:    1996
+" @Revision:    1999
 
 scriptencoding utf-8
 
@@ -807,7 +807,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
             let tt = []
             " TODO: Correctly handle foreign comments with inconsistent 
             " whitespace around mx markers
-            let mx1 = substitute(mx, ' \+$', '\\s\\*', '')
+            let mx1 = substitute(mx, ' $', '\\( \\?\\$\\| \\)', '')
             Tlibtrace 'tcomment', mx1
             let rx = '\V'. tcomment#regex#StartColRx(a:cdef, a:comment_mode, a:cbeg) . '\zs'. mx1
             Tlibtrace 'tcomment', rx
