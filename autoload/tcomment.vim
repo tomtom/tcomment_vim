@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-07-04.
-" @Revision:    2003
+" @Last Change: 2018-07-08.
+" @Revision:    2005
 
 scriptencoding utf-8
 
@@ -860,7 +860,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
                 else
                     for line in split(@t, '\n')
                         Tlibtrace 'tcomment', 1, line
-                        if empty(line)
+                        if line =~# '^\s*' && tcomment#compatibility#Strdisplaywidth(line) < indentlen
                             let line = indentStr . ms
                         elseif lnum == 0
                             let line = substitute(line, rx, ms, '')
