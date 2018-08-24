@@ -484,7 +484,7 @@ tcomment#commentdef#GetCustom(ft, comment_mode, ...)
 ------------------------------------------------------------------------
                                                     *autoload/tcomment/filetype.vim*
                                                     *g:tcomment#filetype#guess*
-g:tcomment#filetype#guess      (default: 0)
+g:tcomment#filetype#guess      (default: 1)
     Guess the file type based on syntax names always or for some fileformat only
     If non-zero, try to guess filetypes.
     tcomment also checks g:tcomment#filetype#guess_{&filetype} for 
