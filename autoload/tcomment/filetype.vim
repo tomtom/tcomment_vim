@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-08-24.
-" @Revision:    25
+" @Revision:    27
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -93,6 +93,9 @@ if !exists('g:tcomment#filetype#map')
                 \ 'tblgen': 'cpp',
                 \ }
 endif
+if exists('g:tcomment#filetype#map_user')
+    let g:tcomment#filetype#map = extend(g:tcomment#filetype#map, g:tcomment#filetype#map_user)
+endif
 
 
 if !exists('g:tcomment#filetype#syntax_map')
@@ -127,6 +130,9 @@ if !exists('g:tcomment#filetype#syntax_map')
                 \     ],
                 \ },
                 \ }
+endif
+if exists('g:tcomment#filetype#syntax_map_user')
+    let g:tcomment#filetype#syntax_map = extend(g:tcomment#filetype#syntax_map, g:tcomment#filetype#syntax_map_user)
 endif
 
 
