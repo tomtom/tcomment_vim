@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-07-02.
-" @Revision:    24
+" @Last Change: 2018-08-24.
+" @Revision:    25
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -266,17 +266,18 @@ endf
 " Handle sub-filetypes etc.
 function! tcomment#filetype#GetAlt(filetype, cdef) abort "{{{3
     let filetype = empty(a:filetype) ? tcomment#filetype#Get(&filetype, [-1]) : a:filetype
+    let vfiletype = substitute(filetype, '[.]', '_', 'g')
     Tlibtrace 'tcomment', a:filetype, filetype
-    if g:tcomment#filetype#guess || (exists('g:tcomment#filetype#guess_'. filetype) 
-                \ && g:tcomment#filetype#guess_{filetype} =~# '[^0]')
-        if g:tcomment#filetype#guess || g:tcomment#filetype#guess_{filetype} == 1
+    if g:tcomment#filetype#guess || (exists('g:tcomment#filetype#guess_'. vfiletype) 
+                \ && g:tcomment#filetype#guess_{vfiletype} =~# '[^0]')
+        if g:tcomment#filetype#guess || g:tcomment#filetype#guess_{vfiletype} == 1
             if filetype =~# '^.\{-}\..\+$'
                 let alt_filetype = tcomment#filetype#Get(filetype)
             else
                 let alt_filetype = ''
             endif
         else
-            let alt_filetype = g:tcomment#filetype#guess_{filetype}
+            let alt_filetype = g:tcomment#filetype#guess_{vfiletype}
         endif
         Tlibtrace 'tcomment', 1, alt_filetype
         return [1, alt_filetype]
