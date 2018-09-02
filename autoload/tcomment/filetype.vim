@@ -274,19 +274,21 @@ function! tcomment#filetype#GetAlt(filetype, cdef) abort "{{{3
     let filetype = empty(a:filetype) ? tcomment#filetype#Get(&filetype, [-1]) : a:filetype
     let vfiletype = substitute(filetype, '[.]', '_', 'g')
     Tlibtrace 'tcomment', a:filetype, filetype
-    if g:tcomment#filetype#guess || (exists('g:tcomment#filetype#guess_'. vfiletype) 
-                \ && g:tcomment#filetype#guess_{vfiletype} =~# '[^0]')
-        if g:tcomment#filetype#guess || g:tcomment#filetype#guess_{vfiletype} == 1
-            if filetype =~# '^.\{-}\..\+$'
-                let alt_filetype = tcomment#filetype#Get(filetype)
-            else
-                let alt_filetype = ''
-            endif
+    let guess = get(a:cdef, 'guess',
+                \ exists('g:tcomment#filetype#guess_'. vfiletype) ?
+                \    g:tcomment#filetype#guess_{vfiletype} :
+                \    g:tcomment#filetype#guess)
+    if guess ==# '1'
+        if filetype =~# '^.\{-}\..\+$'
+            let alt_filetype = tcomment#filetype#Get(filetype)
         else
-            let alt_filetype = g:tcomment#filetype#guess_{vfiletype}
+            let alt_filetype = ''
         endif
         Tlibtrace 'tcomment', 1, alt_filetype
         return [1, alt_filetype]
+    elseif !empty(guess)
+        Tlibtrace 'tcomment', 2, guess
+        return [1, guess]
     elseif filetype =~# '^.\{-}\..\+$'
         " Unfortunately the handling of "sub-filetypes" isn't 
         " consistent. Some use MAJOR.MINOR, others use MINOR.MAJOR.
@@ -297,10 +299,10 @@ function! tcomment#filetype#GetAlt(filetype, cdef) abort "{{{3
         "         let alt_filetype = tcomment#filetype#Get(filetype, 0)
         "     endif
         " endif
-        Tlibtrace 'tcomment', 2, alt_filetype
+        Tlibtrace 'tcomment', 3, alt_filetype
         return [1, alt_filetype]
     else
-        Tlibtrace 'tcomment', 3, ''
+        Tlibtrace 'tcomment', 4, ''
         return [0, '']
     endif
 endf
