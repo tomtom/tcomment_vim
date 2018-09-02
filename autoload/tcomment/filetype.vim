@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-08-24.
-" @Revision:    27
+" @Last Change: 2018-09-02.
+" @Revision:    41
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -20,7 +20,13 @@ if !exists('g:tcomment#filetype#guess')
     "   0        ... don't guess
     "   1        ... guess
     "   FILETYPE ... assume this filetype
-    let g:tcomment#filetype#guess = 1   "{{{2
+    "
+    " NOTE: Issue 222, 224: Default=1 doesn't work well
+    let g:tcomment#filetype#guess = 0   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_cpp')
+    " See |g:tcomment#filetype#guess_php|.
+    let g:tcomment#filetype#guess_cpp = 0   "{{{2
 endif
 if !exists('g:tcomment#filetype#guess_blade')
     " See |g:tcomment#filetype#guess_php|.

@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-07-08.
-" @Revision:    2005
+" @Last Change: 2018-09-01.
+" @Revision:    2006
 
 scriptencoding utf-8
 
@@ -107,6 +107,9 @@ function! tcomment#GetLineC(...) abort
     let cmt = deepcopy(g:tcomment#line_fmt_c)
     if a:0 >= 1
         let cmt.commentstring = a:1
+    endif
+    if a:0 >= 2
+        let cmt = extend(cmt, a:2)
     endif
     return cmt
 endf
