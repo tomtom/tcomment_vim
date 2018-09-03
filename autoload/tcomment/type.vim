@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-20.
-" @Revision:    25
+" @Last Change: 2018-09-03.
+" @Revision:    33
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -14,12 +14,22 @@ let s:definitions = {}
 let g:tcomment#types#dirty = 1
 let s:init = 0
 
+" :doc:
+" A dictionary of NAME => COMMENT DEFINITION (see |tcomment#type#Define()|) 
+" that can be set in vimrc to override tcomment's default comment 
+" styles.
+" :read: let g:tcomment_types = {} "{{{2
 
 " collect all known comment types
 " :nodoc:
 function! tcomment#type#Collect() abort
     if !s:init
         runtime! autoload/tcomment/types/*.vim
+        if exists('g:tcomment_types')
+            for [name, def] in items(g:tcomment_types)
+                call tcomment#type#Define(name, def)
+            endfor
+        endif
         let s:init = 1
     endif
     if g:tcomment#types#dirty
@@ -101,16 +111,4 @@ function! tcomment#type#Exists(name, ...) abort
     return has_key(s:definitions, name) ? name : ''
 endf
 
-
-" :doc:
-" A dictionary of NAME => COMMENT DEFINITION (see |tcomment#type#Define()|) 
-" that can be set in vimrc to override tcomment's default comment 
-" styles.
-" :read: let g:tcomment_types = {} "{{{2
-if exists('g:tcomment_types')
-    for [s:name, s:def] in items(g:tcomment_types)
-        call tcomment#type#Define(s:name, s:def)
-    endfor
-    unlet! s:name s:def
-endif
 
