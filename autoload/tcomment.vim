@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-09-01.
-" @Revision:    2006
+" @Last Change: 2018-09-26.
+" @Revision:    2022
 
 scriptencoding utf-8
 
@@ -81,8 +81,8 @@ if !exists('g:tcomment#replacements_c')
     " Replacements for c filetype.
     " :read: let g:tcomment#replacements_c = {...}   "{{{2
     let g:tcomment#replacements_c = {
-                \     '/*': '#<{(|',
-                \     '*/': '|)}>#',
+                \     '/*': {'guard_rx': '^\s*/\?\*', 'subst': '#<{(|'},
+                \     '*/': {'guard_rx': '^\s*/\?\*', 'subst': '|)}>#'},
                 \ }
 endif
 
@@ -690,10 +690,10 @@ function! s:ProcessLine(comment_do, match, checkRx, replace) abort
                 let irx = 2
             endif
             let rv = substitute(a:match, a:checkRx, '\1\'. irx, '')
-            let rv = s:UnreplaceInLine(rv)
+            let rv = s:UnreplaceInLine(rv, a:match)
         else
             let ml = len(a:match)
-            let rv = s:ReplaceInLine(a:match)
+            let rv = s:ReplaceInLine(a:match, a:match)
             let rv = tcomment#format#Printf1(a:replace, rv)
             let strip_whitespace = get(s:cdef, 'strip_whitespace', 1)
             if strip_whitespace == 2 || (strip_whitespace == 1 && ml == 0)
@@ -737,9 +737,26 @@ function! s:ProcessLine(comment_do, match, checkRx, replace) abort
 endf
 
 
-function! s:ReplaceInLine(text) abort "{{{3
+function! s:GetReplacements(cdef, text) abort "{{{3
+    let replacements = {}
+    for [rx, sdef] in items(s:cdef.replacements)
+        if type(sdef) == 1
+            let replacements[rx] = sdef
+        elseif type(sdef) == 4
+            if a:text =~# sdef.guard_rx
+                let replacements[rx] = sdef.subst
+            endif
+        else
+            throw 'tcomment: Malformed substitute in GetReplacements(): '. rx .' => '. string(sdef)
+        endif
+    endfor
+    return replacements
+endf
+
+
+function! s:ReplaceInLine(text, match) abort "{{{3
     if has_key(s:cdef, 'replacements')
-        let replacements = s:cdef.replacements
+        let replacements = s:GetReplacements(s:cdef, s:cdef.commentstring)
         return s:DoReplacements(a:text, keys(replacements), values(replacements))
     else
         return a:text
@@ -747,9 +764,9 @@ function! s:ReplaceInLine(text) abort "{{{3
 endf
 
 
-function! s:UnreplaceInLine(text) abort "{{{3
+function! s:UnreplaceInLine(text, match) abort "{{{3
     if has_key(s:cdef, 'replacements')
-        let replacements = s:cdef.replacements
+        let replacements = s:GetReplacements(s:cdef, a:match)
         return s:DoReplacements(a:text, values(replacements), keys(replacements))
     else
         return a:text
@@ -818,6 +835,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
             for line in split(@t, '\n')
                 let line1 = substitute(line, rx, '', '')
                 Tlibtrace 'tcomment', line, line1
+                let line1 = s:UnreplaceInLine(line1, line)
                 call add(tt, line1)
             endfor
             let @t = join(tt, "\n")
@@ -863,6 +881,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
                 else
                     for line in split(@t, '\n')
                         Tlibtrace 'tcomment', 1, line
+                        let line = s:ReplaceInLine(line, line)
                         if line =~# '^\s*' && tcomment#compatibility#Strdisplaywidth(line) < indentlen
                             let line = indentStr . ms
                         elseif lnum == 0
