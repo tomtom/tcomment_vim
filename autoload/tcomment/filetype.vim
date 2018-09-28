@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-09-02.
-" @Revision:    41
+" @Last Change: 2018-09-28.
+" @Revision:    43
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -32,25 +32,25 @@ if !exists('g:tcomment#filetype#guess_blade')
     " See |g:tcomment#filetype#guess_php|.
     let g:tcomment#filetype#guess_blade = 'html'   "{{{2
 endif
-" if !exists('g:tcomment#filetype#guess_django')
-"     let g:tcomment#filetype#guess_django = 1   "{{{2
-" endif
+if !exists('g:tcomment#filetype#guess_django')
+    let g:tcomment#filetype#guess_django = 1   "{{{2
+endif
 if !exists('g:tcomment#filetype#guess_dsl')
     " For dsl documents, assume filetype = xml.
     let g:tcomment#filetype#guess_dsl = 'xml'   "{{{2
 endif
-" if !exists('g:tcomment#filetype#guess_eruby')
-"     let g:tcomment#filetype#guess_eruby = 1   "{{{2
-" endif
-" if !exists('g:tcomment#filetype#guess_html')
-"     let g:tcomment#filetype#guess_html = 1   "{{{2
-" endif
+if !exists('g:tcomment#filetype#guess_eruby')
+    let g:tcomment#filetype#guess_eruby = 1   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_html')
+    let g:tcomment#filetype#guess_html = 1   "{{{2
+endif
 if !exists('g:tcomment#filetype#guess_jinja')
     let g:tcomment#filetype#guess_jinja = 'html'   "{{{2
 endif
-" if !exists('g:tcomment#filetype#guess_perl')
-"     let g:tcomment#filetype#guess_perl = 1   "{{{2
-" endif
+if !exists('g:tcomment#filetype#guess_perl')
+    let g:tcomment#filetype#guess_perl = 1   "{{{2
+endif
 if !exists('g:tcomment#filetype#guess_php')
     " In php documents, the php part is usually marked as phpRegion. We 
     " thus assume that the buffers default comment style isn't php but 
@@ -63,15 +63,15 @@ endif
 if !exists('g:tcomment#filetype#guess_rnoweb')
     let g:tcomment#filetype#guess_rnoweb = 'r'   "{{{2
 endif
-" if !exists('g:tcomment#filetype#guess_smarty')
-"     let g:tcomment#filetype#guess_smarty = 1   "{{{2
-" endif
-" if !exists('g:tcomment#filetype#guess_tskeleton')
-"     let g:tcomment#filetype#guess_tskeleton = 1   "{{{2
-" endif
-" if !exists('g:tcomment#filetype#guess_vim')
-"     let g:tcomment#filetype#guess_vim = 1   "{{{2
-" endif
+if !exists('g:tcomment#filetype#guess_smarty')
+    let g:tcomment#filetype#guess_smarty = 1   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_tskeleton')
+    let g:tcomment#filetype#guess_tskeleton = 1   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_vim')
+    let g:tcomment#filetype#guess_vim = 1   "{{{2
+endif
 if !exists('g:tcomment#filetype#guess_vue')
     let g:tcomment#filetype#guess_vue = 'html'   "{{{2
 endif
