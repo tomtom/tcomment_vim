@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2018-11-06.
-" @Revision:    46
+" @Revision:    53
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -65,6 +65,9 @@ if !exists('g:tcomment#filetype#guess_rnoweb')
 endif
 if !exists('g:tcomment#filetype#guess_smarty')
     let g:tcomment#filetype#guess_smarty = 1   "{{{2
+endif
+if !exists('g:tcomment#filetype#guess_tex')
+    let g:tcomment#filetype#guess_tex = 1   "{{{2
 endif
 if !exists('g:tcomment#filetype#guess_tskeleton')
     let g:tcomment#filetype#guess_tskeleton = 1   "{{{2
@@ -194,59 +197,63 @@ function! tcomment#filetype#Guess(beg, end, comment_mode, filetype, ...) abort
         let cont = 1
         while cont && m <= le
             for tran in [1, 0]
-                let syntax_name = tcomment#syntax#GetSyntaxName(n, m)
-                Tlibtrace 'tcomment', syntax_name, n, m
+                let syntax_name = tcomment#syntax#GetSyntaxName(n, m, tran)
+                Tlibtrace 'tcomment', syntax_name, n, m, tran
                 unlet! ftype_map
                 let ftype_map = get(g:tcomment#filetype#syntax_map, syntax_name, '')
-                Tlibtrace 'tcomment', ftype_map
-                if !empty(ftype_map) && type(ftype_map) == 4
-                    if n < a:beg
-                        let key = 'prevnonblank'
-                    elseif n > a:end
-                        let key = 'nextnonblank'
-                    else
-                        let key = ''
-                    endif
-                    if empty(key) || !has_key(ftype_map, key)
-                        let ftypeftype = get(ftype_map, 'filetype', {})
-                        Tlibtrace 'tcomment', ftype_map, ftypeftype
-                        unlet! ftype_map
-                        let ftype_map = get(ftypeftype, a:filetype, '')
-                    else
-                        let mapft = ''
-                        for mapdef in ftype_map[key]
-                            if strpart(text, m - 1) =~# '^'. mapdef.match
-                                let mapft = mapdef.filetype
-                                let cont = 0
-                                break
-                            endif
-                        endfor
-                        unlet! ftype_map
-                        if empty(mapft)
-                            let ftype_map = ''
-                        else
-                            let ftype_map = mapft
-                        endif
-                    endif
-                endif
                 if !empty(ftype_map)
                     Tlibtrace 'tcomment', ftype_map
-                    return tcomment#commentdef#GetCustom(ftype_map, a:comment_mode, cdef.commentstring)
-                elseif syntax_name =~ g:tcomment#types#rx
-                    let ft = substitute(syntax_name, g:tcomment#types#rx, '\1', '')
-                    Tlibtrace 'tcomment', ft
-                    if exists('g:tcomment#filetype#ignore_'. a:filetype) && g:tcomment#filetype#ignore_{a:filetype} =~ '\<'.ft.'\>'
-                        let m += 1
-                    else
-                        return tcomment#commentdef#GetCustom(ft, a:comment_mode, cdef.commentstring)
-                    endif
-                elseif empty(syntax_name) || syntax_name ==? 'None' || syntax_name =~# '^\u\+$' || syntax_name =~# '^\u\U*$'
-                    let m += 1
-                else
-                    let cont = 0
                     break
                 endif
             endfor
+            Tlibtrace 'tcomment', ftype_map
+            if !empty(ftype_map) && type(ftype_map) == 4
+                if n < a:beg
+                    let key = 'prevnonblank'
+                elseif n > a:end
+                    let key = 'nextnonblank'
+                else
+                    let key = ''
+                endif
+                if empty(key) || !has_key(ftype_map, key)
+                    let ftypeftype = get(ftype_map, 'filetype', {})
+                    Tlibtrace 'tcomment', ftype_map, ftypeftype
+                    unlet! ftype_map
+                    let ftype_map = get(ftypeftype, a:filetype, '')
+                else
+                    let mapft = ''
+                    for mapdef in ftype_map[key]
+                        if strpart(text, m - 1) =~# '^'. mapdef.match
+                            let mapft = mapdef.filetype
+                            let cont = 0
+                            break
+                        endif
+                    endfor
+                    unlet! ftype_map
+                    if empty(mapft)
+                        let ftype_map = ''
+                    else
+                        let ftype_map = mapft
+                    endif
+                endif
+            endif
+            if !empty(ftype_map)
+                Tlibtrace 'tcomment', ftype_map
+                return tcomment#commentdef#GetCustom(ftype_map, a:comment_mode, cdef.commentstring)
+            elseif syntax_name =~ g:tcomment#types#rx
+                let ft = substitute(syntax_name, g:tcomment#types#rx, '\1', '')
+                Tlibtrace 'tcomment', ft
+                if exists('g:tcomment#filetype#ignore_'. a:filetype) && g:tcomment#filetype#ignore_{a:filetype} =~ '\<'.ft.'\>'
+                    let m += 1
+                else
+                    return tcomment#commentdef#GetCustom(ft, a:comment_mode, cdef.commentstring)
+                endif
+            elseif empty(syntax_name) || syntax_name ==? 'None' || syntax_name =~# '^\u\+$' || syntax_name =~# '^\u\U*$'
+                let m += 1
+            else
+                let cont = 0
+                break
+            endif
         endwh
         let n += 1
     endwh
@@ -324,7 +331,6 @@ function! tcomment#filetype#GetAlt(filetype, cdef) abort "{{{3
         return [0, '']
     endif
 endf
-
 
 
 " vi: ft=vim:tw=72:ts=4:fo=w2croql
