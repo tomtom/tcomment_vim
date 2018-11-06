@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-09-28.
-" @Revision:    43
+" @Last Change: 2018-11-06.
+" @Revision:    46
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -115,6 +115,13 @@ if !exists('g:tcomment#filetype#syntax_map')
                 \ 'bladePhpParenBlock': 'php',
                 \ 'erubyExpression':    'ruby',
                 \ 'rmdRChunk':          'r',
+                \ 'texZonePythontex':   'python',
+                \ 'texZonePythontexArg': 'python',
+                \ 'texZoneLua':         'lua',
+                \ 'texZoneLuaArg':      'lua',
+                \ 'texZoneGnuplot':     'gnuplot',
+                \ 'texZoneAsymptote':   'cpp',
+                \ 'texZoneDot':         'cpp',
                 \ 'vimMzSchemeRegion':  'scheme',
                 \ 'vimPerlRegion':      'perl',
                 \ 'vimPythonRegion':    'python',
@@ -184,57 +191,62 @@ function! tcomment#filetype#Guess(beg, end, comment_mode, filetype, ...) abort
         " let m  = indent(n) + 1
         let le = tcomment#compatibility#Strwidth(text)
         Tlibtrace 'tcomment', n, m, le
-        while m <= le
-            let syntax_name = tcomment#syntax#GetSyntaxName(n, m)
-            Tlibtrace 'tcomment', syntax_name, n, m
-            unlet! ftype_map
-            let ftype_map = get(g:tcomment#filetype#syntax_map, syntax_name, '')
-            Tlibtrace 'tcomment', ftype_map
-            if !empty(ftype_map) && type(ftype_map) == 4
-                if n < a:beg
-                    let key = 'prevnonblank'
-                elseif n > a:end
-                    let key = 'nextnonblank'
-                else
-                    let key = ''
-                endif
-                if empty(key) || !has_key(ftype_map, key)
-                    let ftypeftype = get(ftype_map, 'filetype', {})
-                    Tlibtrace 'tcomment', ftype_map, ftypeftype
-                    unlet! ftype_map
-                    let ftype_map = get(ftypeftype, a:filetype, '')
-                else
-                    let mapft = ''
-                    for mapdef in ftype_map[key]
-                        if strpart(text, m - 1) =~# '^'. mapdef.match
-                            let mapft = mapdef.filetype
-                            break
-                        endif
-                    endfor
-                    unlet! ftype_map
-                    if empty(mapft)
-                        let ftype_map = ''
+        let cont = 1
+        while cont && m <= le
+            for tran in [1, 0]
+                let syntax_name = tcomment#syntax#GetSyntaxName(n, m)
+                Tlibtrace 'tcomment', syntax_name, n, m
+                unlet! ftype_map
+                let ftype_map = get(g:tcomment#filetype#syntax_map, syntax_name, '')
+                Tlibtrace 'tcomment', ftype_map
+                if !empty(ftype_map) && type(ftype_map) == 4
+                    if n < a:beg
+                        let key = 'prevnonblank'
+                    elseif n > a:end
+                        let key = 'nextnonblank'
                     else
-                        let ftype_map = mapft
+                        let key = ''
+                    endif
+                    if empty(key) || !has_key(ftype_map, key)
+                        let ftypeftype = get(ftype_map, 'filetype', {})
+                        Tlibtrace 'tcomment', ftype_map, ftypeftype
+                        unlet! ftype_map
+                        let ftype_map = get(ftypeftype, a:filetype, '')
+                    else
+                        let mapft = ''
+                        for mapdef in ftype_map[key]
+                            if strpart(text, m - 1) =~# '^'. mapdef.match
+                                let mapft = mapdef.filetype
+                                let cont = 0
+                                break
+                            endif
+                        endfor
+                        unlet! ftype_map
+                        if empty(mapft)
+                            let ftype_map = ''
+                        else
+                            let ftype_map = mapft
+                        endif
                     endif
                 endif
-            endif
-            if !empty(ftype_map)
-                Tlibtrace 'tcomment', ftype_map
-                return tcomment#commentdef#GetCustom(ftype_map, a:comment_mode, cdef.commentstring)
-            elseif syntax_name =~ g:tcomment#types#rx
-                let ft = substitute(syntax_name, g:tcomment#types#rx, '\1', '')
-                Tlibtrace 'tcomment', ft
-                if exists('g:tcomment#filetype#ignore_'. a:filetype) && g:tcomment#filetype#ignore_{a:filetype} =~ '\<'.ft.'\>'
+                if !empty(ftype_map)
+                    Tlibtrace 'tcomment', ftype_map
+                    return tcomment#commentdef#GetCustom(ftype_map, a:comment_mode, cdef.commentstring)
+                elseif syntax_name =~ g:tcomment#types#rx
+                    let ft = substitute(syntax_name, g:tcomment#types#rx, '\1', '')
+                    Tlibtrace 'tcomment', ft
+                    if exists('g:tcomment#filetype#ignore_'. a:filetype) && g:tcomment#filetype#ignore_{a:filetype} =~ '\<'.ft.'\>'
+                        let m += 1
+                    else
+                        return tcomment#commentdef#GetCustom(ft, a:comment_mode, cdef.commentstring)
+                    endif
+                elseif empty(syntax_name) || syntax_name ==? 'None' || syntax_name =~# '^\u\+$' || syntax_name =~# '^\u\U*$'
                     let m += 1
                 else
-                    return tcomment#commentdef#GetCustom(ft, a:comment_mode, cdef.commentstring)
+                    let cont = 0
+                    break
                 endif
-            elseif empty(syntax_name) || syntax_name ==? 'None' || syntax_name =~# '^\u\+$' || syntax_name =~# '^\u\U*$'
-                let m += 1
-            else
-                break
-            endif
+            endfor
         endwh
         let n += 1
     endwh

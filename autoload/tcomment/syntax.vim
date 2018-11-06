@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-03-20.
-" @Revision:    6
+" @Last Change: 2018-11-06.
+" @Revision:    7
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -20,8 +20,9 @@ if !exists('g:tcomment#syntax#substitute')
 endif
 
 
-function! tcomment#syntax#GetSyntaxName(lnum, col) abort "{{{3
-    let syntax_name = synIDattr(synID(a:lnum, a:col, 1), 'name')
+function! tcomment#syntax#GetSyntaxName(lnum, col, ...) abort "{{{3
+    let tran = a:0 >= 1 ? a:1 : 1
+    let syntax_name = synIDattr(synID(a:lnum, a:col, tran), 'name')
     if !empty(g:tcomment#syntax#substitute)
         for [rx, subdef] in items(g:tcomment#syntax#substitute)
             if !has_key(subdef, 'if') || eval(subdef.if)
