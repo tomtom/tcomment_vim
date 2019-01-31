@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2018-06-29
-" @Revision:    8
+" @Last Change: 2019-01-31
+" @Revision:    9
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -105,11 +105,11 @@ call tcomment#type#Define('java_inline',      g:tcomment#inline_fmt_c  )
 call tcomment#type#Define('javascript',       tcomment#GetLineC('// %s'))
 call tcomment#type#Define('javascript_block', g:tcomment#block_fmt_c   )
 call tcomment#type#Define('javascript_inline', g:tcomment#inline_fmt_c )
-call tcomment#type#Define('jsx',             '{/* %s */}')
-call tcomment#type#Define('jsx_block',       '{/* %s */}')
-call tcomment#type#Define('jsx_inline',      '{/* %s */}')
-call tcomment#type#Define('jinja',           '{# %s #}'     )
-call tcomment#type#Define('jinja_block',     "{%% comment %%}%s{%% endcomment %%}\n ")
+call tcomment#type#Define('jsx',              '{/* %s */}')
+call tcomment#type#Define('jsx_block',        '{/* %s */}')
+call tcomment#type#Define('jsx_inline',       '{/* %s */}')
+call tcomment#type#Define('jinja',            '{# %s #}'     )
+call tcomment#type#Define('jinja_block',      "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('jproperties',      '# %s'             )
 call tcomment#type#Define('jq',               '# %s'             )
 call tcomment#type#Define('lilypond',         '%% %s'            )
@@ -224,6 +224,9 @@ call tcomment#type#Define('terraform',        '# %s'             )
 call tcomment#type#Define('tex',              '%% %s'            )
 call tcomment#type#Define('toml',             '# %s'             )
 call tcomment#type#Define('tpl',              '<!-- %s -->'      )
+call tcomment#type#Define('tsx',              '{/* %s */}')
+call tcomment#type#Define('tsx_block',        '{/* %s */}')
+call tcomment#type#Define('tsx_inline',       '{/* %s */}')
 call tcomment#type#Define('tup',              '# %s'             )
 call tcomment#type#Define('typescript',       tcomment#GetLineC('// %s'))
 call tcomment#type#Define('typescript_block', g:tcomment#block_fmt_c   )
