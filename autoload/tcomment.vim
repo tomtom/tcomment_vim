@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-09-26.
-" @Revision:    2022
+" @Last Change: 2019-01-31.
+" @Revision:    2030
 
 scriptencoding utf-8
 
@@ -230,6 +230,16 @@ function! tcomment#GuessCommentType(...) abort "{{{3
     let fallbackFiletype = get(options, 'filetype', '')
     return tcomment#filetype#Guess(beg, end,
           \ comment_mode, filetype, fallbackFiletype)
+endf
+
+
+function! tcomment#DebugInfo() abort "{{{3
+    redir @+>
+    echom 'TCOMMENT: &ft =' &filetype
+    echom 'TCOMMENT: ft  =' tcomment#filetype#Get()
+    echom 'TCOMMENT: stx =' tcomment#syntax#GetSyntaxName(line('.'), col('.'))
+    echom 'TCOMMENT: ct  =' string(tcomment#GuessCommentType())
+    redir END
 endf
 
 
