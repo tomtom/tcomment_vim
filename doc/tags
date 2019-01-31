@@ -15,6 +15,7 @@ g:tcomment#block2_fmt_c	tcomment.txt	/*g:tcomment#block2_fmt_c*
 g:tcomment#block_fmt_xml	tcomment.txt	/*g:tcomment#block_fmt_xml*
 g:tcomment#filetype#guess	tcomment.txt	/*g:tcomment#filetype#guess*
 g:tcomment#filetype#guess_blade	tcomment.txt	/*g:tcomment#filetype#guess_blade*
+g:tcomment#filetype#guess_cpp	tcomment.txt	/*g:tcomment#filetype#guess_cpp*
 g:tcomment#filetype#guess_dsl	tcomment.txt	/*g:tcomment#filetype#guess_dsl*
 g:tcomment#filetype#guess_php	tcomment.txt	/*g:tcomment#filetype#guess_php*
 g:tcomment#filetype#ignore_php	tcomment.txt	/*g:tcomment#filetype#ignore_php*
@@ -49,6 +50,8 @@ tcomment#filetype#GetAlt()	tcomment.txt	/*tcomment#filetype#GetAlt()*
 tcomment#filetype#Guess()	tcomment.txt	/*tcomment#filetype#Guess()*
 tcomment#type#Define()	tcomment.txt	/*tcomment#type#Define()*
 tcomment#type#GetDefinition()	tcomment.txt	/*tcomment#type#GetDefinition()*
+tcomment-debug	tcomment.txt	/*tcomment-debug*
 tcomment-maps	tcomment.txt	/*tcomment-maps*
+tcomment-new-filetype	tcomment.txt	/*tcomment-new-filetype*
 tcomment-operator	tcomment.txt	/*tcomment-operator*
 tcomment.txt	tcomment.txt	/*tcomment.txt*

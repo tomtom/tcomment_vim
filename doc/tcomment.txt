@@ -122,6 +122,38 @@ A secondary set of key maps is defined for normal and insert mode (see also
     <Leader>_i       :: :TCommentInline
 
 
+
+-----------------------------------------------------------------------
+                            *tcomment-new-filetype* *tcomment-debug*
+Adding a new filetype~
+
+If tcomment doesn't know a filetype, it makes use of 'commentstring' or 
+'comments'. If the result still does not satisfy your needs, you might have to 
+add a custom filetype definition. This could be done in a file like 
+`autoload/tcomment/types/mytypes.vim` somewhere in your 'runtimepath', which 
+will be loaded on startup.
+
+New comment types can be defined via the |tcomment#type#Define()| function. If 
+the file may contain embedded code of another filetype, you might also want to 
+set `g:tcomment#filetype#guess_{FILETYPE}` to 1 or the name of a default 
+fallback filetype.
+
+If nothing helps:
+
+1. Make sure 'filetype' is set correctly.
+2. Place the cursor at an appropriate position -- e.g. the first non-blank 
+   character of a line of code.
+3. Call |tcomment#DebugInfo()|.
+4. File an issue on github and post the output of `:call tcomment#DebugInfo()`.
+
+If this still doesn't help, please install tlib 
+(https://github.com/tomtom/tlib_vim), try:
+
+    Tlibtraceset --file=tcomment.log +tcomment
+
+... and send me the log file.
+
+
 -----------------------------------------------------------------------
 Install~
 
@@ -179,6 +211,7 @@ Contents~
         tcomment#commentdef#Get ....................... |tcomment#commentdef#Get()|
         tcomment#commentdef#GetCustom ................. |tcomment#commentdef#GetCustom()|
         g:tcomment#filetype#guess ..................... |g:tcomment#filetype#guess|
+        g:tcomment#filetype#guess_cpp ................. |g:tcomment#filetype#guess_cpp|
         g:tcomment#filetype#guess_blade ............... |g:tcomment#filetype#guess_blade|
         g:tcomment#filetype#guess_dsl ................. |g:tcomment#filetype#guess_dsl|
         g:tcomment#filetype#guess_php ................. |g:tcomment#filetype#guess_php|
@@ -187,9 +220,9 @@ Contents~
         tcomment#filetype#Guess ....................... |tcomment#filetype#Guess()|
         tcomment#filetype#GetAlt ...................... |tcomment#filetype#GetAlt()|
         g:tcomment#operator#mode_extra ................ |g:tcomment#operator#mode_extra|
+        g:tcomment_types .............................. |g:tcomment_types|
         tcomment#type#Define .......................... |tcomment#type#Define()|
         tcomment#type#GetDefinition ................... |tcomment#type#GetDefinition()|
-        g:tcomment_types .............................. |g:tcomment_types|
 
 
 ------------------------------------------------------------------------
@@ -484,7 +517,7 @@ tcomment#commentdef#GetCustom(ft, comment_mode, ...)
 ------------------------------------------------------------------------
                                                     *autoload/tcomment/filetype.vim*
                                                     *g:tcomment#filetype#guess*
-g:tcomment#filetype#guess      (default: 1)
+g:tcomment#filetype#guess      (default: 0)
     Guess the file type based on syntax names always or for some fileformat only
     If non-zero, try to guess filetypes.
     tcomment also checks g:tcomment#filetype#guess_{&filetype} for 
@@ -494,6 +527,12 @@ g:tcomment#filetype#guess      (default: 1)
       0        ... don't guess
       1        ... guess
       FILETYPE ... assume this filetype
+
+    NOTE: Issue 222, 224: Default=1 doesn't work well
+
+                                                    *g:tcomment#filetype#guess_cpp*
+g:tcomment#filetype#guess_cpp  (default: 0)
+    See |g:tcomment#filetype#guess_php|.
 
                                                     *g:tcomment#filetype#guess_blade*
 g:tcomment#filetype#guess_blade (default: 'html')
@@ -543,6 +582,14 @@ g:tcomment#operator#mode_extra (default: '')
 
 ------------------------------------------------------------------------
                                                     *autoload/tcomment/type.vim*
+                                                    *g:tcomment_types*
+g:tcomment_types               (default: {})
+    A dictionary of NAME => COMMENT DEFINITION (see |tcomment#type#Define()|) 
+    that can be set in vimrc to override tcomment's default comment 
+    styles.
+
+
+
                                                     *tcomment#type#Define()*
 tcomment#type#Define(name, commentdef, ?cdef={}, ?anyway=0)
     If you don't explicitly define a comment style, |:TComment| will use 
@@ -579,14 +626,6 @@ tcomment#type#GetDefinition(name, ...)
                                                           *b:tcomment_def_{NAME}*
     Return b:tcomment_def_{NAME} if the variable exists. Otherwise return 
     the comment definition as set with |tcomment#type#Define|.
-
-                                                    *g:tcomment_types*
-g:tcomment_types               (default: {})
-    A dictionary of NAME => COMMENT DEFINITION (see |tcomment#type#Define()|) 
-    that can be set in vimrc to override tcomment's default comment 
-    styles.
-
-
 
 
 

@@ -119,6 +119,38 @@ A secondary set of key maps is defined for normal and insert mode (see also
     <Leader>_i       :: :TCommentInline
 
 
+
+-----------------------------------------------------------------------
+                            *tcomment-new-filetype* *tcomment-debug*
+Adding a new filetype~
+
+If tcomment doesn't know a filetype, it makes use of 'commentstring' or 
+'comments'. If the result still does not satisfy your needs, you might have to 
+add a custom filetype definition. This could be done in a file like 
+`autoload/tcomment/types/mytypes.vim` somewhere in your 'runtimepath', which 
+will be loaded on startup.
+
+New comment types can be defined via the |tcomment#type#Define()| function. If 
+the file may contain embedded code of another filetype, you might also want to 
+set `g:tcomment#filetype#guess_{FILETYPE}` to 1 or the name of a default 
+fallback filetype.
+
+If nothing helps:
+
+1. Make sure 'filetype' is set correctly.
+2. Place the cursor at an appropriate position -- e.g. the first non-blank 
+   character of a line of code.
+3. Call |tcomment#DebugInfo()|.
+4. File an issue on github and post the output of `:call tcomment#DebugInfo()`.
+
+If this still doesn't help, please install tlib 
+(https://github.com/tomtom/tlib_vim), try:
+
+    Tlibtraceset --file=tcomment.log +tcomment
+
+... and send me the log file.
+
+
 -----------------------------------------------------------------------
 Install~
 
