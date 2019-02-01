@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2019-01-31.
-" @Revision:    2030
+" @Revision:    2034
 
 scriptencoding utf-8
 
@@ -196,8 +196,16 @@ if !exists('g:tcomment#must_escape_expression_backslash')
 endif
 
 
+let s:warning_definetype = 0
+
 function! tcomment#DefineType(...) abort
-    echom 'tcomment: tcomment#DefineType() is deprecated; please use tcomment#type#Define() instead'
+    if !s:warning_definetype
+        echohl WarningMsg
+        echom 'tcomment: tcomment#DefineType() is deprecated; please use tcomment#type#Define() instead'
+        echom 'tcomment: tcomment#DefineType() will be removed in a future release'
+        echohl NONE
+        let s:warning_definetype = 1
+    endif
     return call('tcomment#type#Define', a:000)
 endf
 
@@ -230,16 +238,6 @@ function! tcomment#GuessCommentType(...) abort "{{{3
     let fallbackFiletype = get(options, 'filetype', '')
     return tcomment#filetype#Guess(beg, end,
           \ comment_mode, filetype, fallbackFiletype)
-endf
-
-
-function! tcomment#DebugInfo() abort "{{{3
-    redir @+>
-    echom 'TCOMMENT: &ft =' &filetype
-    echom 'TCOMMENT: ft  =' tcomment#filetype#Get()
-    echom 'TCOMMENT: stx =' tcomment#syntax#GetSyntaxName(line('.'), col('.'))
-    echom 'TCOMMENT: ct  =' string(tcomment#GuessCommentType())
-    redir END
 endf
 
 
