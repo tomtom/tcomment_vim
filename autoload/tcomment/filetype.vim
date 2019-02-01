@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2019-01-31.
-" @Revision:    54
+" @Last Change: 2019-02-01.
+" @Revision:    61
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -118,6 +118,11 @@ if !exists('g:tcomment#filetype#syntax_map')
     " region. This works well if the syntax names match 
     " /filetypeSomeName/. Other syntax names have to be explicitly 
     " mapped onto the corresponding filetype.
+    "
+    " NOTE: |g:tcomment#syntax#substitute| and 
+    " |g:tcomment#syntax#substitute_by_filetype| provide alternative, 
+    " and maybe preferable means to detect the proper filetype from a 
+    " syntax group name.
     " :read: let g:tcomment#filetype#syntax_map = {...}   "{{{2
     let g:tcomment#filetype#syntax_map = {
                 \ 'bladeEcho':          'php',
@@ -203,7 +208,7 @@ function! tcomment#filetype#Guess(beg, end, comment_mode, filetype, ...) abort
         let cont = 1
         while cont && m <= le
             for tran in [1, 0]
-                let syntax_name = tcomment#syntax#GetSyntaxName(n, m, tran)
+                let syntax_name = tcomment#syntax#GetSyntaxName(n, m, tran, cdef)
                 Tlibtrace 'tcomment', syntax_name, n, m, tran
                 unlet! ftype_map
                 let ftype_map = get(g:tcomment#filetype#syntax_map, syntax_name, '')
