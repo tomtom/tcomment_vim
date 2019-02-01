@@ -140,15 +140,17 @@ If nothing helps:
 1. Make sure 'filetype' is set correctly.
 2. Place the cursor at an appropriate position -- e.g. the first non-blank 
    character of a line of code.
-3. Call |tcomment#DebugInfo()|.
-4. File an issue on github and post the output of `:call tcomment#DebugInfo()`.
+3. Call |tcomment#debug#CollectInfo()|.
+4. File an issue on github and post the output of `:call 
+   tcomment#debug#CollectInfo()`. The output will also be copied to the 
+   clipboard.
 
 If this still doesn't help, please install tlib 
-(https://github.com/tomtom/tlib_vim), try:
+(https://github.com/tomtom/tlib_vim), please try:
 
     Tlibtraceset --file=tcomment.log +tcomment
 
-... and send me the log file.
+Then comment out the text in question and send me the log file.
 
 
 -----------------------------------------------------------------------

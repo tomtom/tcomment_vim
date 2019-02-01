@@ -8,6 +8,7 @@ autoload/tcomment.vim	tcomment.txt	/*autoload\/tcomment.vim*
 autoload/tcomment/commentdef.vim	tcomment.txt	/*autoload\/tcomment\/commentdef.vim*
 autoload/tcomment/filetype.vim	tcomment.txt	/*autoload\/tcomment\/filetype.vim*
 autoload/tcomment/operator.vim	tcomment.txt	/*autoload\/tcomment\/operator.vim*
+autoload/tcomment/syntax.vim	tcomment.txt	/*autoload\/tcomment\/syntax.vim*
 autoload/tcomment/type.vim	tcomment.txt	/*autoload\/tcomment\/type.vim*
 b:tcomment_def_{NAME}	tcomment.txt	/*b:tcomment_def_{NAME}*
 g:tcomment#blank_lines	tcomment.txt	/*g:tcomment#blank_lines*
@@ -33,6 +34,7 @@ g:tcomment#options_commentstring	tcomment.txt	/*g:tcomment#options_commentstring
 g:tcomment#replacements_c	tcomment.txt	/*g:tcomment#replacements_c*
 g:tcomment#replacements_xml	tcomment.txt	/*g:tcomment#replacements_xml*
 g:tcomment#rstrip_on_uncomment	tcomment.txt	/*g:tcomment#rstrip_on_uncomment*
+g:tcomment#syntax#substitute	tcomment.txt	/*g:tcomment#syntax#substitute*
 g:tcomment_mapleader1	tcomment.txt	/*g:tcomment_mapleader1*
 g:tcomment_mapleader2	tcomment.txt	/*g:tcomment_mapleader2*
 g:tcomment_mapleader_comment_anyway	tcomment.txt	/*g:tcomment_mapleader_comment_anyway*
