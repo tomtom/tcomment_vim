@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2019-02-01.
-" @Revision:    61
+" @Revision:    63
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -201,9 +201,9 @@ function! tcomment#filetype#Guess(beg, end, comment_mode, filetype, ...) abort
     while n <= end
         let text = getline(n)
         let indentstring = matchstr(text, '^\s*')
-        let m = tcomment#compatibility#Strwidth(indentstring)
+        let m = tcomment#compatibility#Strwidth(indentstring) + 1
         " let m  = indent(n) + 1
-        let le = tcomment#compatibility#Strwidth(text)
+        let le = tcomment#compatibility#Strwidth(text) + 1
         Tlibtrace 'tcomment', n, m, le
         let cont = 1
         while cont && m <= le

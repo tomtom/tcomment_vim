@@ -3,7 +3,7 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
 " @Last Change: 2019-02-01.
-" @Revision:    24
+" @Revision:    31
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -28,8 +28,8 @@ if !exists('g:tcomment#syntax#substitute_by_filetype')
     " let g:tcomment#syntax#substitute_by_filetype = {FILETYPE_RX: SUBSTITUTE_DEF ...}   "{{{2
     let g:tcomment#syntax#substitute_by_filetype = {
                 \ '^\(java\|type\)script\.[jt]sx$': {
-                \         '\C^xmlTag': {'sub': 'jsx'}
-                \     }
+                \         '\C^xmlTag': {'sub': 'jsx'},
+                \         '\C^xmlAttrib': {'sub': 'javascript'}}
                 \ }
 endif
 
