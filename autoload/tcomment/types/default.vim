@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2019-01-31
-" @Revision:    9
+" @Last Change: 2019-03-09
+" @Revision:    11
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -112,6 +112,8 @@ call tcomment#type#Define('jinja',            '{# %s #}'     )
 call tcomment#type#Define('jinja_block',      "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('jproperties',      '# %s'             )
 call tcomment#type#Define('jq',               '# %s'             )
+call tcomment#type#Define('julia',            '# %s'             )
+call tcomment#type#Define('julia_block',      "#=%s=#\n   "      )
 call tcomment#type#Define('lilypond',         '%% %s'            )
 call tcomment#type#Define('lisp',             '; %s'             )
 call tcomment#type#Define('liquid',           g:tcomment#inline_fmt_xml)
