@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2019-03-09
-" @Revision:    11
+" @Last Change: 2019-03-10
+" @Revision:    12
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -92,7 +92,6 @@ call tcomment#type#Define('html_inline',      g:tcomment#inline_fmt_xml)
 call tcomment#type#Define('htmldjango',       '{# %s #}'     )
 call tcomment#type#Define('htmldjango_block', "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('htmljinja',       '{# %s #}'     )
-call tcomment#type#Define('htmljinja_block', "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('hy',               '; %s'             )
 call tcomment#type#Define('ini',              '; %s'             ) " php ini (/etc/php5/...)
 call tcomment#type#Define('io',               '// %s'            )
@@ -109,7 +108,6 @@ call tcomment#type#Define('jsx',              '{/* %s */}')
 call tcomment#type#Define('jsx_block',        '{/* %s */}')
 call tcomment#type#Define('jsx_inline',       '{/* %s */}')
 call tcomment#type#Define('jinja',            '{# %s #}'     )
-call tcomment#type#Define('jinja_block',      "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('jproperties',      '# %s'             )
 call tcomment#type#Define('jq',               '# %s'             )
 call tcomment#type#Define('julia',            '# %s'             )
@@ -221,6 +219,7 @@ call tcomment#type#Define('squid',            '# %s'             )
 call tcomment#type#Define('sshconfig',        '# %s'             )
 call tcomment#type#Define('sshdconfig',       '# %s'             )
 call tcomment#type#Define('st',               '" %s "'           )
+call tcomment#type#Define('stata'             '// %s'            )
 call tcomment#type#Define('tcl',              '# %s'             )
 call tcomment#type#Define('terraform',        '# %s'             )
 call tcomment#type#Define('tex',              '%% %s'            )
