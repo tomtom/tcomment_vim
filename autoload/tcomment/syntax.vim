@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2019-02-01.
-" @Revision:    31
+" @Last Change: 2019-02-19.
+" @Revision:    34
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -36,12 +36,13 @@ endif
 
 function! tcomment#syntax#GetSyntaxName(lnum, col, ...) abort "{{{3
     let tran = a:0 >= 1 ? a:1 : 1
-    let cdef = a:0 >= 2 ? a:2 : {'filetype': &filetype}
+    let cdef = a:0 >= 2 ? a:2 : {}
+    let filetype = get(cdef, 'filetype', &filetype)
     let syntax_name = synIDattr(synID(a:lnum, a:col, tran), 'name')
     Tlibtrace 'tcomment', a:lnum, a:col, tran, cdef, syntax_name
     let subs = copy(g:tcomment#syntax#substitute)
     for [ft_rx, sdef] in items(g:tcomment#syntax#substitute_by_filetype)
-        if cdef.filetype =~ ft_rx
+        if filetype =~ ft_rx
             let subs = extend(subs, sdef)
         endif
     endfor
