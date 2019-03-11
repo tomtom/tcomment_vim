@@ -2,7 +2,7 @@
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Last Change: 2019-03-10
-" @Revision:    12
+" @Revision:    14
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -219,7 +219,7 @@ call tcomment#type#Define('squid',            '# %s'             )
 call tcomment#type#Define('sshconfig',        '# %s'             )
 call tcomment#type#Define('sshdconfig',       '# %s'             )
 call tcomment#type#Define('st',               '" %s "'           )
-call tcomment#type#Define('stata'             '// %s'            )
+call tcomment#type#Define('stata',            '// %s'            )
 call tcomment#type#Define('tcl',              '# %s'             )
 call tcomment#type#Define('terraform',        '# %s'             )
 call tcomment#type#Define('tex',              '%% %s'            )
