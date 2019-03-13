@@ -92,6 +92,7 @@ call tcomment#type#Define('htmldjango_block', "{%% comment %%}%s{%% endcomment %
 call tcomment#type#Define('htmljinja',       '{# %s #}'     )
 call tcomment#type#Define('htmljinja_block', "{%% comment %%}%s{%% endcomment %%}\n ")
 call tcomment#type#Define('hy',               '; %s'             )
+call tcomment#type#Define('igorpro',          '// %s'            )
 call tcomment#type#Define('ini',              '; %s'             ) " php ini (/etc/php5/...)
 call tcomment#type#Define('io',               '// %s'            )
 call tcomment#type#Define('jade',             '// %s'            )
