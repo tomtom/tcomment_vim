@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2019-03-10
-" @Revision:    14
+" @Last Change: 2019-03-17
+" @Revision:    18
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -105,7 +105,7 @@ call tcomment#type#Define('java_inline',      g:tcomment#inline_fmt_c  )
 call tcomment#type#Define('javascript',       tcomment#GetLineC('// %s'))
 call tcomment#type#Define('javascript_block', g:tcomment#block_fmt_c   )
 call tcomment#type#Define('javascript_inline', g:tcomment#inline_fmt_c )
-call tcomment#type#Define('jsx',              '{/* %s */}')
+call tcomment#type#Define('jsx',              {'commentstring_rx': '\%%(// %s\|{/* %s */}\)', 'commentstring': '{/* %s */}'})
 call tcomment#type#Define('jsx_block',        '{/* %s */}')
 call tcomment#type#Define('jsx_inline',       '{/* %s */}')
 call tcomment#type#Define('jinja',            '{# %s #}'     )
