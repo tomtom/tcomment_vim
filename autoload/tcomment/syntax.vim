@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2019-03-17.
-" @Revision:    45
+" @Last Change: 2019-03-23.
+" @Revision:    46
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -42,21 +42,20 @@ function! tcomment#syntax#GetSyntaxName(lnum, col, ...) abort "{{{3
     let line = getline(a:lnum)
     let syntax_name = synIDattr(synID(a:lnum, a:col, tran), 'name')
     Tlibtrace 'tcomment', a:lnum, a:col, tran, cdef, syntax_name
-    let subs = copy(g:tcomment#syntax#substitute)
+    let subs = items(copy(g:tcomment#syntax#substitute))
     let done_extend = 0
     for [ft_rx, sdef] in items(g:tcomment#syntax#substitute_by_filetype)
         if filetype =~ ft_rx
             if !done_extend
-                let subs = extend(subs, sdef)
+                let subs += items(sdef)
                 let done_extend = 1
             else
                 echoerr 'tcomment: Duplicate matches in g:tcomment#syntax#substitute_by_filetype for ft='. filetype
             endif
         endif
     endfor
-    Tlibtrace 'tcomment', keys(subs)
     if !empty(subs)
-        for [rx, subdef] in items(subs)
+        for [rx, subdef] in subs
             if has_key(subdef, 'if') && !eval(subdef.if)
                 continue
             endif
