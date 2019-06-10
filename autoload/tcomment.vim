@@ -817,7 +817,6 @@ endf
 
 function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx, cdef) abort
     Tlibtrace 'tcomment', a:beg, a:end, a:cbeg, a:cend, a:comment_do, a:checkRx, a:cdef
-    let indentStr = repeat(' ', a:cbeg)
     let t = @t
     let sel_save = &selection
     set selection=exclusive
@@ -874,9 +873,13 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
                 endif
             endif
         else
+            let indentStr = repeat(' ', a:cbeg)
+            if &expandtab == 0
+                let indentStr = substitute(indentStr, repeat(' ', &tabstop), '\t', 'g')
+            endif
             let cs = indentStr . substitute(cs, '%\@<!%s', '%s'. indentStr, '')
             Tlibtrace 'tcomment', cs, ms
-            if !empty(ms)
+            " if !empty(ms)
                 let lines = []
                 let lnum = 0
                 let indentlen = a:cbeg
@@ -905,7 +908,7 @@ function! s:CommentBlock(beg, end, cbeg, cend, comment_mode, comment_do, checkRx
                 endif
                 let @t = join(lines, "\n")
                 Tlibtrace 'tcomment', 3, @t
-            endif
+            " endif
             let @t = tcomment#format#Printf1(cs, "\n". @t ."\n")
             Tlibtrace 'tcomment', 4, cs, @t, a:comment_mode
             if a:comment_mode =~# '#'
