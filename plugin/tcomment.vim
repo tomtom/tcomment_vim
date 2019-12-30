@@ -274,8 +274,8 @@ if g:tcomment_maps
         exec 'xmap '. g:tcomment_mapleader_comment_anyway .' <Plug>TComment_Comment'
     endif
     if g:tcomment_textobject_inlinecomment != ''
-        exec 'vmap' g:tcomment_textobject_inlinecomment ' <Plug>TComment_ic'
-        exec 'omap' g:tcomment_textobject_inlinecomment ' <Plug>TComment_ic'
+        exec 'vmap '. g:tcomment_textobject_inlinecomment .' <Plug>TComment_ic'
+        exec 'omap '. g:tcomment_textobject_inlinecomment .' <Plug>TComment_ic'
     endif
 endif
 
