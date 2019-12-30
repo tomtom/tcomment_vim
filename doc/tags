@@ -56,4 +56,5 @@ tcomment-debug	tcomment.txt	/*tcomment-debug*
 tcomment-maps	tcomment.txt	/*tcomment-maps*
 tcomment-new-filetype	tcomment.txt	/*tcomment-new-filetype*
 tcomment-operator	tcomment.txt	/*tcomment-operator*
+tcomment-textobject	tcomment.txt	/*tcomment-textobject*
 tcomment.txt	tcomment.txt	/*tcomment.txt*
