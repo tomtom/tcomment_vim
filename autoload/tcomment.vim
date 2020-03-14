@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2019-03-17.
-" @Revision:    2036
+" @Last Change: 2020-03-14.
+" @Revision:    2039
 
 scriptencoding utf-8
 
@@ -279,6 +279,16 @@ endf
 "         postprocess_uncomment .. Run a |printf()| expression with 2 
 "                              placeholders on uncommented lines, e.g. 
 "                              'norm! %sgg=%sgg'.
+"         choose           ... A list of commend definitions (a 
+"                              dictionary as defined above) that may 
+"                              contain an `if` key referring to an 
+"                              expression; if this condition evaluates 
+"                              to true, the item will be selected; the 
+"                              last item in the list will be selected 
+"                              anyway (see the bib definition for an 
+"                              example)
+"         if               ... an |eval()|able expression (only valid 
+"                              within a choose list, see above)
 "   2. 1-2 values for: ?commentPrefix, ?commentPostfix
 "   3. a dictionary (internal use only)
 "

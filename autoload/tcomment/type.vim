@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2018-09-03.
-" @Revision:    33
+" @Last Change: 2020-03-12.
+" @Revision:    42
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -90,11 +90,36 @@ endf
 " Return b:tcomment_def_{NAME} if the variable exists. Otherwise return 
 " the comment definition as set with |tcomment#type#Define|.
 function! tcomment#type#GetDefinition(name, ...) abort
+    Tlibtrace 'tcomment', a:name
     if exists('b:tcomment_def_'. a:name)
-        return b:tcomment_def_{a:name}
+        let def = b:tcomment_def_{a:name}
     else
-        return get(s:definitions, a:name, a:0 >= 1 ? a:1 : '')
+        let def = get(s:definitions, a:name, a:0 >= 1 ? a:1 : '')
     endif
+    Tlibtrace 'tcomment', def
+    if has_key(def, 'choose')
+        let def = copy(def)
+        let defs = def.choose
+        let ndefs = len(defs)
+        Tlibtrace 'tcomment', ndefs
+        for idef in range(ndefs)
+            let cdef = defs[idef]
+            Tlibtrace 'tcomment', idef, cdef
+            if idef == ndefs - 1
+                let choose = 1
+            else
+                let choose = eval(cdef.if)
+            endif
+            Tlibtrace 'tcomment', choose
+            if choose
+                call remove(def, 'choose')
+                let def = extend(def, cdef)
+                break
+            endif
+        endfor
+    endif
+    Tlibtrace 'tcomment', def
+    return def
 endf
 
 
