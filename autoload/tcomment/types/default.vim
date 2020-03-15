@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2020-03-12
-" @Revision:    23
+" @Last Change: 2020-03-15
+" @Revision:    28
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -14,7 +14,7 @@ call tcomment#type#Define('applescript_inline','# %s'            )
 call tcomment#type#Define('asciidoc',         '// %s'            )
 call tcomment#type#Define('asm',              '; %s'             )
 call tcomment#type#Define('asterisk',         '; %s'             )
-call tcomment#type#Define('bib',              {'choose': [{'if': 'col(".") <= 1', 'commentstring': '@Comment{%s}'}, {'commentstring': '%% %s'}]})
+call tcomment#type#Define('bib',              {'choose': [{'if': 'getline(''.'') =~? ''^\s*@''', 'commentstring': '@Comment{%s}'}, {'commentstring': '%% %s'}]})
 call tcomment#type#Define('blade',            '{{-- %s --}}'     )
 call tcomment#type#Define('blade_block',      '{{--%s--}}'       )
 call tcomment#type#Define('blade_inline',     '{{-- %s --}}'     )
