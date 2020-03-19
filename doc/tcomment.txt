@@ -121,6 +121,14 @@ A secondary set of key maps is defined for normal and insert mode (see also
     <Leader>__       :: :TComment
     <Leader>_i       :: :TCommentInline
 
+                                              *tcomment-textobject*
+
+A text object is also added for selecting an inner-comment:
+
+    {operator}ic :: Operate on the inner comment. The mapping can be changed
+                    using the `g:tcomment_textobject_inlinecomment` variable
+                    or disabled by setting it to the empty string, `''`.
+
 
 
 -----------------------------------------------------------------------
@@ -255,6 +263,10 @@ g:tcomment_mapleader_uncomment_anyway (default: 'g<')
                                                     *g:tcomment_mapleader_comment_anyway*
 g:tcomment_mapleader_comment_anyway (default: 'g>')
     See |tcomment-operator|.
+
+                                                    *g:tcomment_textobject_inlinecomment*
+g:tcomment_textobject_inlinecomment (default: 'ic')
+    See |tcomment-textobject|.
 
                                                     *:TComment*
 :[range]TComment[!] ?ARGS...
