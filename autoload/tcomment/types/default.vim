@@ -6,6 +6,9 @@
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
+call tcomment#type#Define('agda',             '-- %s'            )
+call tcomment#type#Define('agda_block',       "{-%s-}\n   "      )
+call tcomment#type#Define('agda_inline',      '{- %s -}'         )
 call tcomment#type#Define('autohotkey',       '; %s'             )
 call tcomment#type#Define('apache',           '# %s'             )
 call tcomment#type#Define('applescript',      '(* %s *)'         )
