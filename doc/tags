@@ -35,12 +35,14 @@ g:tcomment#replacements_c	tcomment.txt	/*g:tcomment#replacements_c*
 g:tcomment#replacements_xml	tcomment.txt	/*g:tcomment#replacements_xml*
 g:tcomment#rstrip_on_uncomment	tcomment.txt	/*g:tcomment#rstrip_on_uncomment*
 g:tcomment#syntax#substitute	tcomment.txt	/*g:tcomment#syntax#substitute*
+g:tcomment_map_modifier	tcomment.txt	/*g:tcomment_map_modifier*
 g:tcomment_mapleader1	tcomment.txt	/*g:tcomment_mapleader1*
 g:tcomment_mapleader2	tcomment.txt	/*g:tcomment_mapleader2*
 g:tcomment_mapleader_comment_anyway	tcomment.txt	/*g:tcomment_mapleader_comment_anyway*
 g:tcomment_mapleader_uncomment_anyway	tcomment.txt	/*g:tcomment_mapleader_uncomment_anyway*
 g:tcomment_maps	tcomment.txt	/*g:tcomment_maps*
 g:tcomment_opleader1	tcomment.txt	/*g:tcomment_opleader1*
+g:tcomment_opmap_modifier	tcomment.txt	/*g:tcomment_opmap_modifier*
 g:tcomment_types	tcomment.txt	/*g:tcomment_types*
 plugin/tcomment.vim	tcomment.txt	/*plugin\/tcomment.vim*
 tcomment#Comment()	tcomment.txt	/*tcomment#Comment()*

@@ -186,6 +186,8 @@ Contents~
         g:tcomment_opleader1 .......................... |g:tcomment_opleader1|
         g:tcomment_mapleader_uncomment_anyway ......... |g:tcomment_mapleader_uncomment_anyway|
         g:tcomment_mapleader_comment_anyway ........... |g:tcomment_mapleader_comment_anyway|
+        g:tcomment_map_modifier ....................... |g:tcomment_map_modifier|
+        g:tcomment_opmap_modifier ..................... |g:tcomment_opmap_modifier|
         :TComment ..................................... |:TComment|
         :TCommentAs ................................... |:TCommentAs|
         :TCommentRight ................................ |:TCommentRight|
@@ -255,6 +257,14 @@ g:tcomment_mapleader_uncomment_anyway (default: 'g<')
                                                     *g:tcomment_mapleader_comment_anyway*
 g:tcomment_mapleader_comment_anyway (default: 'g>')
     See |tcomment-operator|.
+
+                                                    *g:tcomment_map_modifier*
+g:tcomment_map_modifier        (default: '<silent>')
+    Use map modifiers like |:map-<silent>|.
+
+                                                    *g:tcomment_opmap_modifier*
+g:tcomment_opmap_modifier      (default: '<silent>')
+    Use map modifiers like |:map-<silent>| for operators.
 
                                                     *:TComment*
 :[range]TComment[!] ?ARGS...
