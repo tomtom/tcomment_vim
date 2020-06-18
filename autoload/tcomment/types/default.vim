@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2020-03-15
-" @Revision:    28
+" @Last Change: 2020-06-18
+" @Revision:    29
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -51,6 +51,7 @@ call tcomment#type#Define('css',              '/* %s */'         )
 call tcomment#type#Define('css_block',        g:tcomment#block_fmt_c   )
 call tcomment#type#Define('css_inline',       g:tcomment#inline_fmt_c  )
 call tcomment#type#Define('cucumber',         '# %s'             )
+call tcomment#type#Define('cuda',             tcomment#GetLineC('// %s'))
 call tcomment#type#Define('cypher',           '// %s'            )
 call tcomment#type#Define('debcontrol',       '# %s'             )
 call tcomment#type#Define('debsources',       '# %s'             )
