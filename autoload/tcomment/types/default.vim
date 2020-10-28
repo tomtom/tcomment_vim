@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2020-06-18
-" @Revision:    29
+" @Last Change: 2020-09-14
+" @Revision:    30
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -226,10 +226,8 @@ call tcomment#type#Define('solidity',         tcomment#GetLineC('// %s'))
 call tcomment#type#Define('solidity_block',   g:tcomment#block_fmt_c)
 call tcomment#type#Define('solidity_inline',  g:tcomment#inline_fmt_c)
 call tcomment#type#Define('spec',             '# %s'             )
-call tcomment#type#Define('sps',              '* %s.'            )
-call tcomment#type#Define('sps_block',        '* %s.'            )
-call tcomment#type#Define('spss',             '* %s.'            )
-call tcomment#type#Define('spss_block',       '* %s.'            )
+call tcomment#type#Define('sps',              '/* %s */'            )
+call tcomment#type#Define('spss',             '/* %s */'            )
 call tcomment#type#Define('sql',              '-- %s'            )
 call tcomment#type#Define('squid',            '# %s'             )
 call tcomment#type#Define('sshconfig',        '# %s'             )
