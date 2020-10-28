@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2020-03-14.
-" @Revision:    2039
+" @Last Change: 2020-10-09.
+" @Revision:    2040
 
 scriptencoding utf-8
 
@@ -236,8 +236,10 @@ function! tcomment#GuessCommentType(...) abort "{{{3
     let comment_mode = get(options, 'comment_mode', '')
     let filetype = get(options, 'filetype', &filetype)
     let fallbackFiletype = get(options, 'filetype', '')
-    return tcomment#filetype#Guess(beg, end,
+    let ct = tcomment#filetype#Guess(beg, end,
           \ comment_mode, filetype, fallbackFiletype)
+    call extend(ct, {'_args': {'beg': beg, 'end': end, 'comment_mode': comment_mode, 'filetype': filetype, 'fallbackFiletype': fallbackFiletype}})
+    return ct
 endf
 
 
