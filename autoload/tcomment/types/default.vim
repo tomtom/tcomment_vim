@@ -274,7 +274,11 @@ call tcomment#type#Define('verilog_systemverilog_inline', g:tcomment#inline_fmt_
 call tcomment#type#Define('viki',             '%% %s'            )
 call tcomment#type#Define('viki_3',           '%%%%%% %s'        )
 call tcomment#type#Define('viki_inline',      '{cmt: %s}'        )
-call tcomment#type#Define('vim',              '" %s'             )
+call tcomment#type#Define('vim',              {'choose': [
+      \ {'if': 'getline(1) ==# ''vim9script'' ||' .
+      \        'getline(search(''^\%(fu\%[nction]\|def\)\>'', ''bcnWz'')) =~# ''^def\>'' && search(''^def\>'', ''bcnWz'') < line("''[")',
+      \  'commentstring': '# %s'},
+      \ {'commentstring': '" %s'}]})
 call tcomment#type#Define('vim_3',            '""" %s'           )
 call tcomment#type#Define('vimwiki',          '%%%% %s'          )
 call tcomment#type#Define('websec',           '# %s'             )
