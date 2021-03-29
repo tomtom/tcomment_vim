@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2020-09-14
-" @Revision:    30
+" @Last Change: 2021-03-29
+" @Revision:    35
 
 call tcomment#type#Define('aap',              '# %s'             )
 call tcomment#type#Define('ada',              '-- %s'            )
@@ -197,7 +197,7 @@ call tcomment#type#Define('remind',           {'commentstring_rx': '\[;#] %s', '
 call tcomment#type#Define('resolv',           '# %s'             )
 call tcomment#type#Define('robot', {'col': 1, 'commentstring': '# %s'})
 call tcomment#type#Define('robots',           '# %s'             )
-call tcomment#type#Define('rust',             tcomment#GetLineC('// %s'))
+call tcomment#type#Define('rust',             tcomment#GetLineC('// %s', {'commentstring_rx': '\%%(///\? %s\|/* %s */\)'}))
 call tcomment#type#Define('rust_block',       g:tcomment#block_fmt_c   )
 call tcomment#type#Define('rust_inline',      g:tcomment#inline_fmt_c  )
 call tcomment#type#Define('ruby',             '# %s'             )
@@ -278,10 +278,11 @@ call tcomment#type#Define('viki',             '%% %s'            )
 call tcomment#type#Define('viki_3',           '%%%%%% %s'        )
 call tcomment#type#Define('viki_inline',      '{cmt: %s}'        )
 call tcomment#type#Define('vim',              {'choose': [
-      \ {'if': 'getline(1) ==# ''vim9script'' ||' .
-      \        'getline(search(''^\%(fu\%[nction]\|def\)\>'', ''bcnWz'')) =~# ''^def\>'' && search(''^def\>'', ''bcnWz'') < line("''[")',
+      \ {'if': 'search(''^\s*vim9script\s*$'', "bcnW") ||' .
+      \        'getline(search(''^\s*\%(fu\%[nction]\|def\)\>'', ''bcnWz'')) =~# ''^\s*def\>'' && search(''^\s*def\>'', ''bcnWz'') < line("''[")',
       \  'commentstring': '# %s'},
-      \ {'commentstring': '" %s'}]})
+      \ {'commentstring': '" %s'}],
+      \ 'commentstring_rx': '\["#] %s'})
 call tcomment#type#Define('vim_3',            '""" %s'           )
 call tcomment#type#Define('vimwiki',          '%%%% %s'          )
 call tcomment#type#Define('websec',           '# %s'             )

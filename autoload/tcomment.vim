@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2021-03-28.
-" @Revision:    2041
+" @Last Change: 2021-03-29.
+" @Revision:    2044
 
 scriptencoding utf-8
 
@@ -93,7 +93,7 @@ endif
 if !exists('g:tcomment#line_fmt_c')
     " Generic c-like block comments.
     let g:tcomment#line_fmt_c = {
-                \ 'commentstring_rx': '\%%(//\+ %s\|/* %s */\)',
+                \ 'commentstring_rx': '\%%(// %s\|/* %s */\)',
                 \ 'commentstring': g:tcomment#commentstring_c,
                 \ 'rxbeg': '\*\+',
                 \ 'rxend': '',
