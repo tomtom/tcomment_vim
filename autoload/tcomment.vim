@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2021-03-29.
-" @Revision:    2044
+" @Last Change: 2021-04-14.
+" @Revision:    2046
 
 scriptencoding utf-8
 
@@ -149,7 +149,8 @@ if !exists('g:tcomment#replacements_xml')
     " Replacements for xml filetype.
     " :read: let g:tcomment#replacements_xml = {...}   "{{{2
     let g:tcomment#replacements_xml = {
-                \     '-': '&#45;',
+                \     '<!--': '&#60;&#33;&#45;&#45;',
+                \     '-->': '&#45;&#45;&#62;',
                 \     '&': '&#38;',
                 \ }
 endif
