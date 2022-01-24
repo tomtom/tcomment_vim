@@ -84,6 +84,9 @@ endif
 if !exists('g:tcomment#filetype#guess_vue')
     let g:tcomment#filetype#guess_vue = 'html'   "{{{2
 endif
+if !exists('g:tcomment#filetype#guess_svelte')
+    let g:tcomment#filetype#guess_svelte = 'html'   "{{{2
+endif
 
 
 if !exists('g:tcomment#filetype#ignore_php')
