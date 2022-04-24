@@ -2,8 +2,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2007-09-17.
-" @Last Change: 2021-04-14.
-" @Revision:    2046
+" @Last Change: 2022-04-24.
+" @Revision:    2047
 
 scriptencoding utf-8
 
@@ -282,7 +282,7 @@ endf
 "         postprocess_uncomment .. Run a |printf()| expression with 2 
 "                              placeholders on uncommented lines, e.g. 
 "                              'norm! %sgg=%sgg'.
-"         choose           ... A list of commend definitions (a 
+"         choose           ... A list of comment definitions (a 
 "                              dictionary as defined above) that may 
 "                              contain an `if` key referring to an 
 "                              expression; if this condition evaluates 
