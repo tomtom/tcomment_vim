@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2019-01-31
-" @Revision:    21
+" @Last Change: 2022-04-24
+" @Revision:    23
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -38,7 +38,11 @@ function! tcomment#commentdef#Get(beg, end, comment_mode, ...) abort
     if empty(cms)
         let filetype = tcomment#filetype#Get(ft)
         Tlibtrace 'tcomment', filetype
-        if exists('b:commentstring')
+        if exists('*TCommentGetCommentstring')
+            let cms = TCommentGetCommentstring()
+            Tlibtrace 'tcomment', 0, cms
+            return tcomment#commentdef#GetCustom(filetype, a:comment_mode, cms)
+        elseif exists('b:commentstring')
             let cms = b:commentstring
             Tlibtrace 'tcomment', 1, cms
             return tcomment#commentdef#GetCustom(filetype, a:comment_mode, cms)
