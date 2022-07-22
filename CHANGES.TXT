@@ -537,3 +537,129 @@ version: "3.07"
   SHA256 checksum: e38384a93873d91dd4ab811535d616aad14f0789d7e84e7da1a479357788bf1d
 version: "3.08"
 
+version: '4.00'
+  - FIX #190: use len() is str(display)width() is not defined
+  - Fix comments in Laravel blade filetype
+  - Merge pull request #193 from jaguadoromero/blade_comments_fix
+  - Add rust_inline
+  - Merge pull request #194 from alanjcfs/add-rust-inline
+  - FIX #197: Rmd support
+  - FIX #197: rmd defaults to markdown
+  - Add # as comment sign for qmake project files
+  - Merge pull request #200 from t-b/add-qmake
+  - ultralight refactoring
+  - Do not call setline() if it would not change it
+  - Use CamelCase for function names etc.
+  - Merge pull request #207 from blueyed/setline
+  - CLOSE #208: Add support for Cabal files (thanks to mn720)
+  - FIX #202: Make it easier to customize C-style line comments via g:tcomment#commentstring_c
+  - FIX #201: tcommentModeExtra: Use "j^" instead of "l^"; NEW >|
+  - Further refactoring
+  - Bump major version number due to possibly incompatible changes
+  - More refactoring (not backward-compatible)
+  - FIX #210: Move `call tcomment#deprecated#Check()` to autoload/tcomment.vim
+  - Add support for cdl files
+  - Merge pull request #211 from t-b/feature/add_cdl_support
+  - FIX #212: s/g:tcomment_textoject_inlinecomment/g:tcomment_textobject_inlinecomment/
+  - Run the deprecation checks eagerly (closes #215, closes #216)
+  - Merge pull request #217 from chocolateboy/eager-faster-deprecation
+  - FIX #210: Performance improvement for tcomment#deprecated#Check()
+  - FIX #218: Missing quote
+  - FIX #214: Guess filetype in perl files
+  - FIX #219: vim 7.4 compatibility
+  - FIX #191: Properly escape backslashes (for forth, nroff etc.); explicitly support forth
+  - FIX #213: Make whitespace optional
+  - EXPERIMENTAL: g:tcomment#filetype#guess defaults to 1
+  - FIX #213: Make whitespace conditional only at the end of a line
+  - FIX #220: don't escape backslashes in commentstring_rx
+  - In block mode: make sure to comment empty lines
+  - Block comment: Handle whitespace < prefix
+  - tcomment#filetype#GetAlt: s/[.]/_/g in filetype names
+  - g:tcomment#filetype#map_user, g:tcomment#filetype#syntax_map_user: Make it easier to customize the respective parameters
+  - tcomment#filetype#GetAlt(): cdef.guess > g:tcomment#filetype#guess_{filetype} > g:tcomment#filetype#guess
+  - FIX #222, FIX #224: g:tcomment#filetype#guess defaults to 0 again
+  - FIX #225: Process g:tcomment_types after autoload/tcomment/types/*.vim files
+  - Add type#Define for pug
+  - Merge pull request #226 from bootleq/pug
+  - FIX #228: guard_rx: Use replacements only on certain lines
+  - FIX #229: Re-enable some filetype-specific guess params
+  - Support for the terraform filetype
+  - Merge pull request #230 from Hinidu/patch-1
+  - Add Meson build system defenition
+  - Merge pull request #231 from rkuchumov/master
+  - Possibly FIX #232
+  - FIX #232: Try synID() with tran = 1 and 0
+  - ++Support for tsx, jsx
+  - NEW tcomment#DebugInfo()
+  - NEW tcomment#debug#CollectInfo()
+  - FIX #186 Support xml tags in jsx files
+  - FIX #159 use js-style comments for xmlAttrib; tcomment#filetype#Guess(): one-off error
+  - ft: jinja: there are no comment blocks
+  - FIX tcomment#syntax#GetSyntaxName: Make sure filetype key is in cdef
+  - Support julia and stata
+  - tcomment#syntax#GetSyntaxName(): Make sure cdef includes filetype field
+  - Support for julia
+  - Merge pull request #242 from PietroPate/master
+  - Merge pull request #240 from blueyed/jinja-comments
+  - Support for julia block comments
+  - stata block comments
+  - FIX #245: Missing comma
+  - Merge pull request #243 from PietroPate/master
+  - Add support for igorpro files
+  - Add cucumber comment definition
+  - Merge pull request #247 from pylipp/feature/support-cucumber
+  - FIX #248 handle jsx special case for uncommenting
+  - Merge pull request #246 from t-b/add-igor-pro
+  - tcomment#syntax#GetSyntaxName(): Make sure the rules in g:tcomment#syntax#substitute are applied before those in g:tcomment#syntax#substitute_by_filetype
+  - add taskrc filetype
+  - Merge pull request #249 from dsifford/dsifford-add-taskrc-type
+  - types/default.vim: fasm filetype
+  - Merge pull request #251 from dsirov/add-filetype-fasm
+  - add FSharp comment type
+  - Merge pull request #252 from josselinauguste/master
+  - Add javascriptreact/typescriptreact filetypes
+  - Add support for bibtex files
+  - Merge pull request #259 from t-b/add-bibtex
+  - Add Maude filetype
+  - Add support for go.mod
+  - Merge pull request #262 from josa42/add-go-mod
+  - Merge pull request #261 from magnusmb/master
+  - Merge pull request #256 from Chris-Slade/master
+  - Support for choose: Conditionally select a comment definition from a list of candidates (fixes https://github.com/tomtom/tcomment_vim/commit/0f94e969a14a0cd664ca67de38b640eaf54583ad?email_token=AAAJR5ACHF5PPVOR2JSULJDRD6UP3A5CNFSM4KF5DZ62YY3PNVWWK3TUL52HS4DFVVBW63LNNF2EG33NNVSW45FKMNXW23LFNZ2F62LEZYBDV5IA)
+  - FIX bib commentdef (use `if` condition proposed by enno)
+  - Add support for Agda files
+  - FIX #265 NEW g:tcomment_map_modifier, g:tcomment_opmap_modifier: Configure use of <silent> etc.
+  - Merge pull request #264 from akiomik/patch-1
+  - Add qml inline comment definition
+  - Merge pull request #267 from pylipp/patch-1
+  - FIX #269 Support for cuda
+  - support Swift
+  - Support dot
+  - Add alternative version of typescript
+  - Merge pull request #271 from bradleymackey/master
+  - Merge pull request #273 from amadeus/fix/typescript-alt
+  - Merge pull request #272 from tamago324/support-dot
+  - Add support for Snakemake files
+  - Merge pull request #275 from mnsmar/patch-1
+  - adding sbt filetype
+  - Merge pull request #276 from vito-c/vito
+  - Add support for spss
+  - tcomment#GuessCommentType(): Enrich return value
+  - Support Vim9 script and functions
+  - Merge pull request #278 from itchyny/support-vim9-script
+  - Add Stylus support
+  - Merge pull request #281 from herrbischoff/patch-1
+  - C-style comments: Support for /// etc. FIXES #282
+  - Restrict use of /// to the rust filetype FIXES #282
+  - Add support for bindzone and named type files
+  - Merge pull request #286 from alteriks/bind_named
+  - Fix function call
+  - Merge pull request #287 from aca/master
+  - XML style comments: don't escape "-" but "<!--" and "-->" FIX #288
+  - Add nix_inline type
+  - Merge pull request #293 from SuperSandro2000/patch-1
+  - Add support for Svelte by mapping to HTML
+  - Merge pull request #296 from trygveaa/add-svelte
+  - Support for custom TCommentGetCommentstring() function FIXES #284
+  SHA256 checksum: 6a3f85cfb3506ebff3872ffb6812d74086dbc290ea86e74dac7205a925caa9b5
+
