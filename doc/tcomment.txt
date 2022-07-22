@@ -489,7 +489,7 @@ tcomment#Comment(beg, end, ...)
             postprocess_uncomment .. Run a |printf()| expression with 2 
                                  placeholders on uncommented lines, e.g. 
                                  'norm! %sgg=%sgg'.
-            choose           ... A list of commend definitions (a 
+            choose           ... A list of comment definitions (a 
                                  dictionary as defined above) that may 
                                  contain an `if` key referring to an 
                                  expression; if this condition evaluates 
