@@ -1,8 +1,8 @@
 " @Author:      Tom Link (mailto:micathom AT gmail com?subject=[vim])
 " @Website:     https://github.com/tomtom
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Last Change: 2022-04-24
-" @Revision:    23
+" @Last Change: 2022-12-07
+" @Revision:    38
 
 if exists(':Tlibtrace') != 2
     command! -nargs=+ -bang Tlibtrace :
@@ -186,17 +186,25 @@ function! tcomment#commentdef#SetWhitespaceMode(cdef) abort "{{{3
     let mid = tcomment#commentdef#BlockGetMiddleString(a:cdef)
     let cms0 = cms
     let mid0 = mid
+    let rx = get(a:cdef, 'commentstring_rx', '')
+    let rx0 = rx
     Tlibtrace 'tcomment', mode, cms, mid
     if mode =~# '^\(n\%[o]\|l\%[eft]\|r\%[ight]\)$'
         " Remove whitespace on the left
         if mode =~# '^n\%[o]$' || mode =~# '^r\%[ight]$'
             let cms = substitute(cms, '\s\+\ze%\@<!%s', '', 'g')
             let mid = substitute(mid, '\s\+\ze%\@<!%s', '', 'g')
+            if !empty(rx)
+                let rx = substitute(rx, '\%(\\s\|\s\)\+\ze%\@<!%s', '', 'g')
+            endif
         endif
         " Remove whitespace on the right
         if mode =~# '^n\%[o]$' || mode =~# '^l\%[eft]$'
             let cms = substitute(cms, '%\@<!%s\zs\s\+', '', 'g')
             let mid = substitute(mid, '%\@<!%s\zs\s\+', '', 'g')
+            if !empty(rx)
+                let rx = substitute(rx, '%\@<!%s\zs\%(\\s\|\s\)\+', '', 'g')
+            endif
         endif
         if mode =~# '^l\%[eft]$'
             if mid !~# '%s'
@@ -221,7 +229,11 @@ function! tcomment#commentdef#SetWhitespaceMode(cdef) abort "{{{3
         Tlibtrace 'tcomment', mid
         let a:cdef.middle = mid
     endif
-    Tlibtrace 'tcomment', a:cdef
+    if rx != rx0
+        Tlibtrace 'tcomment', rx
+        let a:cdef.commentstring_rx = rx
+    endif
+    Tlibtrace 'tcommenta', a:cdef
     return a:cdef
 endf
 
