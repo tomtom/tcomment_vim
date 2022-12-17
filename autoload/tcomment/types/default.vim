@@ -283,7 +283,7 @@ call tcomment#type#Define('viki',             '%% %s'            )
 call tcomment#type#Define('viki_3',           '%%%%%% %s'        )
 call tcomment#type#Define('viki_inline',      '{cmt: %s}'        )
 call tcomment#type#Define('vim',              {'choose': [
-      \ {'if': 'search(''^\s*vim9script\s*$'', "bcnW") ||' .
+      \ {'if': 'search(''^\s*:\?vim9script\>'', "bcnW") ||' .
       \        'getline(search(''^\s*\%(fu\%[nction]\|def\)\>'', ''bcnWz'')) =~# ''^\s*def\>'' && search(''^\s*def\>'', ''bcnWz'') < line("''[")',
       \  'commentstring': '# %s'},
       \ {'commentstring': '" %s'}],
