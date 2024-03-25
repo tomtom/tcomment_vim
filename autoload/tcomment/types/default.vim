@@ -81,6 +81,7 @@ call tcomment#type#Define('form',             {'commentstring': '* %s', 'col': 1
 call tcomment#type#Define('forth',            '\ %s'             )
 call tcomment#type#Define('fsharp',           '// %s'            )
 call tcomment#type#Define('fstab',            '# %s'             )
+call tcomment#type#Define('gdscript',         '# %s'             )
 call tcomment#type#Define('gitconfig',        '# %s'             )
 call tcomment#type#Define('gitcommit',        '# %s'             )
 call tcomment#type#Define('gitignore',        '# %s'             )
